@@ -22,11 +22,17 @@ public class FindTheImage : MonoBehaviour
     Material[] imageMats;
 
     [SerializeField]
-    Text timeText, scoreText;
+    Text timeText, scoreText, winAndLoseText;
 
     float selectTimer = 0.2f, countdown = 10.0f;
     int lastMatIndex, numMatches = 0;
 
+    [SerializeField]
+    int matchesToWin;
+    [SerializeField]
+    float timeBonus;
+
+    bool isClockRunning = true;
 
     void InitImages()
     {
@@ -73,6 +79,7 @@ public class FindTheImage : MonoBehaviour
         {
             leftSelect.GetComponent<Renderer>().material = originalSelectorMat;
             rightSelect.GetComponent<Renderer>().material = originalSelectorMat;
+            winAndLoseText.text = "";
         }
         else
         {
@@ -81,9 +88,10 @@ public class FindTheImage : MonoBehaviour
 
         if (countdown < 0)
         {
-           // Debug.Log("GG");
+            selectTimer = 100000f;
+            winAndLoseText.text = "U LOSE";
         }
-        else
+        else if(isClockRunning)
         {
             countdown -= Time.deltaTime;
             string textStr = countdown.ToString("F2");
@@ -135,13 +143,11 @@ public class FindTheImage : MonoBehaviour
                 {
                     if (currentMatIndex == lastMatIndex)
                     {
-                        Debug.Log("Back to zero" + currentMatIndex);
                         currentMatIndex = 0;
                         break;
                     }
                     else
                     {
-                        Debug.Log("Counting up" + currentMatIndex);
                         currentMatIndex++;
                         break;
                     }
@@ -155,15 +161,35 @@ public class FindTheImage : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space)) //select
         {
-            Debug.Log(imageToFind.GetComponent<Renderer>().material.name);
-            Debug.Log(currentMat.name);
-
-
+            //correct selection
             if (currentMat.name.Contains(imageMats[currentMatIndex].name) && imageToFind.GetComponent<Renderer>().material.name.Contains(imageMats[currentMatIndex].name))
             {
-                numMatches++;
-                scoreText.text = "Matches: " + numMatches;
-                InitImages();
+                winAndLoseText.text = "nice";
+                selectTimer = 0.15f;
+
+                if (numMatches < matchesToWin-1)
+                {
+                    countdown += 2;
+                    numMatches++;
+                    scoreText.text = "Matches: " + numMatches;
+                    InitImages();
+                }
+                else
+                {
+                    isClockRunning = false;
+
+                    numMatches++;
+                    scoreText.text = "Matches: " + numMatches;
+
+                    winAndLoseText.text = "YOU WIN";
+                    selectTimer = 100000f;
+                }
+            }
+            else // incorrect selection
+            {
+                selectTimer = 0.15f;
+                winAndLoseText.text = "nope";
+                countdown -= 1;
             }
         }
     }
