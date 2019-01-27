@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class FindTheImage : MonoBehaviour
 {
+    public bool won = false;
+    int winCounter;
+
     [SerializeField]
     GameObject leftSelect, rightSelect;
     [SerializeField]
@@ -17,26 +20,25 @@ public class FindTheImage : MonoBehaviour
 
     Material currentMat, matToFind;
 
-    [SerializeField]
-    int currentMatIndex;
+  // [SerializeField]
+     int currentMatIndex;
 
     [SerializeField]
     Material[] imageMats;
 
-    [SerializeField]
-    Text timeText, scoreText, winAndLoseText;
+    public Text timeText, scoreText, winAndLoseText;
 
     float selectTimer = 0.2f, countdown = 10.0f;
     int lastMatIndex, numMatches = 0;
 
     [SerializeField]
     int matchesToWin;
-    [SerializeField]
-    float timeBonus;
+
+    public float timeBonus, timeLoss;
 
     bool isClockRunning = true;
 
-    void InitImages()
+    public void InitImages()
     {
         //set up image to find and current image
         currentMatIndex = Random.Range(0, imageMats.Length);
@@ -72,7 +74,7 @@ public class FindTheImage : MonoBehaviour
         }
 
         lastMatIndex = imageMats.Length-1;
-        Debug.Log(lastMatIndex);
+    //    Debug.Log(lastMatIndex);
     }
 
     void Update()
@@ -171,13 +173,15 @@ public class FindTheImage : MonoBehaviour
 
                 if (numMatches < matchesToWin-1)
                 {
-                    countdown += 2;
+                    countdown += timeBonus;
                     numMatches++;
                     scoreText.text = "Matches: " + numMatches;
                     InitImages();
                 }
                 else
                 {
+                    winCounter++;
+
                     isClockRunning = false;
 
                     numMatches++;
@@ -185,14 +189,59 @@ public class FindTheImage : MonoBehaviour
 
                     winAndLoseText.text = "YOU WIN";
                     selectTimer = 100000f;
+
+                    if(winCounter < 2)
+                        won = true;
+
+                    this.enabled = false;
+
+                    Camera.main.backgroundColor = Color.blue;
                 }
             }
             else // incorrect selection
             {
                 selectTimer = 0.15f;
                 winAndLoseText.text = "nope";
-                countdown -= 1;
+                countdown -= timeLoss;
             }
         }
     }
+
+    public void DecreaseTime(float timeLost)
+    {
+        countdown -= timeLost;
+    }
+
+    public void AddTime(float timeGained)
+    {
+        countdown += timeGained;
+    }
+    public void ResetTimer(float time)
+    {
+        countdown = time;
+        isClockRunning = true;
+    }
+
+    public void ResetMatches()
+    {
+        numMatches = 0;
+        scoreText.text = "Matches: " + numMatches;
+    }
+
+    public void SetMatchesToWin(int numMatchesToWin)
+    {
+        matchesToWin = numMatchesToWin;
+    }
+
+    public void MadeAMatch()
+    {
+        numMatches++;
+        scoreText.text = "Matches: " + numMatches;
+    }
+
+    public int CheckWins()
+    {
+        return winCounter;
+    }
+
 }
