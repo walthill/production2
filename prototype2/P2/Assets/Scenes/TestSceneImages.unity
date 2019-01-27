@@ -530,6 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftSelect: {fileID: 1079873174}
   rightSelect: {fileID: 313411106}
+  selectionMaterial: {fileID: 2100000, guid: 58acb43c4dabc2e4cbb9f376db6650e0, type: 2}
   imageToFind: {fileID: 1582573394}
   currentImage: {fileID: 1525812064}
   currentMatIndex: 0
@@ -2158,7 +2159,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh12254
+  m_Name: pb_Mesh16440
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2

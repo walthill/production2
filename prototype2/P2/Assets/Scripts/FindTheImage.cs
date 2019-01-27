@@ -7,6 +7,8 @@ public class FindTheImage : MonoBehaviour
 {
     [SerializeField]
     GameObject leftSelect, rightSelect;
+    [SerializeField]
+    Material selectionMaterial;
 
     Material originalSelectorMat;
 
@@ -108,7 +110,7 @@ public class FindTheImage : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) //left
         {
             rightSelect.GetComponent<Renderer>().material = originalSelectorMat;
-            leftSelect.GetComponent<Renderer>().material = imageMats[2];
+            leftSelect.GetComponent<Renderer>().material = selectionMaterial;
 
             for(int i = 0; i < imageMats.Length; i++)
             {
@@ -135,7 +137,7 @@ public class FindTheImage : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.D)) //right
         {
             leftSelect.GetComponent<Renderer>().material = originalSelectorMat;
-            rightSelect.GetComponent<Renderer>().material = imageMats[2];
+            rightSelect.GetComponent<Renderer>().material = selectionMaterial;
 
             for (int i = 0; i < imageMats.Length; i++)
             {
