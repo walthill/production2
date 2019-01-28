@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class FindTheImage : MonoBehaviour
 {
@@ -46,7 +47,6 @@ public class FindTheImage : MonoBehaviour
 
         currentMatIndex = Random.Range(0, imageMats.Length);
         currentImage.GetComponent<Renderer>().material = imageMats[currentMatIndex];
-
 
         while (currentImage.GetComponent<Renderer>().material.name == imageToFind.GetComponent<Renderer>().material.name)
         {
@@ -99,7 +99,7 @@ public class FindTheImage : MonoBehaviour
         {
             countdown -= Time.deltaTime;
             string textStr = countdown.ToString("F2");
-            timeText.text = "Time Left: " + textStr;
+            timeText.text = "Productivity: " + textStr;
         }
 
         CheckInput();
@@ -191,7 +191,12 @@ public class FindTheImage : MonoBehaviour
                     selectTimer = 100000f;
 
                     if(winCounter < 2)
+                    {
                         won = true;
+                    }
+                    else
+                        StartCoroutine(WaitForSceneChange());
+
 
                     this.enabled = false;
 
@@ -244,4 +249,15 @@ public class FindTheImage : MonoBehaviour
         return winCounter;
     }
 
+    IEnumerator WaitForSceneChange()
+    {
+        Debug.Log(Time.time);
+        yield return new WaitForSeconds(5);
+        Debug.Log(Time.time);
+        SceneManager.LoadScene("rythmGameScene");
+    }
+
 }
+
+    
+
