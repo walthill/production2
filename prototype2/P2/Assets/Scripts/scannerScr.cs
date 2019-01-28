@@ -10,6 +10,7 @@ public class scannerScr : MonoBehaviour
     public bool baggingOrScanning;
     Renderer r;
     public GameObject particles;
+    public GameObject scanLine;
 
     public bool selected;
     public bool entered;
@@ -18,6 +19,7 @@ public class scannerScr : MonoBehaviour
     {
         particles.SetActive(false);
         r = gameObject.GetComponent<Renderer>();
+        scanLine.SetActive(false);
     }
 
     // Update is called once per frame
@@ -59,11 +61,14 @@ public class scannerScr : MonoBehaviour
         if (baggingOrScanning)
         {
             particles.SetActive(true);
+            scanLine.SetActive(true);
             //Timer += Time.deltaTime;
         }
         if (!entered)
         {
+
             particles.SetActive(false);
+            scanLine.SetActive(false);
         }
         
 

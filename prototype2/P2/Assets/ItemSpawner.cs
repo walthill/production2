@@ -42,7 +42,7 @@ public class ItemSpawner : MonoBehaviour
             {
                 Timer = 0;
             }
-            Debug.Log("yeet yeet");
+            //Debug.Log("yeet yeet");
             ArrayPoint++;
 
 
