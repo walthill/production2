@@ -4,26 +4,23 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
-
-    /**
-     *  What type of camera do we want? 
-     * 
-     * 
-     * 
-     * */
-
-
+    const float MODEL_ROTATION_FACTOR = 75f;
 
     [SerializeField]
     GameObject target;
     [SerializeField]
     float dampingValue;
+    [SerializeField]
+    float xOffsetValue, yOffsetValue, zOffsetValue;
 
     Vector3 offset;
+    PlayerSkateMovement playerMove;
 
     void Awake()
     {
-        offset = target.transform.position - gameObject.transform.position; //TODO: camera behind
+        offset = target.transform.position - gameObject.transform.position;
+
+        playerMove = target.GetComponent<PlayerSkateMovement>();
     }
 
     // Update is called once per frame
@@ -32,12 +29,15 @@ public class FollowCamera : MonoBehaviour
         float targetAngle, currentAngle, angle;
 
         currentAngle = gameObject.transform.eulerAngles.y;
-        targetAngle = target.transform.eulerAngles.y;
+        targetAngle = target.transform.eulerAngles.y - MODEL_ROTATION_FACTOR; 
+
         angle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * dampingValue);
 
-        Quaternion rotation = Quaternion.Euler(0, targetAngle, 0);
+        Quaternion rotation = Quaternion.Euler(0, angle, 0);
         gameObject.transform.position = target.transform.position - (rotation * offset);
-
-        transform.LookAt(target.transform);
+  
+        //create new transform
+        Vector3 t = new Vector3(target.transform.position.x + xOffsetValue, target.transform.position.y + yOffsetValue, target.transform.position.z + zOffsetValue);
+        transform.LookAt(t);
     }
 }
