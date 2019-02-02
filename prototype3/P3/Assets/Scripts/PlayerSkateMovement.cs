@@ -7,6 +7,10 @@ public enum SpeedChannel { QUICK, SPEEDY, FAST, LIGHTNING, BLUR }
 public class PlayerSkateMovement : MonoBehaviour
 {
     const float MODEL_ROTATION_FACTOR = 180f;
+
+    //temptemptemp
+    const float LEFT_STICK_DEADZONE = 0.35f;
+
     /*
      * CONTROLS
      * Up on stick to accel, down to deccel
@@ -29,6 +33,9 @@ public class PlayerSkateMovement : MonoBehaviour
     float turnLeft, turnRight, rotationY;
     bool jump, jumpReleased;
 
+
+    bool accelButtonDown;
+
     Rigidbody rb;
 
     void Awake()
@@ -39,35 +46,29 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void Update()
     {
+        //change local drag variable. this function takes care of the rest
+        SetDrag();
+
         //NOTE: values between 0 and 1
         turnLeft = Input.GetAxis("JoyTurnLeft");
-        turnRight = Input.GetAxis("JoyTurnRight"); 
-
-        zMove = Input.GetAxis("JoyVertical");
-
-        // TODO: deadzone 
-        if (zMove > 0.35) //accelerate
-        {
-            baseMoveSpeed = 5f;
-        }
-        else if (zMove < -0.35) //deccelerate
-        {
-            if(baseMoveSpeed == 5f)
-                baseMoveSpeed = 3f;
-        }
+        turnRight = Input.GetAxis("JoyTurnRight");
 
         jump = Input.GetButtonDown("JoyJump");
-        jumpReleased = Input.GetButtonUp("JoyJump");
+        jumpReleased = Input.GetButtonUp("JoyJump"); //TODO(low): do jumping
+
+        Move();
     }
 
     private void FixedUpdate()
     {
-        Vector3 movement = new Vector3();
-        movement.z = zMove * baseMoveSpeed;
+        RollerSkateMovement();
+    }
 
-        if (turnLeft > 0)
+    private void RollerSkateMovement()
+    {
+        if (turnLeft > 0) //TODO: turn input value should affect base turn speed
         {
-            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, (gameObject.transform.eulerAngles.y - (turnLeft* rotationSpeed)), gameObject.transform.eulerAngles.z);
+            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, (gameObject.transform.eulerAngles.y - (turnLeft * rotationSpeed)), gameObject.transform.eulerAngles.z);
         }
 
         if (turnRight > 0)
@@ -79,7 +80,42 @@ public class PlayerSkateMovement : MonoBehaviour
 
         Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
 
-        //The add force based on the players current rotation and direction is constantly applied, we just change the movespeed & turnspeed
+        //Add force based on player's current rotation and direction
+        //constantly applied, we just change the movespeed & turnspeed
+
         rb.AddForce(updatedDirection * baseTurnSpeed * baseMoveSpeed, ForceMode.Acceleration);
+    }
+
+    private void Move()
+    {
+        zMove = Input.GetAxis("JoyVertical");
+
+        // TODO(low): deadzone 
+        if (zMove > LEFT_STICK_DEADZONE) //accelerate
+        {
+            if (!accelButtonDown && baseMoveSpeed < 10)
+            {
+                accelButtonDown = true;
+                baseMoveSpeed++;
+            }
+        }
+        else if (zMove < -LEFT_STICK_DEADZONE) //deccelerate
+        {
+            if (!accelButtonDown && baseMoveSpeed > 0)
+            {
+                accelButtonDown = true;
+                baseMoveSpeed--;
+            }
+        }
+        else
+        {
+            accelButtonDown = false;
+        }
+    }
+
+    public void SetDrag()
+    {
+        //allow for designer to update rigidbody drag
+        rb.drag = turnDrag;
     }
 }
