@@ -6,8 +6,6 @@ public class FollowCamera : MonoBehaviour
 {
     //TODO: pull back camera on speed increase
 
-    //TODO: add level geometry blocks
-
     const float MODEL_ROTATION_FACTOR = 75f;
 
     [SerializeField]
