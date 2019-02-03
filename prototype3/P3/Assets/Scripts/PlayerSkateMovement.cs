@@ -21,7 +21,7 @@ public class PlayerSkateMovement : MonoBehaviour
     float baseTurnSpeed, turnDrag;
 
     [SerializeField]
-    [Range(1, 10)]
+    [Range(0, 10)]
     float baseMoveSpeed;
 
     [SerializeField]
