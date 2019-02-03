@@ -6,6 +6,9 @@ public enum SpeedChannel { QUICK, SPEEDY, FAST, LIGHTNING, BLUR }
 
 public class PlayerSkateMovement : MonoBehaviour
 {
+    [SerializeField]
+    GameObject respawn;
+
     const float MODEL_ROTATION_FACTOR = 180f;
 
     //temptemptemp
@@ -57,6 +60,11 @@ public class PlayerSkateMovement : MonoBehaviour
         jumpReleased = Input.GetButtonUp("JoyJump"); //TODO(low): do jumping
 
         Move();
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            ResetPlayer();
+        }
     }
 
     private void FixedUpdate()
@@ -117,5 +125,15 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //allow for designer to update rigidbody drag
         rb.drag = turnDrag;
+    }
+
+    public void ResetPlayer()
+    {
+        gameObject.transform.position = respawn.transform.position;
+        gameObject.transform.localRotation = Quaternion.identity;
+        baseMoveSpeed = 1;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 }
