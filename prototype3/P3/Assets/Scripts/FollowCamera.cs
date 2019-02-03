@@ -25,8 +25,7 @@ public class FollowCamera : MonoBehaviour
         playerMove = target.GetComponent<PlayerSkateMovement>();
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    void FixedUpdate()
     {
         float targetAngle, currentAngle, angle;
 
