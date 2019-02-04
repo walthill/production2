@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpeedChannel { QUICK, SPEEDY, FAST, LIGHTNING, BLUR }
 
 public class PlayerSkateMovement : MonoBehaviour
 {
