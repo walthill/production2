@@ -60,7 +60,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
         Move();
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (jump = Input.GetButtonDown("JoyJump"))
         {
             ResetPlayer();
         }
