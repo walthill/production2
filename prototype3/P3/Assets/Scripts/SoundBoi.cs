@@ -47,8 +47,26 @@ public class SoundBoi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         
     }
+
+    public void LoadMusic()
+    {
+        //loads the clips into
+        drumsSource0.clip = drumsSnd0;
+        drumsSource1.clip = drumsSnd1;
+        drumsSource2.clip = drumsSnd2;
+        chordsSource0.clip = chordsSnd0;
+        chordsSource1.clip = chordsSnd1;
+        droneOrBaseSource.clip = droneOrBaseSnd;
+        melodySource0.clip = melodySnd0;
+        melodySource1.clip = melodySnd1;
+        arpSource0.clip = arpSnd0;
+        arpSource1.clip = arpSnd1;
+    }
+
+
 
     // Update is called once per frame
     void Update()
