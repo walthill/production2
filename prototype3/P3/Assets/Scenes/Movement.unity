@@ -423,46 +423,6 @@ PrefabInstance:
       propertyPath: respawn
       value: 
       objectReference: {fileID: 653620677}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.moveSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.maxVelocity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.rotationSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.lowRotationSpeed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.medRotationSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754655, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: arcadeData.maxRotationSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754656, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754656, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: m_Constraints
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754657, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: m_Height
-      value: 1.4252849
-      objectReference: {fileID: 0}
-    - target: {fileID: 1767754657, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
-      propertyPath: m_Center.y
-      value: 0.027544498
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d08ab14d0deab4f43abac887a3b268a8, type: 3}
 --- !u!1 &653620677
@@ -1368,7 +1328,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: eeb60119522eabc4e92f40ae068f7414, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: eeb60119522eabc4e92f40ae068f7414, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eeb60119522eabc4e92f40ae068f7414, type: 3}
@@ -1407,7 +1371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2005949248
 Transform:
   m_ObjectHideFlags: 0
