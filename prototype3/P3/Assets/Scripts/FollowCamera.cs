@@ -4,7 +4,24 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
+    /*
+     * Camera help
+     * https://gamedev.stackexchange.com/questions/114742/how-can-i-make-camera-to-follow-smoothly
+     * https://answers.unity.com/questions/600577/camera-rotation-around-player-while-following.html?page=1&pageSize=5&sort=votes
+    */
+
     //TODO: pull back camera on speed increase
+    //TODO: more control over camera offset
+
+    /*
+     *  https://github.com/DieselPrius/Unity-Third-Person-Camera-Script/blob/master/ThirdPersonCamera.cs
+     *  
+     *  //if a collider is blocking the line of sight of the camera snap the camera in front of the collider ...
+        if (Physics.Raycast(parentTransform.position, playerToCamera, out hitInfo, playerToCamera.magnitude)) 
+        {
+            gameObject.transform.position = hitInfo.point;
+        }
+    */
 
     const float MODEL_ROTATION_FACTOR = 75f;
 
