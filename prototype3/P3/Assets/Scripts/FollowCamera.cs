@@ -26,11 +26,11 @@ public class FollowCamera : MonoBehaviour
     const float MODEL_ROTATION_FACTOR = 75f;
 
     [SerializeField]
-    GameObject target;
+    GameObject target = null;
     [SerializeField]
-    float dampingValue;
+    float dampingValue = 0;
     [SerializeField]
-    float xOffsetValue, yOffsetValue, zOffsetValue;
+    float xOffsetValue=0, yOffsetValue = 0, zOffsetValue = 0;
 
     Vector3 offset;
     PlayerSkateMovement playerMove;

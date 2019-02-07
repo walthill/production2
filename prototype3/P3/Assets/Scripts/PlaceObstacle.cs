@@ -9,7 +9,7 @@ public class PlaceObstacle : MonoBehaviour
     public SpeedChannel speedChannel;
 
     [SerializeField]
-    Mesh[] modelList;
+    Mesh[] modelList = null;
 
     MeshFilter mesh;
 

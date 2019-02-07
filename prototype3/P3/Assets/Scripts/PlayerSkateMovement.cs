@@ -42,7 +42,7 @@ public class PlayerSkateMovement : MonoBehaviour
     SimMoveData simData;
 
     [SerializeField]
-    GameObject respawn;
+    GameObject respawn = null;
 
     const float MODEL_ROTATION_FACTOR = 180f;
     //temptemptemp
@@ -75,19 +75,17 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void Update()
     {
-        //change local drag variable. this function takes care of the rest
-    //    SetDrag();
 
         //NOTE: values between 0 and 1
         turnLeft = Input.GetAxis("JoyTurnLeft");
         turnRight = Input.GetAxis("JoyTurnRight");
 
         jump = Input.GetButtonDown("JoyJump");
-        jumpReleased = Input.GetButtonUp("JoyJump"); //TODO(low): do jumping
+        jumpReleased = Input.GetButtonUp("JoyJump");
 
         Move();
         
-        //TODO: speed channel interactions
+        //TODO: speed channel interactions, move this code to new script
         if (jump)
         {
         }
@@ -100,6 +98,9 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(moveType == MoveType.ARCADE)
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+
         RollerSkateMovement();
     }
 
@@ -107,7 +108,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (moveType == MoveType.SIM)
         {
-            if (turnLeft > 0) //TODO: turn input value should affect base turn speed
+            if (turnLeft > 0)
             {
                 gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, (gameObject.transform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), gameObject.transform.eulerAngles.z);
             }
@@ -133,39 +134,29 @@ public class PlayerSkateMovement : MonoBehaviour
             {
                 float moveFactor = zMove * arcadeData.moveSpeed;
 
-                // Debug.Log(Vector3.ClampMagnitude(movement, arcadeData.maxVelocity));
-
                 //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = transform.right*moveFactor*MODEL_ROTATION_MOVE_FACTOR; 
+                Vector3 moveDir = transform.right*moveFactor*MODEL_ROTATION_MOVE_FACTOR;                
+                Vector3 vel = rb.velocity;
 
-                 rb.velocity += Vector3.ClampMagnitude(moveDir, arcadeData.maxVelocity);
+                if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
+                {
+                    rb.velocity = vel.normalized * arcadeData.maxVelocity;
+                }
+                else
+                {
+                    rb.velocity += moveDir;
+                }
             }
 
             if(turnLeft > 0) //Bumper press for quick U-turn??
             {
-               /* if (turnLeft == 1)
-                {
-                    arcadeData.rotationSpeed = arcadeData.maxRotationSpeed;
-                }
-                else
-                {
-                    arcadeData.rotationSpeed = arcadeData.medRotationSpeed;
-                }*/
-
+                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y - (turnLeft*arcadeData.rotationSpeed), gameObject.transform.eulerAngles.z);
             }
 
             if(turnRight > 0)
             {
-                /*if (turnRight == 1)
-                {
-                    arcadeData.rotationSpeed = arcadeData.maxRotationSpeed;
-                }
-                else
-                {
-                    arcadeData.rotationSpeed = arcadeData.medRotationSpeed;
-                }*/
-
+                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y + (turnRight* arcadeData.rotationSpeed), gameObject.transform.eulerAngles.z);
             }
         }
@@ -201,7 +192,6 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if (moveType == MoveType.ARCADE)
         {
-         
             if(zMove > LEFT_STICK_DEADZONE)
             {
                 accelButtonDown = true;
