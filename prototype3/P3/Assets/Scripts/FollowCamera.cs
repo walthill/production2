@@ -22,40 +22,124 @@ public class FollowCamera : MonoBehaviour
             gameObject.transform.position = hitInfo.point;
         }
     */
+    [SerializeField]
+    bool shouldRotate = true;
 
-    const float MODEL_ROTATION_FACTOR = 75f;
+    // The target we are following
+    public Transform target;
+    // The distance in the x-z plane to the target
+    public float distance = 10.0f;
+    // the height we want the camera to be above the target
+    public float height = 5.0f;
+    // How much we
+    public float heightDamping = 2.0f;
+    public float rotationDamping = 3.0f;
 
     [SerializeField]
-    GameObject target = null;
-    [SerializeField]
-    float dampingValue = 0;
-    [SerializeField]
-    float xOffsetValue=0, yOffsetValue = 0, zOffsetValue = 0;
+    float yOffset =0;
 
-    Vector3 offset;
-    PlayerSkateMovement playerMove;
+    float wantedRotationAngle;
+    float wantedHeight;
+    float currentRotationAngle;
+    float currentHeight;
+    Quaternion currentRotation;
 
-    void Awake()
+    [SerializeField]
+    float timer = 0, knockbackTime =0,
+
+    knockbackDistance = 0,     //value added to distance and lerped to communicate speed
+
+    knockbackSpeed = 0,     //Speed of lerp on speed increase
+
+    returnSpeed = 0;     //speed of lerp on speed decrease
+
+    Camera cam;
+    bool hasKnockback;
+    float originalDistance, distanceToReach;
+    Vector3 centerCamPos;
+    RaycastHit hitInfo;
+
+    private void Awake()
     {
-        offset = target.transform.position - gameObject.transform.position;
+        cam = gameObject.GetComponent<Camera>();
 
-        playerMove = target.GetComponent<PlayerSkateMovement>();
+        float centerY = cam.scaledPixelHeight / 2;
+        float centerX = cam.scaledPixelWidth / 2;
+        centerCamPos = cam.ScreenToWorldPoint(new Vector3(centerX, centerY, 0));
+
+        originalDistance = distance;
+        distanceToReach = distance + knockbackDistance;
     }
 
-    void FixedUpdate()
+    private void Update()
     {
-        float targetAngle, currentAngle, angle;
+        CameraFallback();
+    }
 
-        currentAngle = gameObject.transform.eulerAngles.y;
-        targetAngle = target.transform.eulerAngles.y - MODEL_ROTATION_FACTOR; 
+    private void FixedUpdate()
+    {
+        /*Vector3 dir = gameObject.transform.position - target.position ;
 
-        angle = Mathf.LerpAngle(currentAngle, targetAngle, Time.deltaTime * dampingValue);
+        if (Physics.Raycast(target.position, dir, out hitInfo, dir.magnitude))
+        {
+            Debug.Log("ray hit. Need to move camera forward");
+            //gameObject.transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, hitInfo.point.z+10);
+        }*/
+    }
 
-        Quaternion rotation = Quaternion.Euler(0, angle, 0);
-        gameObject.transform.position = target.transform.position - (rotation * offset);
-  
-        //create new transform
-        Vector3 t = new Vector3(target.transform.position.x + xOffsetValue, target.transform.position.y + yOffsetValue, target.transform.position.z + zOffsetValue);
-        transform.LookAt(t);
+    void LateUpdate()
+    {
+        if (target)
+        {
+            // Calculate the current rotation angles
+            wantedRotationAngle = target.eulerAngles.y-90;
+            wantedHeight = target.position.y + height;
+            currentRotationAngle = transform.eulerAngles.y;
+            currentHeight = transform.position.y;
+
+            // Damp the rotation around the y-axis
+            currentRotationAngle = Mathf.LerpAngle(currentRotationAngle, wantedRotationAngle, rotationDamping * Time.deltaTime);
+            // Damp the height
+            currentHeight = Mathf.Lerp(currentHeight, wantedHeight, heightDamping * Time.deltaTime);
+            // Convert the angle into a rotation
+            currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
+            
+            // Set the position of the camera on the x-z plane to:
+            // distance meters behind the target
+            transform.position = target.position;
+            transform.position -= currentRotation * Vector3.forward * distance;
+            
+            // Set the height of the camera
+            transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
+            
+            // Always look at the target
+            if (shouldRotate)
+                transform.LookAt(new Vector3(target.position.x, target.position.y + yOffset, target.position.z));
+        }
+
+    }
+
+    void CameraFallback()
+    {
+        if (hasKnockback)
+        {
+            timer += Time.deltaTime;
+            distance = Mathf.Lerp(distance, distanceToReach, Time.deltaTime * knockbackSpeed);
+
+            if (timer >= knockbackTime)
+            {
+                hasKnockback = false;
+                timer = 0;
+            }
+        }
+        else if (!hasKnockback && distance > originalDistance)
+        {
+            distance = Mathf.Lerp(distance, originalDistance, Time.deltaTime * knockbackSpeed);
+        }
+    }
+
+    public void ToggleKnockback()
+    {
+        hasKnockback = true;
     }
 }

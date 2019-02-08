@@ -26,8 +26,8 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //clamp value - increase this for speed channels?
         public float maxVelocity; 
-
-        public float moveSpeed;
+        public float moveSpeed, 
+                     boostAcceleration, boostValue;
 
         [HeaderAttribute("RotationData")]
         public float medRotationSpeed;
@@ -37,35 +37,27 @@ public class PlayerSkateMovement : MonoBehaviour
     public MoveType moveType;
 
     [SerializeField]
-    ArcadeMoveData arcadeData;
+    ArcadeMoveData arcadeData = new ArcadeMoveData();
     [SerializeField]
     SimMoveData simData;
 
     [SerializeField]
-    GameObject respawn = null;
+    Transform respawn = null;
 
     const float MODEL_ROTATION_FACTOR = 180f;
-    //temptemptemp
     const float LEFT_STICK_DEADZONE = 0.35f;
     const float MODEL_ROTATION_MOVE_FACTOR = -1f;
-
-    /*
-     * CONTROLS
-     * Up on stick to accel, down to deccel
-     * A to crouch
-     */
 
     //Input vars
     float zMove;
     float turnLeft, turnRight, rotationY;
-    bool jump, jumpReleased;
-
     bool accelButtonDown;
-
     Rigidbody rb;
 
     void Awake()
     {
+        respawn.position = gameObject.transform.position;
+
         rb = gameObject.GetComponent<Rigidbody>();
         rb.drag = simData.turnDrag;
 
@@ -75,25 +67,14 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void Update()
     {
-
         //NOTE: values between 0 and 1
         turnLeft = Input.GetAxis("JoyTurnLeft");
         turnRight = Input.GetAxis("JoyTurnRight");
 
-        jump = Input.GetButtonDown("JoyJump");
-        jumpReleased = Input.GetButtonUp("JoyJump");
-
         Move();
         
-        //TODO: speed channel interactions, move this code to new script
-        if (jump)
-        {
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
-        {
             ResetPlayer();
-        }
     }
 
     private void FixedUpdate()
@@ -221,5 +202,17 @@ public class PlayerSkateMovement : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+    }
+
+    public void IncreaseSpeed(float boostAcceleration)
+    {
+        arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
+    }
+
+    public void Boost(float boostValue, float maxVelocityIncrease)
+    {
+        arcadeData.moveSpeed += (Time.deltaTime * boostValue);
+        arcadeData.maxVelocity += maxVelocityIncrease;
+        Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
 }
