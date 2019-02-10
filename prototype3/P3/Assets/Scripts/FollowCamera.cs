@@ -83,6 +83,7 @@ public class FollowCamera : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //TODO: camera collisions
         /*Vector3 dir = gameObject.transform.position - target.position ;
 
         if (Physics.Raycast(target.position, dir, out hitInfo, dir.magnitude))
@@ -139,7 +140,7 @@ public class FollowCamera : MonoBehaviour
         }
         else if (!hasKnockback && distance > returnDistance)
         {
-            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * knockbackSpeed);
+            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * returnSpeed);
 
             //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
             target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);

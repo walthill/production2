@@ -29,9 +29,7 @@ public class PlayerSkateMovement : MonoBehaviour
         public float moveSpeed, 
                      boostAcceleration, boostValue;
 
-        [HeaderAttribute("RotationData")]
-        public float medRotationSpeed;
-        public float maxRotationSpeed, rotationSpeed;
+        public float rotationSpeed;
     }
 
     public MoveType moveType;
@@ -47,13 +45,13 @@ public class PlayerSkateMovement : MonoBehaviour
     const float MODEL_ROTATION_FACTOR = 180f;
     const float LEFT_STICK_DEADZONE = 0.35f;
     const float MODEL_ROTATION_MOVE_FACTOR = -1f;
-    const float SLOPE_RAY_DIST = 10f;
-    const float PLAYER_ALIGN_SPEED = 3;
+    const float SLOPE_RAY_DIST = 1f;
+    const float PLAYER_ALIGN_SPEED = 10;
 
     //Input vars
     float zMove;
     float turnLeft, turnRight, rotationY;
-    bool accelButtonDown;
+    bool accelButtonDown, isGrounded;
     Rigidbody rb;
     Transform objTransform;
 
@@ -122,7 +120,7 @@ public class PlayerSkateMovement : MonoBehaviour
         else if(moveType == MoveType.ARCADE)
         {
             //Forward and back movement
-            if (accelButtonDown)
+            if (accelButtonDown && isGrounded)
             {
                 float moveFactor = zMove * arcadeData.moveSpeed;
 
@@ -207,11 +205,17 @@ public class PlayerSkateMovement : MonoBehaviour
 
         if (Physics.Raycast(objTransform.position, -objTransform.up, out hit, SLOPE_RAY_DIST, layerMask))
         {
-            Debug.Log("hit the ground @ " + hit.normal);
+            isGrounded = true;
+           // Debug.Log("hit the ground @ " + hit.normal);
 
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime* PLAYER_ALIGN_SPEED);
+        }
+        else
+        {
+            //Debug.Log("the 101st AIRBORNE");
+            isGrounded = false;
         }
     }
 
