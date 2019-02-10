@@ -81,8 +81,8 @@ public class FollowCamera : MonoBehaviour
         CameraFallback();
     }
 
-    private void FixedUpdate()
-    {
+   // private void FixedUpdate()
+    //{
         /*Vector3 dir = gameObject.transform.position - target.position ;
 
         if (Physics.Raycast(target.position, dir, out hitInfo, dir.magnitude))
@@ -90,9 +90,9 @@ public class FollowCamera : MonoBehaviour
             Debug.Log("ray hit. Need to move camera forward");
             //gameObject.transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, hitInfo.point.z+10);
         }*/
-    }
+    //}
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (target)
         {
