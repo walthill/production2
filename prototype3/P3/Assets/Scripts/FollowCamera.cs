@@ -81,8 +81,9 @@ public class FollowCamera : MonoBehaviour
         CameraFallback();
     }
 
-   // private void FixedUpdate()
-    //{
+    private void FixedUpdate()
+    {
+
         /*Vector3 dir = gameObject.transform.position - target.position ;
 
         if (Physics.Raycast(target.position, dir, out hitInfo, dir.magnitude))
