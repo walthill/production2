@@ -13,7 +13,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
     [SerializeField]
     float buildUpTime=0, timer=0;
     [SerializeField]
-    float boostAcceleration, boostVelocityValue, maxVelocityIncrease;
+    float boostAcceleration=0, boostVelocityValue=0, maxVelocityIncrease=0;
     bool aButtonHold, aButtonReleased, isHeldDown;
 
     PlayerSkateMovement playerMove;
@@ -38,10 +38,9 @@ public class SpeedSurfaceBoost : MonoBehaviour
 
     void Update()
     {
-        aButtonHold = Input.GetButton("JoyJump");
-        aButtonReleased = Input.GetButtonUp("JoyJump");
+       ProcessInput();
 
-        if(isHeldDown)
+       if (isHeldDown)
         {
             if(timer < buildUpTime) //build up speed
             {
@@ -55,7 +54,13 @@ public class SpeedSurfaceBoost : MonoBehaviour
         }
     }
 
-   
+    void ProcessInput()
+    {
+        aButtonHold = Input.GetButton("JoyJump");
+        aButtonReleased = Input.GetButtonUp("JoyJump");
+    }
+
+
     void SpeedSurfaceInteraction()
     {
         if (aButtonReleased && timer >= buildUpTime) // once speed is built up, give quick boost
@@ -65,8 +70,6 @@ public class SpeedSurfaceBoost : MonoBehaviour
             timer = 0;
 
             perfectRelease = true;
-
-          
         }
 
         if (aButtonHold)
