@@ -104,7 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ae67b82916f8843bbff97974277d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   buildUpTime: 0.55
+
   timer: 0
   boostAcceleration: 0.3
   boostVelocityValue: 1.5
