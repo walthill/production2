@@ -47,18 +47,22 @@ public class PlayerSkateMovement : MonoBehaviour
     const float MODEL_ROTATION_FACTOR = 180f;
     const float LEFT_STICK_DEADZONE = 0.35f;
     const float MODEL_ROTATION_MOVE_FACTOR = -1f;
+    const float SLOPE_RAY_DIST = 10f;
+    const float PLAYER_ALIGN_SPEED = 3;
 
     //Input vars
     float zMove;
     float turnLeft, turnRight, rotationY;
     bool accelButtonDown;
     Rigidbody rb;
+    Transform objTransform;
 
     void Awake()
     {
-        respawn.position = gameObject.transform.position;
-
+        objTransform = gameObject.GetComponent<Transform>();
         rb = gameObject.GetComponent<Rigidbody>();
+
+        respawn.position = objTransform.position;
         rb.drag = simData.turnDrag;
 
         if (moveType == MoveType.SIM)
@@ -67,10 +71,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void Update()
     {
-        //NOTE: values between 0 and 1
-        turnLeft = Input.GetAxis("JoyTurnLeft");
-        turnRight = Input.GetAxis("JoyTurnRight");
-
+        ProcessInput();
         Move();
         
         if (Input.GetKeyDown(KeyCode.R))
@@ -79,10 +80,20 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(moveType == MoveType.ARCADE)
+        if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
+        AlignPlayerWithGround();
         RollerSkateMovement();
+    }
+
+
+    void ProcessInput()
+    {
+        //NOTE: values between 0 and 1
+        turnLeft = Input.GetAxis("JoyTurnLeft");
+        turnRight = Input.GetAxis("JoyTurnRight");
+        zMove = Input.GetAxis("JoyVertical");
     }
 
     private void RollerSkateMovement()
@@ -91,15 +102,15 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             if (turnLeft > 0)
             {
-                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, (gameObject.transform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), gameObject.transform.eulerAngles.z);
+                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
 
             if (turnRight > 0)
             {
-                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, (gameObject.transform.eulerAngles.y + (turnRight * simData.rotationSpeed)), gameObject.transform.eulerAngles.z);
+                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
 
-            float rotationY = gameObject.transform.eulerAngles.y + MODEL_ROTATION_FACTOR;
+            float rotationY = objTransform.eulerAngles.y + MODEL_ROTATION_FACTOR;
 
             Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
 
@@ -116,7 +127,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 float moveFactor = zMove * arcadeData.moveSpeed;
 
                 //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = transform.right*moveFactor*MODEL_ROTATION_MOVE_FACTOR;                
+                Vector3 moveDir = objTransform.right*moveFactor*MODEL_ROTATION_MOVE_FACTOR;                
                 Vector3 vel = rb.velocity;
 
                 if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
@@ -132,21 +143,19 @@ public class PlayerSkateMovement : MonoBehaviour
             if(turnLeft > 0) //Bumper press for quick U-turn??
             {
                 rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y - (turnLeft*arcadeData.rotationSpeed), gameObject.transform.eulerAngles.z);
+                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, objTransform.eulerAngles.y - (turnLeft*arcadeData.rotationSpeed), objTransform.eulerAngles.z);
             }
 
             if(turnRight > 0)
             {
                 rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y + (turnRight* arcadeData.rotationSpeed), gameObject.transform.eulerAngles.z);
+                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, objTransform.eulerAngles.y + (turnRight* arcadeData.rotationSpeed), objTransform.eulerAngles.z);
             }
         }
     }
 
     private void Move()
     {
-        zMove = Input.GetAxis("JoyVertical");
-
         if (moveType == MoveType.SIM)
         {
             // TODO(low): expose input deadzone data
@@ -188,6 +197,23 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+    void AlignPlayerWithGround()
+    {
+        //help @ https://bit.ly/2RMVeox
+
+        RaycastHit hit;
+        if (Physics.Raycast(objTransform.position, -objTransform.up, out hit, SLOPE_RAY_DIST))
+        {
+            //Debug.Log("hit the ground @ " + hit.normal);
+
+            //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime* PLAYER_ALIGN_SPEED);
+        }
+    }
+
+
+    #region Getters and Setters
     public void SetDrag()
     {
         //allow for designer to update rigidbody drag - SIM movement
@@ -196,8 +222,8 @@ public class PlayerSkateMovement : MonoBehaviour
 
     public void ResetPlayer()
     {
-        gameObject.transform.position = respawn.transform.position;
-        gameObject.transform.localRotation = Quaternion.identity;
+        objTransform.position = respawn.transform.position;
+        objTransform.localRotation = Quaternion.identity;
         simData.baseMoveSpeed = 1;
 
         rb.velocity = Vector3.zero;
@@ -215,4 +241,5 @@ public class PlayerSkateMovement : MonoBehaviour
         arcadeData.maxVelocity += maxVelocityIncrease;
         Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
+    #endregion
 }

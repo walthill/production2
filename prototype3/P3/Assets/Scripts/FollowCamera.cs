@@ -24,9 +24,10 @@ public class FollowCamera : MonoBehaviour
     */
     [SerializeField]
     bool shouldRotate = true;
-
     // The target we are following
     public Transform target;
+
+    [Header("General Camera Settings")]
     // The distance in the x-z plane to the target
     public float distance = 10.0f;
     // the height we want the camera to be above the target
@@ -44,14 +45,18 @@ public class FollowCamera : MonoBehaviour
     float currentHeight;
     Quaternion currentRotation;
 
+    [Header("Dynamic Cam Settings")]
     [SerializeField]
-    float timer = 0, knockbackTime =0,
+    float timer = 0;
+    [SerializeField]
+    float knockbackTime = 0;
 
-    knockbackDistance = 0,     //value added to distance and lerped to communicate speed
-
-    knockbackSpeed = 0,     //Speed of lerp on speed increase
-
-    returnSpeed = 0;     //speed of lerp on speed decrease
+    [SerializeField]
+    float knockbackDistance = 0; //value added to distance and lerped to communicate speed
+    [SerializeField]
+    float knockbackSpeed = 0;    //Speed of lerp on speed increase
+    [SerializeField]
+    float returnSpeed = 0;       //speed of lerp on speed decrease
 
     Camera cam;
     bool hasKnockback;
