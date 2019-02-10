@@ -201,10 +201,13 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //help @ https://bit.ly/2RMVeox
 
+        //only align to gameobjects marked as ground layers
+        LayerMask layerMask = LayerMask.GetMask("Ground");
         RaycastHit hit;
-        if (Physics.Raycast(objTransform.position, -objTransform.up, out hit, SLOPE_RAY_DIST))
+
+        if (Physics.Raycast(objTransform.position, -objTransform.up, out hit, SLOPE_RAY_DIST, layerMask))
         {
-            //Debug.Log("hit the ground @ " + hit.normal);
+            Debug.Log("hit the ground @ " + hit.normal);
 
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;

@@ -60,7 +60,7 @@ public class FollowCamera : MonoBehaviour
 
     Camera cam;
     bool hasKnockback;
-    float originalDistance, distanceToReach;
+    float returnDistance, distanceToReach;
     Vector3 centerCamPos;
     RaycastHit hitInfo;
 
@@ -72,7 +72,7 @@ public class FollowCamera : MonoBehaviour
         float centerX = cam.scaledPixelWidth / 2;
         centerCamPos = cam.ScreenToWorldPoint(new Vector3(centerX, centerY, 0));
 
-        originalDistance = distance;
+        returnDistance = distance;
         distanceToReach = distance + knockbackDistance;
     }
 
@@ -137,9 +137,13 @@ public class FollowCamera : MonoBehaviour
                 timer = 0;
             }
         }
-        else if (!hasKnockback && distance > originalDistance)
+        else if (!hasKnockback && distance > returnDistance)
         {
-            distance = Mathf.Lerp(distance, originalDistance, Time.deltaTime * knockbackSpeed);
+            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * knockbackSpeed);
+
+            //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
+            target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
+            target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
         }
     }
 

@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpeedSurfaceBoost : MonoBehaviour
 {
+    //TODO: move player indicator UI into its own class. Singleton?
+    //TODO: add anims to player ui
+
     const string CHARGE_SURFACE = "ChargeSurface", RELEASE_SURFACE = "ReleaseSurface";
 
     [SerializeField]
@@ -14,8 +18,21 @@ public class SpeedSurfaceBoost : MonoBehaviour
 
     PlayerSkateMovement playerMove;
 
+    [SerializeField]
+    public Image speedIndicator;
+    [SerializeField]
+    public Text speedText;
+
+    bool perfectRelease;
+
     private void Awake()
     {
+        speedIndicator = gameObject.GetComponentInChildren<Image>();
+        speedText = gameObject.GetComponentInChildren<Text>();
+
+        speedIndicator.gameObject.SetActive(false);
+        speedText.gameObject.SetActive(false);
+
         playerMove = gameObject.GetComponent<PlayerSkateMovement>();
     }
 
@@ -30,9 +47,15 @@ public class SpeedSurfaceBoost : MonoBehaviour
             {
                 timer += Time.deltaTime;
             }
+
+            if(timer >= buildUpTime)
+            {
+                DisplaySpeed(true, "100%");
+            }
         }
     }
 
+   
     void SpeedSurfaceInteraction()
     {
         if (aButtonReleased && timer >= buildUpTime) // once speed is built up, give quick boost
@@ -40,10 +63,15 @@ public class SpeedSurfaceBoost : MonoBehaviour
             Debug.Log("BOOST");
             playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
             timer = 0;
+
+            perfectRelease = true;
+
+          
         }
 
         if (aButtonHold)
         {
+            perfectRelease = false;
             Debug.Log("building speed...");
             playerMove.IncreaseSpeed(boostAcceleration);
             isHeldDown = true;
@@ -55,6 +83,15 @@ public class SpeedSurfaceBoost : MonoBehaviour
         }
     }
 
+    void DisplaySpeed(bool showUI, string textToDisplay)
+    {
+        speedIndicator.gameObject.SetActive(showUI);
+        speedText.gameObject.SetActive(showUI);
+
+        speedText.text = textToDisplay;
+    }
+
+    #region Collision Handling
     private void OnTriggerStay(Collider other)
     {
         if(other.tag == CHARGE_SURFACE)
@@ -66,4 +103,14 @@ public class SpeedSurfaceBoost : MonoBehaviour
             SpeedSurfaceInteraction();
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == RELEASE_SURFACE)
+        {
+            if(perfectRelease)
+                DisplaySpeed(true, "200%");
+        }
+    }
+    #endregion
 }
