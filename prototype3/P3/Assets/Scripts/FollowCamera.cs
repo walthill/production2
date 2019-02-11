@@ -80,7 +80,7 @@ public class FollowCamera : MonoBehaviour
     {
         CameraFallback();
     }
-
+    /*
     private void FixedUpdate()
     {
 
@@ -90,9 +90,9 @@ public class FollowCamera : MonoBehaviour
         {
             Debug.Log("ray hit. Need to move camera forward");
             //gameObject.transform.position = new Vector3(hitInfo.point.x, hitInfo.point.y, hitInfo.point.z+10);
-        }*/
-    //}
-
+        }
+    }
+    */
     void FixedUpdate()
     {
         if (target)
