@@ -31,7 +31,7 @@ public class ParticleScript : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         instance = this;
         ParticleSystem ps = GetComponent<ParticleSystem>();
@@ -60,7 +60,7 @@ public class ParticleScript : MonoBehaviour
 
     void checkInput()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+       /* if (Input.GetKeyDown(KeyCode.A))
         {
             SpeedColor1();
         }
@@ -97,7 +97,7 @@ public class ParticleScript : MonoBehaviour
         {
             MakeSmall();
 
-        }
+        }*/
         
     }
 

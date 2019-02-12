@@ -57,10 +57,12 @@ public class FollowCamera : MonoBehaviour
     float knockbackSpeed = 0;    //Speed of lerp on speed increase
     [SerializeField]
     float returnSpeed = 0;       //speed of lerp on speed decrease
+    [SerializeField]
+    float returnDistance = 0;
 
     Camera cam;
     bool hasKnockback;
-    float returnDistance, distanceToReach;
+    float distanceToReach;
     Vector3 centerCamPos;
     RaycastHit hitInfo;
 
@@ -98,7 +100,7 @@ public class FollowCamera : MonoBehaviour
         if (target)
         {
             // Calculate the current rotation angles
-            wantedRotationAngle = target.eulerAngles.y-90;
+            wantedRotationAngle = target.eulerAngles.y;
             wantedHeight = target.position.y + height;
             currentRotationAngle = transform.eulerAngles.y;
             currentHeight = transform.position.y;
@@ -140,16 +142,20 @@ public class FollowCamera : MonoBehaviour
         }
         else if (!hasKnockback && distance > returnDistance)
         {
-            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * knockbackSpeed);
-
-            //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
-            target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
-            target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
+            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * returnSpeed);
+            ToggleSpeedUI();
         }
     }
 
     public void ToggleKnockback()
     {
         hasKnockback = true;
+    }
+
+    public void ToggleSpeedUI()
+    {
+        //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
+        target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
+        target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
     }
 }

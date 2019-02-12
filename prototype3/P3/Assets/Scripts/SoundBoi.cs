@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SoundBoi : MonoBehaviour
 {
+    public static SoundBoi instance;
+
     [Header("General Feedback Sounds")]
     public AudioClip WheelSoundSlowSnd;
     public AudioClip WheelSoundFastSnd;
@@ -70,9 +72,9 @@ public class SoundBoi : MonoBehaviour
     float ChargingpitchNumber = 1;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        instance = this;
 
         heldVolume0 = musicSlot0.volume;
         heldVolume1 = musicSlot1.volume;

@@ -44,11 +44,11 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     Transform respawn = null;
 
-    const float MODEL_ROTATION_FACTOR = 180f;
+   // const float MODEL_ROTATION_FACTOR = 180f;
     const float LEFT_STICK_DEADZONE = 0.35f;
-    const float MODEL_ROTATION_MOVE_FACTOR = -1f;
+  //  const float MODEL_ROTATION_MOVE_FACTOR = -1f;
     const float SLOPE_RAY_DIST = 10f;
-    const float PLAYER_ALIGN_SPEED = 3;
+    const float PLAYER_ALIGN_SPEED = 10;
 
     //Input vars
     float zMove;
@@ -73,7 +73,9 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         ProcessInput();
         Move();
-        
+
+       
+
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
     }
@@ -83,8 +85,8 @@ public class PlayerSkateMovement : MonoBehaviour
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        AlignPlayerWithGround();
         RollerSkateMovement();
+        AlignPlayerWithGround();
     }
 
 
@@ -110,7 +112,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
 
-            float rotationY = objTransform.eulerAngles.y + MODEL_ROTATION_FACTOR;
+            float rotationY = objTransform.eulerAngles.y;// + MODEL_ROTATION_FACTOR;
 
             Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
 
@@ -127,7 +129,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 float moveFactor = zMove * arcadeData.moveSpeed;
 
                 //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = objTransform.right*moveFactor*MODEL_ROTATION_MOVE_FACTOR;                
+                Vector3 moveDir = objTransform.forward * moveFactor;// *MODEL_ROTATION_MOVE_FACTOR;                
                 Vector3 vel = rb.velocity;
 
                 if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
