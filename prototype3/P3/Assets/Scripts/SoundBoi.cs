@@ -66,11 +66,14 @@ public class SoundBoi : MonoBehaviour
     float heldVolume4;
     float heldVolume5;
 
+    float pitchNumber = 1;
+    float ChargingpitchNumber = 1;
+
     // Start is called before the first frame update
     void Start()
     {
-
         
+
         heldVolume0 = musicSlot0.volume;
         heldVolume1 = musicSlot1.volume;
         heldVolume2 = musicSlot2.volume;
@@ -78,6 +81,7 @@ public class SoundBoi : MonoBehaviour
         heldVolume4 = musicSlot4.volume;
         heldVolume5 = musicSlot5.volume;
         SetMusic();
+        LoadGeneralSounds();
     }
 
     public void SetMusic()
@@ -132,6 +136,48 @@ public class SoundBoi : MonoBehaviour
         chargingSource.clip = ChargingSnd;
         ReleaseFeedBackSource.clip = ReleaseSnd;
     }
+    public void ReleaseSound()
+    {
+        ReleaseFeedBackSource.Play();
+    }
+    public void PlaywheelSound()
+    {
+        WheelSource.Play();
+        Debug.Log("playing wheels");
+        Debug.Log("volume is" + WheelSource.volume);
+    }
+
+    public void WheelPitchUp()
+    {
+        WheelSource.pitch = pitchNumber;
+        pitchNumber++;
+    }
+
+    public void WheelPitchDown()
+    {
+        WheelSource.pitch = pitchNumber;
+        pitchNumber--;
+    }
+
+
+    public void stopWheelSound()
+    {
+        WheelSource.Stop();
+    }
+
+    public void chargingSound()
+    {
+        chargingSource.Play();
+        chargingSource.pitch = ChargingpitchNumber;
+        ChargingpitchNumber = ChargingpitchNumber+.1f;
+    }
+
+    public void stopChargingSound()
+    {
+
+        chargingSource.Stop();
+        ChargingpitchNumber = 1;
+    }
 
 
     // Update is called once per frame
@@ -157,6 +203,30 @@ public class SoundBoi : MonoBehaviour
         {
             VolumeMusic5();
         }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            //PlaywheelSound();
+            chargingSound();
+
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            //stopWheelSound();
+            stopChargingSound();
+            ReleaseSound();
+
+        }
+
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (d > 0f)
+        {
+            WheelPitchUp();
+        }
+        else if (d < 0f)
+        {
+            WheelPitchDown();
+        }
+
     }
 
     //these raise the volume of the sounds as speed inceases

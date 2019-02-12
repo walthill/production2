@@ -118,36 +118,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d6deb75b16a01449d8b68cd7b3775f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WheelSoundSlowSnd: {fileID: 0}
+  WheelSoundSlowSnd: {fileID: 8300000, guid: 265411f01a91bdd4098799540cdad683, type: 3}
   WheelSoundFastSnd: {fileID: 0}
   SparksSnd: {fileID: 0}
-  ChargingSnd: {fileID: 0}
-  ReleaseSnd: {fileID: 0}
+  ChargingSnd: {fileID: 8300000, guid: 6c5a7646928c1d24c87c504dd747faae, type: 3}
+  ReleaseSnd: {fileID: 8300000, guid: b91bc24af05bfea4bab15718489ae28c, type: 3}
   PerfectReleaseSnd: {fileID: 0}
-  drumsSnd0: {fileID: 0}
-  drumsSnd1: {fileID: 0}
-  drumsSnd2: {fileID: 0}
-  chordsSnd0: {fileID: 0}
-  chordsSnd1: {fileID: 0}
-  droneOrBaseSnd: {fileID: 0}
-  melodySnd0: {fileID: 0}
-  melodySnd1: {fileID: 0}
-  arpSnd0: {fileID: 0}
-  arpSnd1: {fileID: 0}
+  musicSnd0: {fileID: 8300000, guid: c467bacfafe22b54e99b40954ac4de56, type: 3}
+  musicSnd1: {fileID: 8300000, guid: 9dc5928da95765947872e2bf53121784, type: 3}
+  musicSnd2: {fileID: 8300000, guid: e3d96830a35c8464986d45167c08b224, type: 3}
+  musicSnd3: {fileID: 8300000, guid: 873c7cb04c9ecb2489e34c1dbdc4b7c2, type: 3}
+  musicSnd4: {fileID: 0}
+  musicSnd5: {fileID: 0}
   WheelSource: {fileID: 6922593834649765491}
   sparkSource: {fileID: 6922593834649765490}
   chargingSource: {fileID: 6922593834649765489}
   ReleaseFeedBackSource: {fileID: 6922593834649765488}
-  drumsSource0: {fileID: 6922593834649765495}
-  drumsSource1: {fileID: 6922593834649765494}
-  drumsSource2: {fileID: 6922593834649765493}
-  chordsSource0: {fileID: 6922593834649765492}
-  chordsSource1: {fileID: 6922593834649765499}
-  droneOrBaseSource: {fileID: 6922593834649765498}
-  melodySource0: {fileID: 6922593834649765497}
-  melodySource1: {fileID: 6922593834649765496}
-  arpSource0: {fileID: 6922593834649765503}
-  arpSource1: {fileID: 6922593834649765502}
+  musicSlot0: {fileID: 6922593834649765495}
+  musicSlot1: {fileID: 6922593834649765494}
+  musicSlot2: {fileID: 6922593834649765493}
+  musicSlot3: {fileID: 6922593834649765492}
+  musicSlot4: {fileID: 6922593834649765499}
+  musicSlot5: {fileID: 6922593834649765498}
 --- !u!82 &6922593834649765491
 AudioSource:
   m_ObjectHideFlags: 0
@@ -354,7 +346,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -544,9 +536,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -640,9 +632,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -736,9 +728,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -832,9 +824,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
