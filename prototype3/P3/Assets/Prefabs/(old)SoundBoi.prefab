@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 6922593834649765503}
   - component: {fileID: 6922593834649765502}
   m_Layer: 0
-  m_Name: SoundBoi
+  m_Name: (old)SoundBoi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d6deb75b16a01449d8b68cd7b3775f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WheelSoundSlowSnd: {fileID: 8300000, guid: 265411f01a91bdd4098799540cdad683, type: 3}
+  WheelSoundSlowSnd: {fileID: 8300000, guid: e6ebce094305c7a4abeb78273e671aab, type: 3}
   WheelSoundFastSnd: {fileID: 0}
   SparksSnd: {fileID: 0}
   ChargingSnd: {fileID: 8300000, guid: 6c5a7646928c1d24c87c504dd747faae, type: 3}
@@ -152,9 +152,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.001
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

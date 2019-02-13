@@ -218,6 +218,10 @@ public class SoundBoi : MonoBehaviour
             ReleaseSound();
 
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            PlaywheelSound();
+        }
 
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
