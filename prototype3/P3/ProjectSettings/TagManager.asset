@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ChargeSurface
   - ReleaseSurface
+  - boomBox
+  - end
   layers:
   - Default
   - TransparentFX
