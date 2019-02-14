@@ -47,13 +47,13 @@ public class PlayerSkateMovement : MonoBehaviour
    // const float MODEL_ROTATION_FACTOR = 180f;
     const float LEFT_STICK_DEADZONE = 0.35f;
   //  const float MODEL_ROTATION_MOVE_FACTOR = -1f;
-    const float SLOPE_RAY_DIST = 10f;
-    const float PLAYER_ALIGN_SPEED = 10;
+    const float SLOPE_RAY_DIST = 1f;
+    const float PLAYER_ALIGN_SPEED = 1;
 
     //Input vars
     float zMove;
     float turnLeft, turnRight, rotationY;
-    bool accelButtonDown;
+    bool accelButtonDown, isGrounded;
     Rigidbody rb;
     Transform objTransform;
 
@@ -75,7 +75,6 @@ public class PlayerSkateMovement : MonoBehaviour
         Move();
 
        
-
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
     }
@@ -86,9 +85,12 @@ public class PlayerSkateMovement : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         RollerSkateMovement();
-        AlignPlayerWithGround();
     }
 
+    private void LateUpdate()
+    {
+        AlignPlayerWithGround();
+    }
 
     void ProcessInput()
     {
@@ -124,7 +126,7 @@ public class PlayerSkateMovement : MonoBehaviour
         else if(moveType == MoveType.ARCADE)
         {
             //Forward and back movement
-            if (accelButtonDown)
+            if (accelButtonDown && isGrounded)
             {
                 float moveFactor = zMove * arcadeData.moveSpeed;
 
@@ -204,17 +206,25 @@ public class PlayerSkateMovement : MonoBehaviour
         //help @ https://bit.ly/2RMVeox
 
         //only align to gameobjects marked as ground layers
-        LayerMask layerMask = LayerMask.GetMask("Ground");
+        // LayerMask layerMask = LayerMask.GetMask("Player");
+        Ray ray = new Ray(objTransform.position, -objTransform.up);
         RaycastHit hit;
 
-        if (Physics.Raycast(objTransform.position, -objTransform.up, out hit, SLOPE_RAY_DIST, layerMask))
+        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
         {
+            isGrounded = true;
+            Debug.Log(hit.distance);
+            Debug.Log(hit.collider.gameObject.name);
             Debug.Log("hit the ground @ " + hit.normal);
-
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime* PLAYER_ALIGN_SPEED);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
         }
+        else
+        {
+            isGrounded = false;
+        }
+
     }
 
 
