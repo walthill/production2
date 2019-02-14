@@ -95,16 +95,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9421ec369c4f5174694370107fb6eaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shouldRotate: 1
   target: {fileID: 0}
   distance: 5
   height: 2.5
-  heightDamping: 2
-  rotationDamping: 3
-  yOffset: 2
+  damping: 10
+  rotationDamping: 30
+  lookAtOffset: {x: 0, y: 2, z: 0}
+  applyRotationDamping: 1
+  raycastLength: 2
+  collisionCameraHeight: 1
+  collisionRaycastOffset: {x: 0, y: 0, z: 0}
   timer: 0
   knockbackTime: 5
-  knockbackDistance: 2
   knockbackSpeed: 1
   returnSpeed: 1
+  knockbackDistance: 2
   returnDistance: 1

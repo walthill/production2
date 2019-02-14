@@ -254,7 +254,7 @@ public class PlayerSkateMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
         {
             isGrounded = true;
-            Debug.Log("hit the ground @ " + hit.normal);
+           // Debug.Log("hit the ground @ " + hit.normal);
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
