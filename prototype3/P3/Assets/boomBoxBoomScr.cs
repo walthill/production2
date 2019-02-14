@@ -33,6 +33,7 @@ public class boomBoxBoomScr : MonoBehaviour
     {
         boomsource.Play();
         anim.Play("BoomAnim");
+        GameObject.Find("Player").GetComponent<TempLerpHardCode>().keepMovingTru();
         
     }
 }

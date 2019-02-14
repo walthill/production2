@@ -137,19 +137,22 @@ public class SpeedSurfaceBoost : MonoBehaviour
     #region Collision Handling
     private void OnTriggerStay(Collider other)
     {
-        if ((int)other.gameObject.GetComponentInParent<SpeedGate>().speedChannel == (int)currentSpeedChannel+1)
+        if (other.gameObject.GetComponentInParent<SpeedGate>() != null)
         {
-            if (other.tag == CHARGE_SURFACE)
+            if ((int)other.gameObject.GetComponentInParent<SpeedGate>().speedChannel == (int)currentSpeedChannel + 1)
             {
-                SpeedSurfaceInteraction();
+                if (other.tag == CHARGE_SURFACE)
+                {
+                    SpeedSurfaceInteraction();
+                }
             }
-        }
 
-        if ((int)other.gameObject.GetComponentInParent<SpeedGate>().speedChannel == (int)currentSpeedChannel)
-        {
-            if (other.tag == RELEASE_SURFACE)
+            if ((int)other.gameObject.GetComponentInParent<SpeedGate>().speedChannel == (int)currentSpeedChannel)
             {
-                SpeedSurfaceInteraction();
+                if (other.tag == RELEASE_SURFACE)
+                {
+                    SpeedSurfaceInteraction();
+                }
             }
         }
     }
