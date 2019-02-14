@@ -76,10 +76,13 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         Move();
 
-        if (objTransform.localEulerAngles.z > 10 || objTransform.localEulerAngles.z < -10)
+        if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
         {
-            Debug.Log("APPLYING DOWN FORCE");
-            applyDownforce = true;
+            if (objTransform.position.y > -20)
+            {
+                Debug.Log("APPLYING DOWN FORCE");
+                applyDownforce = true;
+            }
         }
         else
         {
