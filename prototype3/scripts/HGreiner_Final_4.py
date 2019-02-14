@@ -74,6 +74,7 @@ def terrainUI():
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 125)], parent="columnMain_C")
     cmds.intSlider('planePoint', minValue=1, maxValue=5, step=1, value=1)
 
+    """
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 125)], parent="columnMain_C")
     cmds.separator(height=10, style="out")
     cmds.text(label='')
@@ -90,6 +91,7 @@ def terrainUI():
     cmds.radioButton(label='Green', changeCommand=lambda args: shadingColor('Green'))
     cmds.radioButton(label='Pink', changeCommand=lambda args: shadingColor('Pink'))
     cmds.text(label='')
+    """
 
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 125)], parent="columnMain_C")
     cmds.text(label='')
