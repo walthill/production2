@@ -248,6 +248,10 @@ PrefabInstance:
       propertyPath: respawn
       value: 
       objectReference: {fileID: 310529198}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: liftCoeffiecient
+      value: -0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 8746182659600908359, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
         type: 3}
       propertyPath: EmissionModule.rateOverDistance.scalar
@@ -265,6 +269,10 @@ PrefabInstance:
     - target: {fileID: 193769611, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.505
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722380, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: m_Drag
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 1032722379, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_Enabled
@@ -3722,6 +3730,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1406194919}
+    - target: {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187,
+        type: 3}
+      propertyPath: rotationDamping
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6789190844311896844, guid: d1aa96f5974760e4d8636b8233e40187,
         type: 3}
       propertyPath: m_BackGroundColor.r

@@ -53,9 +53,11 @@ public class PlayerSkateMovement : MonoBehaviour
     //Input vars
     float zMove;
     float turnLeft, turnRight, rotationY;
-    bool accelButtonDown, isGrounded;
+    bool accelButtonDown, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
+
+    [SerializeField] float liftCoeffiecient=0;
 
     void Awake()
     {
@@ -74,22 +76,39 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         Move();
 
-       
+        if (objTransform.localEulerAngles.z > 10 || objTransform.localEulerAngles.z < -10)
+        {
+            Debug.Log("APPLYING DOWN FORCE");
+            applyDownforce = true;
+        }
+        else
+        {
+            applyDownforce = false;
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
-            ResetPlayer();
+        ResetPlayer();
     }
 
     private void FixedUpdate()
     {
+        float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
+
+        if(applyDownforce)
+        {
+            rb.AddForceAtPosition(lift*transform.up, objTransform.position);
+        }
+
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         RollerSkateMovement();
+        AlignPlayerWithGround();
     }
 
     private void LateUpdate()
     {
-        AlignPlayerWithGround();
+        
     }
 
     void ProcessInput()
@@ -144,16 +163,35 @@ public class PlayerSkateMovement : MonoBehaviour
                 }
             }
 
-            if(turnLeft > 0) //Bumper press for quick U-turn??
+            if (!applyDownforce)
             {
-                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, objTransform.eulerAngles.y - (turnLeft*arcadeData.rotationSpeed), objTransform.eulerAngles.z);
-            }
 
-            if(turnRight > 0)
+                if (turnLeft > 0) //Bumper press for quick U-turn??
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y - (turnLeft * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                }
+
+                if (turnRight > 0)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (turnRight * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                }
+            }
+            else
             {
-                rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, objTransform.eulerAngles.y + (turnRight* arcadeData.rotationSpeed), objTransform.eulerAngles.z);
+                if (turnLeft > 0) //Bumper press for quick U-turn??
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y , objTransform.localEulerAngles.z + (turnLeft * arcadeData.rotationSpeed));
+                }
+
+                if (turnRight > 0)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z - (turnRight * arcadeData.rotationSpeed));
+                }
+
             }
         }
     }
@@ -213,8 +251,6 @@ public class PlayerSkateMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
         {
             isGrounded = true;
-            Debug.Log(hit.distance);
-            Debug.Log(hit.collider.gameObject.name);
             Debug.Log("hit the ground @ " + hit.normal);
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;

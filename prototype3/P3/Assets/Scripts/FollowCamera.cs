@@ -80,7 +80,7 @@ public class FollowCamera : MonoBehaviour
 
     private void Update()
     {
-        CameraFallback();
+        
     }
     /*
     private void FixedUpdate()
@@ -100,7 +100,7 @@ public class FollowCamera : MonoBehaviour
         if (target)
         {
             // Calculate the current rotation angles
-            wantedRotationAngle = target.eulerAngles.y;
+            wantedRotationAngle = target.localEulerAngles.y;
             wantedHeight = target.position.y + height;
             currentRotationAngle = transform.eulerAngles.y;
             currentHeight = transform.position.y;
@@ -124,6 +124,8 @@ public class FollowCamera : MonoBehaviour
             if (shouldRotate)
                 transform.LookAt(new Vector3(target.position.x, target.position.y + yOffset, target.position.z));
         }
+
+        CameraFallback();
 
     }
 
