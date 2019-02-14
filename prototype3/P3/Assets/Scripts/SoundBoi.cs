@@ -152,13 +152,13 @@ public class SoundBoi : MonoBehaviour
     public void WheelPitchUp()
     {
         WheelSource.pitch = pitchNumber;
-        pitchNumber++;
+        pitchNumber = pitchNumber + .1f;
     }
 
     public void WheelPitchDown()
     {
         WheelSource.pitch = pitchNumber;
-        pitchNumber--;
+        pitchNumber = pitchNumber - .1f;
     }
 
 
