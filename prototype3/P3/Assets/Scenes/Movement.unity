@@ -420,6 +420,10 @@ PrefabInstance:
       propertyPath: zAxisDeadzone
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: leftStickTurning
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 218031474, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_Camera
       value: 

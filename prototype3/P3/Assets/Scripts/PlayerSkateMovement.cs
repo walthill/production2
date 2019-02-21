@@ -34,6 +34,7 @@ public class PlayerSkateMovement : MonoBehaviour
         public float maxRotationSpeed, rotationSpeed;
     }
 
+    [SerializeField] bool leftStickTurning;
     [SerializeField] float zAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
     public MoveType moveType;
 
@@ -112,8 +113,8 @@ public class PlayerSkateMovement : MonoBehaviour
     void ProcessInput()
     {
         //NOTE: values between 0 and 1
-//        turnLeft = Input.GetAxis("JoyTurnLeft");
-//        turnRight = Input.GetAxis("JoyTurnRight");
+        turnLeft = Input.GetAxis("JoyTurnLeft");
+        turnRight = Input.GetAxis("JoyTurnRight");
 
         xMove = Input.GetAxis("JoyHorizontal");
         
@@ -168,32 +169,65 @@ public class PlayerSkateMovement : MonoBehaviour
             {
                 Debug.Log(xMove);
 
-                if (xMove < 0) //Bumper press for quick U-turn??
+                if (leftStickTurning)
                 {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                }
+                    if (xMove < 0) //Bumper press for quick U-turn??
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    }
 
-                if (xMove > 0)
+                    if (xMove > 0)
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    }
+                }
+                else //TEMP for control testing
                 {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    if (turnLeft > 0) //Bumper press for quick U-turn??
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y - (turnLeft * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    }
+
+                    if (turnRight > 0)
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (turnRight * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    }
                 }
             }
             else
             {
-                if (xMove < 0) //Bumper press for quick U-turn??
+                if (leftStickTurning)
                 {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y , objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
+                    if (xMove < 0) //Bumper press for quick U-turn??
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
+                    }
 
-                if (xMove > 0)
+                    if (xMove > 0)
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
+                    }
+                }
+                else //TEMP for control testing
                 {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
+                    if (turnLeft > 0) //Bumper press for quick U-turn??
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z - (turnLeft * arcadeData.rotationSpeed));
+                    }
 
+                    if (turnRight > 0)
+                    {
+                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (turnRight * arcadeData.rotationSpeed));
+                    }
+                }
             }
         }
     }
