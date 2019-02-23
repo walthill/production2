@@ -1,6 +1,0 @@
-what to put in python script editor:
-
-
-import rockGen
-reload(rockGen)
-rockGen.UIwindow()
