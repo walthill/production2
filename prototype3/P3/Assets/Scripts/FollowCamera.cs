@@ -6,6 +6,7 @@ public class FollowCamera : MonoBehaviour
 {
     //Smooth camera vars
     [SerializeField] Transform target;
+//    [SerializeField] Transform rotationTarget;
 
     [Header("Smooth Camera Values")]
     [SerializeField] float distance;
@@ -13,7 +14,7 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float damping;
     [SerializeField] float rotationDamping;
     [SerializeField] Vector3 lookAtOffset;
-    [SerializeField] bool applyRotationDamping;
+    [SerializeField] bool applyRotationDamp;
 
     //Camera collision vars
     [Header("Camera Collision Values")]
@@ -30,30 +31,53 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float knockbackDistance;
     [SerializeField] float returnDistance;
 
+    
     float distanceToReach;
     bool hasKnockback = false;
-    
+    [SerializeField] float rotationSpeed;
+    [SerializeField] bool looking = false;
+
+    float camYRotation;
+    float camXRotation;
+
+    Quaternion originalParentRotation;
+
+    float deadzone = 0.3f;
     private void Awake()
     {
+        originalParentRotation = transform.parent.rotation;
         distanceToReach = distance + knockbackDistance;
         returnDistance = returnDistance + distance;
     }
 
+    private void Update()
+    {
+        camYRotation = Input.GetAxis("JoyHorizontalRS");
+        camXRotation = Input.GetAxis("JoyVerticalRS");
+
+        if (camYRotation != 0 || camXRotation != 0) looking = true;
+        else looking = false;
+       
+    }
+
     private void FixedUpdate()
     {
-        if (target)
+        if (target && !looking)
         {
+            transform.parent.rotation = originalParentRotation;
+
             Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
             RaycastHit hitInfo;
 
-            if (Physics.Raycast(ray, out hitInfo, raycastLength ))
+            //Camera collisions
+            if (Physics.Raycast(ray, out hitInfo, raycastLength))
             {
                 if (hitInfo.transform != target) //make sure collision isn't the player
                 {
-                    Debug.Log("raycast hit" + hitInfo.collider.name);
+                    // Debug.Log("raycast hit" + hitInfo.collider.name);
 
                     wantedPosition = new Vector3(hitInfo.point.x,
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
@@ -65,7 +89,7 @@ public class FollowCamera : MonoBehaviour
 
             Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
 
-            if (applyRotationDamping)
+            if (applyRotationDamp)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationDamping);
@@ -77,6 +101,26 @@ public class FollowCamera : MonoBehaviour
             }
 
             CameraFallback();
+        }
+        else if (looking)
+        {
+            // Debug.Log("looking");
+            //TODO: clamp rotation on the X and Y
+
+            //TODO: set camera rig facing to be same as player
+
+            if (camXRotation > deadzone || camXRotation < -deadzone)
+            {
+                transform.parent.Rotate(camXRotation * rotationSpeed, 0, 0.0f);
+            }
+            else if (camYRotation > deadzone || camYRotation < -deadzone)
+            {
+                transform.parent.Rotate(0, -camYRotation * rotationSpeed, 0.0f);
+            }
+            else
+            {
+                Debug.Log("RESET ROTATION");
+            }
         }
     }
 
