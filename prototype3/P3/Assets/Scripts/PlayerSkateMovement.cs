@@ -34,7 +34,6 @@ public class PlayerSkateMovement : MonoBehaviour
         public float maxRotationSpeed, rotationSpeed;
     }
 
-    [SerializeField] bool leftStickTurning;
     [SerializeField] float zAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
     public MoveType moveType;
 
@@ -49,9 +48,11 @@ public class PlayerSkateMovement : MonoBehaviour
     const float PLAYER_ALIGN_SPEED = 1;
 
     //Input vars
-    float zMove, xMove;
-    float turnLeft, turnRight, rotationY;
+    float xMove;
+    float rotationY, accelerationButton;
     bool accelButtonDown, isGrounded, applyDownforce;
+    int moveStartup = 0;
+    const int KICKS_TO_START = 3;
     Rigidbody rb;
     Transform objTransform;
 
@@ -76,8 +77,8 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             if (objTransform.position.y > -20)
             {
-                Debug.Log("APPLYING DOWN FORCE");
-                applyDownforce = true;
+              //  Debug.Log("APPLYING DOWN FORCE");
+               // applyDownforce = true;
             }
         }
         else
@@ -86,15 +87,14 @@ public class PlayerSkateMovement : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.R))
-        ResetPlayer();
+            ResetPlayer();
     }
 
     private void FixedUpdate()
     {
-        float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
-
         if(applyDownforce)
         {
+            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(lift*transform.up, objTransform.position);
         }
 
@@ -105,27 +105,17 @@ public class PlayerSkateMovement : MonoBehaviour
         AlignPlayerWithGround();
     }
 
-    private void LateUpdate()
-    {
-        
-    }
-
     void ProcessInput()
     {
-        //NOTE: values between 0 and 1
-        turnLeft = Input.GetAxis("JoyTurnLeft");
-        turnRight = Input.GetAxis("JoyTurnRight");
-
         xMove = Input.GetAxis("JoyHorizontal");
-        
-        zMove = Input.GetAxis("JoyVertical");
+        accelerationButton = Input.GetAxis("JoyTurnRight");
     }
 
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
         {
-            if (turnLeft < 0)
+           /* if (turnLeft < 0)
             {
                 objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
@@ -134,7 +124,7 @@ public class PlayerSkateMovement : MonoBehaviour
             {
                 objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
-
+            */
             float rotationY = objTransform.eulerAngles.y;// + MODEL_ROTATION_FACTOR;
 
             Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
@@ -149,13 +139,12 @@ public class PlayerSkateMovement : MonoBehaviour
             //Forward and back movement
             if (accelButtonDown && isGrounded)
             {
-                float moveFactor = zMove * arcadeData.moveSpeed;
+                float moveFactor = accelerationButton * arcadeData.moveSpeed;
 
-                //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = objTransform.forward * moveFactor;// *MODEL_ROTATION_MOVE_FACTOR;                
+                Vector3 moveDir = objTransform.forward * moveFactor;                
                 Vector3 vel = rb.velocity;
 
-                if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
+                if(vel.sqrMagnitude > arcadeData.maxVelocity*arcadeData.maxVelocity)
                 {
                     rb.velocity = vel.normalized * arcadeData.maxVelocity;
                 }
@@ -166,67 +155,31 @@ public class PlayerSkateMovement : MonoBehaviour
             }
 
             if (!applyDownforce)
-            {
-                Debug.Log(xMove);
-
-                if (leftStickTurning)
+            { 
+                if (xMove < 0) //Bumper press for quick U-turn??
                 {
-                    if (xMove < 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-
-                    if (xMove > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
                 }
-                else //TEMP for control testing
+
+                if (xMove > 0)
                 {
-                    if (turnLeft > 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y - (turnLeft * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-
-                    if (turnRight > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (turnRight * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-                }
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                }               
             }
             else
             {
-                if (leftStickTurning)
+                if (xMove < 0) //Bumper press for quick U-turn??
                 {
-                    if (xMove < 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                    }
-
-                    if (xMove > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                    }
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
                 }
-                else //TEMP for control testing
-                {
-                    if (turnLeft > 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z - (turnLeft * arcadeData.rotationSpeed));
-                    }
 
-                    if (turnRight > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (turnRight * arcadeData.rotationSpeed));
-                    }
+                if (xMove > 0)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
                 }
             }
         }
@@ -236,7 +189,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (moveType == MoveType.SIM)
         {
-            // TODO(low): expose input deadzone data
+            /* expose input deadzone data
             if (zMove > zAxisDeadzone) //accelerate
             {
                 if (!accelButtonDown && simData.baseMoveSpeed < 10)
@@ -256,22 +209,12 @@ public class PlayerSkateMovement : MonoBehaviour
             else
             {
                 accelButtonDown = false;
-            }
+            }*/
         }
         else if (moveType == MoveType.ARCADE)
         {
-            if(zMove > zAxisDeadzone)
-            {
+            if (accelerationButton > 0)
                 accelButtonDown = true;
-            }
-            else if(zMove < -zAxisDeadzone)
-            {
-                accelButtonDown = true;
-            }
-            else
-            {
-                accelButtonDown = false;
-            }
         }
     }
 
@@ -287,7 +230,7 @@ public class PlayerSkateMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
         {
             isGrounded = true;
-           // Debug.Log("hit the ground @ " + hit.normal);
+          
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
