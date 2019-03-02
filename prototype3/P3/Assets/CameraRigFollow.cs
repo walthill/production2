@@ -8,12 +8,16 @@ public class CameraRigFollow : MonoBehaviour
 
     void Awake()
     {
-       
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = rigAnchor.position;
+    }
+
+    public void AlignRotation()
+    {
+        transform.rotation = rigAnchor.transform.parent.transform.rotation;
     }
 }

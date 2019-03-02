@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44846255, g: 0.49849945, b: 0.5756371, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23895841}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.473, y: 1.285, z: -0.602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -239,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 8746182659600908358, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.13100001
+      value: -0.044
       objectReference: {fileID: 0}
     - target: {fileID: 193769611, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -428,6 +428,26 @@ PrefabInstance:
         type: 3}
       propertyPath: rotationSpeed
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187,
+        type: 3}
+      propertyPath: camTurnLeftBound
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187,
+        type: 3}
+      propertyPath: camTurnRightBound
+      value: 221
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187,
+        type: 3}
+      propertyPath: camLookDownBound
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187,
+        type: 3}
+      propertyPath: collisionCameraHeight
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1aa96f5974760e4d8636b8233e40187, type: 3}

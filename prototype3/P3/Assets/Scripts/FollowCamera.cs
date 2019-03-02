@@ -34,15 +34,20 @@ public class FollowCamera : MonoBehaviour
     
     float distanceToReach;
     bool hasKnockback = false;
-    [SerializeField] float rotationSpeed;
+    [SerializeField] float camRotationSpeed;
     [SerializeField] bool looking = false;
+
+    [SerializeField] float /* camTurnLeftBound, camTurnRightBound,*/ camLookDownBound;
 
     float camYRotation;
     float camXRotation;
+    bool ableToLookBehind;
 
     Quaternion originalParentRotation;
 
     float deadzone = 0.3f;
+    float baseYRotation;
+
     private void Awake()
     {
         originalParentRotation = transform.parent.rotation;
@@ -55,16 +60,19 @@ public class FollowCamera : MonoBehaviour
         camYRotation = Input.GetAxis("JoyHorizontalRS");
         camXRotation = Input.GetAxis("JoyVerticalRS");
 
-        if (camYRotation != 0 || camXRotation != 0) looking = true;
-        else looking = false;
-       
+        if (camYRotation != 0 || camXRotation != 0) 
+            looking = true;
+        else 
+            looking = false;
     }
 
     private void FixedUpdate()
     {
         if (target && !looking)
         {
-            transform.parent.rotation = originalParentRotation;
+            ableToLookBehind = true;
+
+            transform.parent.gameObject.GetComponent<CameraRigFollow>().AlignRotation();
 
             Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
@@ -100,26 +108,63 @@ public class FollowCamera : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
             }
 
+            baseYRotation = transform.parent.localEulerAngles.y;
+           // Debug.Log("ROT START: " + baseYRotation);
+            
             CameraFallback();
+
         }
         else if (looking)
         {
-            // Debug.Log("looking");
-            //TODO: clamp rotation on the X and Y
-
-            //TODO: set camera rig facing to be same as player
-
-            if (camXRotation > deadzone || camXRotation < -deadzone)
+            if (camXRotation > deadzone) //Pan camera over top of player
             {
-                transform.parent.Rotate(camXRotation * rotationSpeed, 0, 0.0f);
+                transform.parent.Rotate(camXRotation * camRotationSpeed, 0, 0.0f);
+
+                if (transform.parent.localEulerAngles.x > camLookDownBound)
+                {
+                    transform.parent.localEulerAngles = new Vector3(camLookDownBound,transform.parent.localEulerAngles.y, transform.parent.localEulerAngles.z);
+                }
             }
-            else if (camYRotation > deadzone || camYRotation < -deadzone)
+            else if(camXRotation < -deadzone) //Look beind
             {
-                transform.parent.Rotate(0, -camYRotation * rotationSpeed, 0.0f);
+                if(ableToLookBehind)
+                {
+                    float behind = transform.parent.localEulerAngles.y + 180;
+                    transform.parent.localEulerAngles = new Vector3(0, behind, 0);
+                    ableToLookBehind = false;
+                }
+            }
+            else if (camYRotation > deadzone || camYRotation < -deadzone) //TODO: clamp cam rotation?
+            {
+                transform.parent.Rotate(0, -camYRotation * camRotationSpeed, 0.0f);               
             }
             else
             {
-                Debug.Log("RESET ROTATION");
+                //Debug.Log("RESET ROTATION");
+            }
+
+            Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
+            Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
+
+            Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), gameObject.transform.position);
+            RaycastHit hitInfo;
+
+            Debug.DrawRay(ray.origin,ray.direction, Color.green, 2, false);
+            
+            //Camera collisions
+            if (Physics.Raycast(ray, out hitInfo, raycastLength))
+            {
+                if (hitInfo.transform != target) //make sure collision isn't the player
+                {
+                     Debug.Log("raycast hit" + hitInfo.collider.name);
+
+                    wantedPosition = new Vector3(hitInfo.point.x,
+                                                 Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
+                                                 hitInfo.point.z);
+
+                    transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
+                    Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
+                }  
             }
         }
     }
