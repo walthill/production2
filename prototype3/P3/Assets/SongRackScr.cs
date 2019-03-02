@@ -29,17 +29,31 @@ public class SongRackScr : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-        CurrentSong++;
-        AssignClipsToTracks();
-        Debug.Log("trying to change music");
+            NextSong();
+        
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            PreviousSong();
+        
+        }
+
+    }
+
+    //call these two functions from elsewhere to change the song
+
+    public void NextSong()
+    {
+        CurrentSong++;
+        AssignClipsToTracks();
+        Debug.Log("trying to change music");
+    }
+
+    public void PreviousSong()
+    {
         CurrentSong--;
         AssignClipsToTracks();
         Debug.Log("trying to change music");
-        }
-
     }
 
     public void AssignClipsToTracks()
