@@ -7,6 +7,7 @@ public class RaliScript : MonoBehaviour
     // Start is called before the first frame update
     public Transform[] railPoints;
     public float timeOnRail;
+    public Collider railCollider;
 
     bool playerIsOnRail = false;
     GameObject player = null;
@@ -26,6 +27,7 @@ public class RaliScript : MonoBehaviour
         if(playerIsOnRail && player != null)
         {
             rideRail();
+            Debug.Log("Riding Rail");
         }
     }
 
@@ -36,8 +38,14 @@ public class RaliScript : MonoBehaviour
             player = other.gameObject;
             playerIsOnRail = true;
             startTime = Time.time;
-            speed = player.GetComponent<Rigidbody>().velocity.z;
+            speed = player.GetComponent<Rigidbody>().velocity.magnitude;
+
+            for(int i = 0; i< railPoints.Length; i++)
+            {
+                Debug.Log(railPoints[i].position.ToString());
+            }
         }
+       
     }
 
     void rideRail()
@@ -45,6 +53,10 @@ public class RaliScript : MonoBehaviour
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / railDistance;
         player.GetComponent<Transform>().position = Vector3.Lerp(startPoint, endPoint, fracJourney);
+        if(fracJourney == 1.0f)
+        {
+            playerIsOnRail = false;
+        }
     }
 
 //GET AND SET

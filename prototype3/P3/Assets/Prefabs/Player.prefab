@@ -257,6 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddf882ab31e271429ae6295fe9f2a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyboardMovement: 0
   moveType: 1
   arcadeData:
     maxVelocity: 50
@@ -272,6 +273,7 @@ MonoBehaviour:
     baseMoveSpeed: 1
     rotationSpeed: 0.5
   respawn: {fileID: 0}
+  liftCoeffiecient: 0
 --- !u!114 &1032722377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,11 +440,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fe366d55faa766842a49a3d249a08f60, type: 2}
-    - target: {fileID: 2300002, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
+    - target: {fileID: 2300022, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 46082fb5ad6a2934a8b42fa0afdded60, type: 2}
-    - target: {fileID: 2300004, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
+    - target: {fileID: 2300002, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 46082fb5ad6a2934a8b42fa0afdded60, type: 2}
@@ -450,7 +452,7 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 46082fb5ad6a2934a8b42fa0afdded60, type: 2}
-    - target: {fileID: 2300022, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
+    - target: {fileID: 2300004, guid: 07f46a9da6c27e14ca68f0b7e54fcfd7, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 46082fb5ad6a2934a8b42fa0afdded60, type: 2}
@@ -529,6 +531,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
+        type: 3}
+      propertyPath: EmissionRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
+        type: 3}
+      propertyPath: EmissionsRateOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
+        type: 3}
+      propertyPath: particleStartSizeOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8746182660135886231, guid: 53b766e89b9636046aedcaef62bc3a45,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
@@ -557,21 +574,6 @@ PrefabInstance:
     - target: {fileID: 8746182660135886231, guid: 53b766e89b9636046aedcaef62bc3a45,
         type: 3}
       propertyPath: NoiseModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
-        type: 3}
-      propertyPath: EmissionRate
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
-        type: 3}
-      propertyPath: EmissionsRateOnStart
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8746182660135886229, guid: 53b766e89b9636046aedcaef62bc3a45,
-        type: 3}
-      propertyPath: particleStartSizeOnStart
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

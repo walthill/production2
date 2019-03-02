@@ -118,19 +118,9 @@ public class PlayerSkateMovement : MonoBehaviour
     void ProcessInput()
     {
         //NOTE: values between 0 and 1
-
-        if (!keyboardMovement)
-        {
-            turnLeft = Input.GetAxis("JoyTurnLeft");
-            turnRight = Input.GetAxis("JoyTurnRight");
-            zMove = Input.GetAxis("JoyVertical");
-        }
-        else
-        {
-            turnLeft = Input.GetAxis("Horizontal");
-            turnRight = Input.GetAxis("Horizontal");
-            zMove = Input.GetAxis("Vertical");
-        }
+        turnLeft = Input.GetAxis("JoyTurnLeft");
+        turnRight = Input.GetAxis("JoyTurnRight");
+        zMove = Input.GetAxis("JoyVertical");
     }
 
     private void RollerSkateMovement()
@@ -159,21 +149,24 @@ public class PlayerSkateMovement : MonoBehaviour
         else if(moveType == MoveType.ARCADE)
         {
             //Forward and back movement
-            if (accelButtonDown && isGrounded)
+            if (accelButtonDown)
             {
                 float moveFactor = zMove * arcadeData.moveSpeed;
+                Debug.Log("Accel Button is down? " + accelButtonDown);
 
                 //NOTE: issue with the model's transform forward. Using right instead
                 Vector3 moveDir = objTransform.forward * moveFactor;// *MODEL_ROTATION_MOVE_FACTOR;                
                 Vector3 vel = rb.velocity;
-
-                if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
+                bool wtf = vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity;
+                if (wtf)
                 {
                     rb.velocity = vel.normalized * arcadeData.maxVelocity;
+                    Debug.Log("Help Me: " + wtf);
                 }
                 else
                 {
                     rb.velocity += moveDir;
+                    Debug.Log("Help Me: " + wtf);
                 }
             }
 
