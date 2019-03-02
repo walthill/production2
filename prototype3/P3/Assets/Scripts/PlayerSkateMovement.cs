@@ -107,6 +107,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
+
     }
 
     private void RollerSkateMovement()
@@ -114,6 +115,7 @@ public class PlayerSkateMovement : MonoBehaviour
         if (moveType == MoveType.SIM)
         {
            /* if (turnLeft < 0)
+
             {
                 objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
             }
@@ -178,6 +180,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 {
                     rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                     objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
+
                 }
             }
         }
@@ -187,6 +190,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (moveType == MoveType.SIM)
         {
+
             /* expose input deadzone data
             if (zMove > zAxisDeadzone) //accelerate
             {
@@ -212,6 +216,7 @@ public class PlayerSkateMovement : MonoBehaviour
         else if (moveType == MoveType.ARCADE)
         {
             if (accelerationButton > 0)
+
             {
                 accelButtonDown = true;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
