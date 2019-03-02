@@ -11,7 +11,7 @@ public class CameraRigFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.position = rigAnchor.position;
     }

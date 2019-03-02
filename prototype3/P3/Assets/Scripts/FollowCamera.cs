@@ -9,35 +9,35 @@ public class FollowCamera : MonoBehaviour
 //    [SerializeField] Transform rotationTarget;
 
     [Header("Smooth Camera Values")]
-    [SerializeField] float distance;
-    [SerializeField] float height;
-    [SerializeField] float damping;
-    [SerializeField] float rotationDamping;
+    [SerializeField] float distance = 0;
+    [SerializeField] float height = 0;
+    [SerializeField] float damping = 0;
+    [SerializeField] float rotationDamping = 0;
     [SerializeField] Vector3 lookAtOffset;
     [SerializeField] bool applyRotationDamp;
 
     //Camera collision vars
     [Header("Camera Collision Values")]
-    [SerializeField] float raycastLength;
-    [SerializeField] float collisionCameraHeight;
+    [SerializeField] float raycastLength = 0;
+    [SerializeField] float collisionCameraHeight = 0;
     [SerializeField] Vector3 collisionRaycastOffset;
 
     //Camera knockback vars
     [Header("Camera Knockback")]
-    [SerializeField] float timer;
-    [SerializeField] float knockbackTime;
-    [SerializeField] float knockbackSpeed;
-    [SerializeField] float returnSpeed;
-    [SerializeField] float knockbackDistance;
-    [SerializeField] float returnDistance;
+    [SerializeField] float timer = 0;
+    [SerializeField] float knockbackTime = 0;
+    [SerializeField] float knockbackSpeed = 0;
+    [SerializeField] float returnSpeed = 0;
+    [SerializeField] float knockbackDistance = 0;
+    [SerializeField] float returnDistance = 0;
 
     
     float distanceToReach;
     bool hasKnockback = false;
-    [SerializeField] float camRotationSpeed;
+    [SerializeField] float camRotationSpeed=0;
     [SerializeField] bool looking = false;
 
-    [SerializeField] float /* camTurnLeftBound, camTurnRightBound,*/ camLookDownBound;
+    [SerializeField] float /* camTurnLeftBound, camTurnRightBound,*/ camLookDownBound=0;
 
     float camYRotation;
     float camXRotation;
@@ -81,7 +81,7 @@ public class FollowCamera : MonoBehaviour
             RaycastHit hitInfo;
 
             //Camera collisions
-            if (Physics.Raycast(ray, out hitInfo, raycastLength))
+           /* if (Physics.Raycast(ray, out hitInfo, raycastLength)) //TODO: shoot ray toward camera instead of straight back 
             {
                 if (hitInfo.transform != target) //make sure collision isn't the player
                 {
@@ -91,7 +91,7 @@ public class FollowCamera : MonoBehaviour
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
                                                  hitInfo.point.z);
                 }
-            }
+            }*/
 
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
@@ -122,7 +122,7 @@ public class FollowCamera : MonoBehaviour
 
                 if (transform.parent.localEulerAngles.x > camLookDownBound)
                 {
-                    transform.parent.localEulerAngles = new Vector3(camLookDownBound,transform.parent.localEulerAngles.y, transform.parent.localEulerAngles.z);
+                    transform.parent.localEulerAngles = new Vector3(camLookDownBound, transform.parent.localEulerAngles.y, transform.parent.localEulerAngles.z);
                 }
             }
             else if(camXRotation < -deadzone) //Look beind
@@ -146,17 +146,17 @@ public class FollowCamera : MonoBehaviour
             Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
 
-            Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), gameObject.transform.position);
+            Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
             RaycastHit hitInfo;
 
             Debug.DrawRay(ray.origin,ray.direction, Color.green, 2, false);
             
             //Camera collisions
-            if (Physics.Raycast(ray, out hitInfo, raycastLength))
+           /* if (Physics.Raycast(ray, out hitInfo, raycastLength))
             {
                 if (hitInfo.transform != target) //make sure collision isn't the player
                 {
-                     Debug.Log("raycast hit" + hitInfo.collider.name);
+                    Debug.Log("raycast hit" + hitInfo.collider.name);
 
                     wantedPosition = new Vector3(hitInfo.point.x,
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
@@ -165,7 +165,7 @@ public class FollowCamera : MonoBehaviour
                     transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
                     Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
                 }  
-            }
+            }*/
         }
     }
 

@@ -51,8 +51,6 @@ public class PlayerSkateMovement : MonoBehaviour
     float xMove;
     float rotationY, accelerationButton;
     bool accelButtonDown, isGrounded, applyDownforce;
-    int moveStartup = 0;
-    const int KICKS_TO_START = 3;
     Rigidbody rb;
     Transform objTransform;
 
@@ -214,7 +212,14 @@ public class PlayerSkateMovement : MonoBehaviour
         else if (moveType == MoveType.ARCADE)
         {
             if (accelerationButton > 0)
+            {
                 accelButtonDown = true;
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
+            }
+            else
+            {
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
+            }
         }
     }
 
