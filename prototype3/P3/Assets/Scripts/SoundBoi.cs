@@ -86,6 +86,17 @@ public class SoundBoi : MonoBehaviour
         LoadGeneralSounds();
     }
 
+
+    public void PlayMusic()
+    {
+        musicSlot0.Play();
+        musicSlot1.Play();
+        musicSlot2.Play();
+        musicSlot3.Play();
+        musicSlot4.Play();
+        musicSlot5.Play();
+    }
+
     public void SetMusic()
     {
 
@@ -103,12 +114,7 @@ public class SoundBoi : MonoBehaviour
         musicSlot3.clip = musicSnd3;
         musicSlot4.clip = musicSnd4;
         musicSlot5.clip = musicSnd5;
-        musicSlot0.Play();
-        musicSlot1.Play();
-        musicSlot2.Play();
-        musicSlot3.Play();
-        musicSlot4.Play();
-        musicSlot5.Play();
+
 
         //loads the clips into
         /*
