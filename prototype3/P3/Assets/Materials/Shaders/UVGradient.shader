@@ -26,11 +26,13 @@
             struct appdata
             {
                 float4 position : POSITION;
+                float3 normal : Normal;
                 float2 uv : TEXCOORD0;
             };
             struct vertData
             {
                 float4 position: POSITION;
+                float3 normal : Texcoord1;
                 float2 uv: TEXCOORD0;
             };
 
@@ -39,6 +41,7 @@
                 vertData o;
                 o.position = UnityObjectToClipPos(v.position);
                 o.uv = v.uv;
+                o.normal = v.normal;
                 return o;
             }
 
@@ -47,7 +50,9 @@
                 // sample the texture
                 //fixed4 col = tex2D(_MainTex, i.uv);
                 fixed4 col = lerp(_HighColor, _LowColor, i.uv.x);
-                col = float4(col.xyz, 1);
+                // col = float4(col.xyz, 1);
+                float3 normal = (i.normal);
+                col = float4(normal * 0.5 + 0.5, 1);
                 return col;
             }
             ENDCG
