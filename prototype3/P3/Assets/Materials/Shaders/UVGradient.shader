@@ -3,6 +3,8 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _LowColor ("Color1", Color) = (0,0,0,1)
+        _HighColor ("Color2", Color) = (1,1,1,1)
     }
     SubShader
     {
@@ -19,6 +21,8 @@
 
             #include "UnityCG.cginc"
             sampler2D _MainTex;
+            float4 _LowColor;
+            float4 _HighColor;
             struct appdata
             {
                 float4 position : POSITION;
@@ -42,7 +46,8 @@
             {
                 // sample the texture
                 //fixed4 col = tex2D(_MainTex, i.uv);
-                fixed4 col = float4(i.uv, 1, 1);
+                fixed4 col = lerp(_HighColor, _LowColor, i.uv.x);
+                col = float4(col.xyz, 1);
                 return col;
             }
             ENDCG
