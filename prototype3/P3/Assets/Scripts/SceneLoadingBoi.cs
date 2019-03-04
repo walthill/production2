@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +14,9 @@ public class SceneLoadingBoi : MonoBehaviour
     // https://answers.unity.com/questions/242794/inspector-field-for-scene-asset.html
     // Check this out to make it easier to select scenes in editor
 
+    [SerializeField] LoadingScreen loadingScreen;
+    [SerializeField] int loadingSceneIndex;
+
     [SerializeField]
     [Tooltip("Index of scenes that should stay loaded")]
     List<int> mPersistentScenes = new List<int>();
@@ -23,11 +26,12 @@ public class SceneLoadingBoi : MonoBehaviour
     //keep track of which level indices have been loaded
     List<int> loadedLevels;
     int currentLevelIndex = 0;
-    // Start is called before the first frame update
+
+    //Start is called before the first frame update
     void Start()
     {
-        //Load all persistent scenes
-        foreach(int sceneNum in mPersistentScenes)
+       //Load all persistent scenes
+        foreach (int sceneNum in mPersistentScenes)
         {
             SceneManager.LoadScene(sceneNum, LoadSceneMode.Additive);
         }
@@ -37,12 +41,22 @@ public class SceneLoadingBoi : MonoBehaviour
     //load all scenes in given level index
     void loadLevel(int index)
     {
-        foreach(int sceneNum in mLevelScenes[index].sceneList)
+        foreach (int sceneNum in mLevelScenes[index].sceneList)
         {
-            SceneManager.LoadSceneAsync(sceneNum, LoadSceneMode.Additive);
+            loadingScreen.Show(SceneManager.LoadSceneAsync(sceneNum, LoadSceneMode.Additive));
         }
         loadedLevels.Add(index);
+
+        StartCoroutine(LoadingWait());
     }
+    
+    IEnumerator LoadingWait()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.UnloadSceneAsync(loadingSceneIndex);
+        loadingScreen.Hide();
+    }
+
     public void loadNextLevel()
     {
         currentLevelIndex++;
@@ -69,9 +83,9 @@ public class SceneLoadingBoi : MonoBehaviour
     //unload everything but the current scene and persistent levels.
     public void unloadAllPrevLevels()
     {
-        foreach(int sceneNum in loadedLevels)
+        foreach (int sceneNum in loadedLevels)
         {
-            if(sceneNum != currentLevelIndex)
+            if (sceneNum != currentLevelIndex)
             {
                 unloadLevel(sceneNum);
             }

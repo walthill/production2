@@ -6,27 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Bowl.unity
-    guid: c2a9271554d973a41a889ba2ff3424f2
-  - enabled: 1
     path: Assets/Scenes/LoadingScene.unity
     guid: e5213a779749bb048ad5e39e68106ddd
-  - enabled: 1
-    path: Assets/Scenes/Movement.unity
-    guid: 65132cfe029ac9e43b14a757bc529a23
   - enabled: 1
     path: Assets/Scenes/NewLevelLayout.unity
     guid: a0f719b07a8c820418c48546dae9fa1a
   - enabled: 1
-    path: Assets/Scenes/Prototype.unity
-    guid: f623840a4ddbc7e48a496d71880ae518
-  - enabled: 1
-    path: Assets/Scenes/PrototypeLayout.unity
-    guid: 6dc5a05cf93e6a446b921563b84a5984
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9b84d6f5968b6134fbfb6257287b9726
-  - enabled: 1
-    path: Assets/Scenes/SoundRoom.unity
-    guid: 0e83b1a6308caf24a81701d0d77700da
+    path: Assets/Scenes/Player.unity
+    guid: 5423d31477805824e828b907b3d15c89
   m_configObjects: {}
