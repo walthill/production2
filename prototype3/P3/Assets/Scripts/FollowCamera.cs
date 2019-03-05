@@ -136,7 +136,7 @@ public class FollowCamera : MonoBehaviour
             }
             else if (camYRotation > deadzone || camYRotation < -deadzone) //TODO: clamp cam rotation?
             {
-                transform.parent.Rotate(0, -camYRotation * camRotationSpeed, 0.0f);               
+                transform.parent.Rotate(0, camYRotation * camRotationSpeed, 0.0f);               
             }
             else
             {
