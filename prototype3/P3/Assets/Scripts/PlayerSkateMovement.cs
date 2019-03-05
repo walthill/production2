@@ -7,6 +7,8 @@ public class PlayerSkateMovement : MonoBehaviour
 {
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
+    //TODO: 
+
     public enum MoveType { SIM, ARCADE };
 
     [System.Serializable]
@@ -151,6 +153,13 @@ public class PlayerSkateMovement : MonoBehaviour
                 else
                 {
                     rb.velocity += moveDir;
+                    /*
+                     * //Need to sim wheel friction
+                     * //Rotate veloctity vector - multiply by change in rotation
+                        //TODO: HORIZ VEL TOWARD 0?
+
+                        //Sphere collider??
+                    */
                 }
             }
 

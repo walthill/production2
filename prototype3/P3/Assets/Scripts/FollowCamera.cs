@@ -50,7 +50,7 @@ public class FollowCamera : MonoBehaviour
 
     private void Awake()
     {
-        originalParentRotation = transform.parent.rotation;
+       // originalParentRotation = transform.parent.rotation;
         distanceToReach = distance + knockbackDistance;
         returnDistance = returnDistance + distance;
     }
@@ -72,7 +72,7 @@ public class FollowCamera : MonoBehaviour
         {
             ableToLookBehind = true;
 
-            transform.parent.gameObject.GetComponent<CameraRigFollow>().AlignRotation();
+           // transform.parent.gameObject.GetComponent<CameraRigFollow>().AlignRotation();
 
             Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
@@ -108,17 +108,17 @@ public class FollowCamera : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
             }
 
-            baseYRotation = transform.parent.localEulerAngles.y;
+           // baseYRotation = transform.parent.localEulerAngles.y;
            // Debug.Log("ROT START: " + baseYRotation);
             
             CameraFallback();
 
         }
-        else if (looking)
+        else if (looking) //TODO: rotate target gameobject
         {
             if (camXRotation > deadzone) //Pan camera over top of player
             {
-                transform.parent.Rotate(camXRotation * camRotationSpeed, 0, 0.0f);
+                transform.Rotate(camXRotation * camRotationSpeed, 0, 0.0f);
 
                 if (transform.parent.localEulerAngles.x > camLookDownBound)
                 {
@@ -129,14 +129,14 @@ public class FollowCamera : MonoBehaviour
             {
                 if(ableToLookBehind)
                 {
-                    float behind = transform.parent.localEulerAngles.y + 180;
-                    transform.parent.localEulerAngles = new Vector3(0, behind, 0);
+                    float behind = transform.localEulerAngles.y + 180;
+                    transform.localEulerAngles = new Vector3(0, behind, 0);
                     ableToLookBehind = false;
                 }
             }
             else if (camYRotation > deadzone || camYRotation < -deadzone) //TODO: clamp cam rotation?
             {
-                transform.parent.Rotate(0, camYRotation * camRotationSpeed, 0.0f);               
+                transform.Rotate(0, camYRotation * camRotationSpeed, 0.0f);               
             }
             else
             {
