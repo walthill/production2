@@ -30,12 +30,14 @@ public class SongRackScr : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             NextSong();
-        
+            SoundBoi.instance.PlayMusic();
+
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
             PreviousSong();
-        
+            SoundBoi.instance.PlayMusic();
+
         }
 
     }
