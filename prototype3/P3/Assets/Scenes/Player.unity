@@ -121,7 +121,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 23895842}
-  - component: {fileID: 23895843}
   - component: {fileID: 23895844}
   m_Layer: 0
   m_Name: CameraRig
@@ -145,19 +144,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 162.69301, z: 0}
---- !u!114 &23895843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23895841}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d261e5d065b44864ea1aedce06afe797, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigAnchor: {fileID: 382545324}
 --- !u!114 &23895844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +162,7 @@ MonoBehaviour:
   damping: 10
   rotationDamping: 30
   lookAtOffset: {x: 0, y: 2, z: 0}
-  applyRotationDamp: 0
+  applyRotationDamp: 1
   raycastLength: 2
   collisionCameraHeight: 1
   collisionRaycastOffset: {x: 0, y: 0, z: 0}
@@ -186,9 +172,13 @@ MonoBehaviour:
   returnSpeed: 1
   knockbackDistance: 2
   returnDistance: 1
+  inputDeadZone: 0.4
+  resetRotationSpeed: 100
   camRotationSpeed: 1
-  looking: 0
-  camLookDownBound: 80
+  camMinXAngle: -25
+  camMaxXAngle: 70
+  camMinYAngle: -115
+  camMaxYAngle: 115
 --- !u!1001 &219287394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -388,7 +378,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 382545323}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.012999535, y: 0.928, z: 0.06800002}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1406194919}
@@ -568,5 +558,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6789190844311896850, guid: d1aa96f5974760e4d8636b8233e40187, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d1aa96f5974760e4d8636b8233e40187, type: 3}
