@@ -88,8 +88,8 @@ public class FollowCamera : MonoBehaviour
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
             RaycastHit hitInfo;
 
-            //Camera collisions
-           /* if (Physics.Raycast(ray, out hitInfo, raycastLength)) //TODO: shoot ray toward camera instead of straight back 
+            //Camera collisions - TODO(low): revisit this collision code 
+            if (Physics.Raycast(ray, out hitInfo, raycastLength)) //TODO: shoot ray toward camera instead of straight back 
             {
                 if (hitInfo.transform != target) //make sure collision isn't the player
                 {
@@ -99,7 +99,7 @@ public class FollowCamera : MonoBehaviour
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
                                                  hitInfo.point.z);
                 }
-            }*/
+            }
 
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
