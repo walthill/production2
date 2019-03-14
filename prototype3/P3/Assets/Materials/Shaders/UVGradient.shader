@@ -41,7 +41,8 @@
                 vertData o;
                 o.position = UnityObjectToClipPos(v.position);
                 o.uv = v.uv;
-                o.normal = v.normal;
+                o.normal = mul(unity_ObjectToWorld, float4(v.normal, 0));
+                o.normal = normalize(o.normal);
                 return o;
             }
 
@@ -50,9 +51,10 @@
                 // sample the texture
                 //fixed4 col = tex2D(_MainTex, i.uv);
                 fixed4 col = lerp(_HighColor, _LowColor, i.uv.x);
-                // col = float4(col.xyz, 1);
+                
                 float3 normal = (i.normal);
                 col = float4(normal * 0.5 + 0.5, 1);
+                col = float4(col.xyz, 1);
                 return col;
             }
             ENDCG
