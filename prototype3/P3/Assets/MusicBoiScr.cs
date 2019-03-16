@@ -17,7 +17,10 @@ public class MusicBoiScr : MonoBehaviour
     public AudioSource ChordSource;
     public string SoundPath;
     public string SongPath;
-    public List<AudioClip> songParts;
+    public int SongNum = 0;
+    //public List<GameObject> CapturePoints = new List<GameObject>();
+    //public List<AudioClip> songParts = new List<AudioClip>();
+    public AudioClip[] songParts;
     public AudioClip ChordClip;
     
 
@@ -31,6 +34,7 @@ public class MusicBoiScr : MonoBehaviour
         SoundPath = "Assets/StreamingAssets/audio/music/Song2/Bass.wav";
         ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
         Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
+        SongPath = "Assets/StreamingAssets/audio/music/Song" + SongNum;
 
         // check out the following links in order to add sound files to a list
         // https://docs.unity3d.com/530/Documentation/ScriptReference/AssetDatabase.GetAssetPath.html
@@ -38,9 +42,24 @@ public class MusicBoiScr : MonoBehaviour
         // https://docs.unity3d.com/530/Documentation/ScriptReference/AssetDatabase.LoadAllAssetsAtPath.html
         // https://docs.unity3d.com/530/Documentation/ScriptReference/AssetDatabase.LoadAssetAtPath.html
 
-        //TODO LOOK AT STRATAGY PROGECT AND FIGURE OUT HOW TO ADD ALL THE AUDIO CLIPS TO A LIST USING
-        // LOAD ALL ASSETS AT PATH
+        //TODO: TRY USING RESOURCE FOLDER
+        //THESE MIGHT BE HELPFUL:
+        // https://answers.unity.com/questions/1018079/audioclip-array-error-1.html
+        // https://answers.unity.com/questions/449659/convert-type-unityengineobject-to-unityengineaudio.html
+        addThingsToList();
+    }
 
+
+    void addThingsToList()
+    {
+        
+        //this doesn't work for some reason
+        songParts = (AudioClip)AssetDatabase.LoadAllAssetsAtPath("" + SongPath, typeof(AudioClip));
+        //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
+        foreach(AudioClip part in songParts)
+        {
+            Debug.Log(part);
+        }
     }
 
     /*
@@ -66,7 +85,17 @@ public class MusicBoiScr : MonoBehaviour
         WWW request = new WWW(audioToLoad);
         return request;
     }
-    
+
+
+    void addThingsToList()
+    {
+        foreach(GameObject CapPoint in GameObject.FindGameObjectsWithTag("Point"))
+        {
+            CapturePoints.Add(CapPoint);
+            numberOfPoints++;
+
+        }
+    }
 
     */
 
