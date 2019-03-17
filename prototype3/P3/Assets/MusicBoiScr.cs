@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.Networking;
+//using UnityEditor;
+//using UnityEngine.Networking;
 
 
 public class MusicBoiScr : MonoBehaviour
@@ -15,9 +15,9 @@ public class MusicBoiScr : MonoBehaviour
 
     [Header("audio stuff")]
     public AudioSource ChordSource;
-    public string SoundPath;
+    //public string SoundPath;
     public string SongPath;
-    public int SongNum = 2;
+    int SongNum = 0;
     //public List<GameObject> CapturePoints = new List<GameObject>();
     //public List<AudioClip> songParts = new List<AudioClip>();
     //public List<Object> songParts = new List<Object>();
@@ -69,11 +69,12 @@ public class MusicBoiScr : MonoBehaviour
 
         //this doesn't work for some reason
         songParts = Resources.LoadAll<AudioClip>(SongPath);
+        /*
         foreach (AudioClip part in songParts)
         {
             Debug.Log(part);
         }
-        
+        updateSoundBoi();
         //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
         /*
         foreach(object part in songParts)
@@ -82,6 +83,72 @@ public class MusicBoiScr : MonoBehaviour
         }
         */
     }
+
+    public void nextSong()
+    {
+        //adjust the number of the song 
+        SongNum++;
+        //debug the number of the song so I can make sure it's working right
+        Debug.Log("You're listening to song number: " + SongNum);
+        //adjust the string representing the path with the new song number
+        SongPath = "audio/music/Song" + SongNum;
+        //update the array
+        songParts = Resources.LoadAll<AudioClip>(SongPath);
+        updateSoundBoi();
+        
+    }
+
+    public void prevSong()
+    {
+        
+        //adjust the number of the song 
+        SongNum--;
+        //debug the number of the song so I can make sure it's working right
+        Debug.Log("You're listening to song number: " + SongNum);
+        //adjust the string representing the path with the new song number
+        SongPath = "audio/music/Song" + SongNum;
+        //update the array
+        songParts = Resources.LoadAll<AudioClip>(SongPath);
+        updateSoundBoi();
+    }
+
+
+    public void updateSoundBoi()
+    {
+        SoundBoi.instance.musicPartsArray = songParts;
+        AssignSoundBoiTracks();
+    }
+
+    public void AssignSoundBoiTracks()
+    {
+        SoundBoi.instance.AssignTracks();
+        //play the tracks
+        
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            nextSong();
+        }
+        if (Input.GetKeyDown(KeyCode.Z)&&SongNum>=0)
+        {
+
+            prevSong();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+
+            SoundBoi.instance.PlayMusic();
+        }
+        
+    }
+
+
 
     /*
     private IEnumerator LoadAudio()
@@ -120,9 +187,5 @@ public class MusicBoiScr : MonoBehaviour
 
     */
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

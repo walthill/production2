@@ -13,6 +13,7 @@ public class SoundBoi : MonoBehaviour
     public AudioClip ChargingSnd;
     public AudioClip ReleaseSnd;
     public AudioClip PerfectReleaseSnd;
+    public AudioClip StaticChangeSongSnd;
 
     [Header("Music Sounds")]
     public AudioClip musicSnd0;
@@ -21,6 +22,10 @@ public class SoundBoi : MonoBehaviour
     public AudioClip musicSnd3;
     public AudioClip musicSnd4;
     public AudioClip musicSnd5;
+
+    [Header("Music Sounds")]
+    public AudioClip[] musicPartsArray;
+
 
     /*
     public AudioClip drumsSnd0;
@@ -41,6 +46,7 @@ public class SoundBoi : MonoBehaviour
     public AudioSource sparkSource;
     public AudioSource chargingSource;
     public AudioSource ReleaseFeedBackSource;
+    public AudioSource ChangeSongStaticSource;
 
     [Header("Music Sources")]
     public AudioSource musicSlot0;
@@ -49,6 +55,9 @@ public class SoundBoi : MonoBehaviour
     public AudioSource musicSlot3;
     public AudioSource musicSlot4;
     public AudioSource musicSlot5;
+
+    public AudioSource[] MusicSlotArray;
+
     /*
     public AudioSource drumsSource0;
     public AudioSource drumsSource1;
@@ -71,6 +80,10 @@ public class SoundBoi : MonoBehaviour
     float pitchNumber = 1;
     float ChargingpitchNumber = 1;
 
+    bool isTimerGoing = false;
+    float timerMax = 1;
+    float timer = 0;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -82,19 +95,80 @@ public class SoundBoi : MonoBehaviour
         heldVolume3 = musicSlot3.volume;
         heldVolume4 = musicSlot4.volume;
         heldVolume5 = musicSlot5.volume;
-        SetMusic();
+        //SetMusic();
         LoadGeneralSounds();
     }
 
 
     public void PlayMusic()
     {
+        /*
         musicSlot0.Play();
         musicSlot1.Play();
         musicSlot2.Play();
         musicSlot3.Play();
         musicSlot4.Play();
         musicSlot5.Play();
+        */
+        foreach(AudioSource slot in MusicSlotArray)
+        {
+            slot.Play();
+        }
+        
+    }
+
+    public void ClearMusic()
+    {
+        /*
+        musicSlot0.clip = null;
+        musicSlot1.clip = null;
+        musicSlot2.clip = null;
+        musicSlot3.clip = null;
+        musicSlot4.clip = null;
+        musicSlot5.clip = null;
+        */
+       
+        foreach(AudioSource slot in MusicSlotArray)
+        {
+            slot.clip = null;
+        }
+    }
+
+    //this is called from MusicBoi
+    public void AssignTracks()
+    {
+        ChangeSongStaticSource.Play();
+        isTimerGoing = true;
+        ClearMusic();
+        int partIndex = 0;
+        int slotIndex = 0;
+        foreach (AudioSource slot in MusicSlotArray)
+        {
+            if (partIndex <= musicPartsArray.Length && slotIndex <= MusicSlotArray.Length)
+            {
+                slot.clip = musicPartsArray[partIndex];
+                Debug.Log(musicPartsArray[partIndex].name + " assigned");
+                partIndex++;
+                slotIndex++;
+            }
+            
+            
+        }
+        
+    }
+
+    //plays a static sound for 1 second and then plays music
+    public void WaitForStatic()
+    {
+        timer = timer + Time.deltaTime;
+        if (timer >= timerMax)
+        {
+            Debug.Log("timer is done");
+            PlayMusic();
+            timer = 0;
+            isTimerGoing = false;
+        }
+
     }
 
     public void SetMusic()
@@ -107,6 +181,9 @@ public class SoundBoi : MonoBehaviour
         musicSlot3.volume = 0;
         musicSlot4.volume = 0;
         musicSlot5.volume = 0;
+
+
+
 
         musicSlot0.clip = musicSnd0;
         musicSlot1.clip = musicSnd1;
@@ -143,6 +220,7 @@ public class SoundBoi : MonoBehaviour
         sparkSource.clip = SparksSnd;
         chargingSource.clip = ChargingSnd;
         ReleaseFeedBackSource.clip = ReleaseSnd;
+        ChangeSongStaticSource.clip = StaticChangeSongSnd;
     }
     public void ReleaseSound()
     {
@@ -237,6 +315,11 @@ public class SoundBoi : MonoBehaviour
         else if (d < 0f)
         {
             WheelPitchDown();
+        }
+
+        if (isTimerGoing)
+        {
+            WaitForStatic();
         }
 
     }

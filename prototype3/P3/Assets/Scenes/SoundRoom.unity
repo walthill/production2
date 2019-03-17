@@ -118,6 +118,48 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6922593833907227500}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410316 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765502, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410320 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765498, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410321 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765499, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410322 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765492, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410323 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765493, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410324 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765494, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1083410325 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6922593834649765495, guid: 804ddaf68ee3d774f947f3e416a8abba,
+    type: 3}
+  m_PrefabInstance: {fileID: 6922593833907227500}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1127076928
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,9 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChordSource: {fileID: 1245626719}
-  SoundPath: 
   SongPath: 
-  SongNum: 0
   songParts: []
   ChordClip: {fileID: 0}
 --- !u!82 &1245626719
@@ -487,17 +527,111 @@ PrefabInstance:
       propertyPath: Loop
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765499, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 1102389529, guid: 804ddaf68ee3d774f947f3e416a8abba, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: MusicSlotArray.Array.size
+      value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 1083410325}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 1083410324}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 1083410323}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[3]
+      value: 
+      objectReference: {fileID: 1083410322}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[4]
+      value: 
+      objectReference: {fileID: 1083410321}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: MusicSlotArray.Array.data[5]
+      value: 
+      objectReference: {fileID: 1083410320}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: ChangeSongStaticSource
+      value: 
+      objectReference: {fileID: 1083410316}
+    - target: {fileID: 6922593834649765473, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: StaticChangeSongSnd
+      value: 
+      objectReference: {fileID: 8300000, guid: d2678b85213e7d94ea4316befd6fa029, type: 3}
     - target: {fileID: 1102389530, guid: 804ddaf68ee3d774f947f3e416a8abba, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1102389528, guid: 804ddaf68ee3d774f947f3e416a8abba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765490, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.573
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765495, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765494, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765493, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765492, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765498, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765498, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6922593834649765502, guid: 804ddaf68ee3d774f947f3e416a8abba,
+        type: 3}
+      propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
