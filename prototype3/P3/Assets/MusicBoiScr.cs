@@ -20,7 +20,9 @@ public class MusicBoiScr : MonoBehaviour
     public int SongNum = 0;
     //public List<GameObject> CapturePoints = new List<GameObject>();
     //public List<AudioClip> songParts = new List<AudioClip>();
-    public AudioClip[] songParts;
+    //public List<Object> songParts = new List<Object>();
+    //public AudioClip[] songParts;
+    public Object[] songParts;
     public AudioClip ChordClip;
     
 
@@ -31,8 +33,13 @@ public class MusicBoiScr : MonoBehaviour
     void Start()
     {
         //SoundPath = "file://" + Application.streamingAssetsPath + "/audio/music/Song0/";
-        SoundPath = "Assets/StreamingAssets/audio/music/Song2/Bass.wav";
-        ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
+        
+        
+        SoundPath = "Assets/StreamingAssets/audio/music/Song2";
+        //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
+
+
+
         Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
         SongPath = "Assets/StreamingAssets/audio/music/Song" + SongNum;
 
@@ -46,20 +53,30 @@ public class MusicBoiScr : MonoBehaviour
         //THESE MIGHT BE HELPFUL:
         // https://answers.unity.com/questions/1018079/audioclip-array-error-1.html
         // https://answers.unity.com/questions/449659/convert-type-unityengineobject-to-unityengineaudio.html
+        //THIS BITCH WORKS (SHOULD)
+        //https://answers.unity.com/questions/1095437/is-there-a-way-to-populate-an-array-of-audio-clips.html <-------
+        //HOW TO USE RESOURCE FOLDER:
+        //https://www.youtube.com/watch?v=mTDy-A7gfSc
         addThingsToList();
+
+
+        
     }
 
 
     void addThingsToList()
     {
-        
+
         //this doesn't work for some reason
-        songParts = (AudioClip)AssetDatabase.LoadAllAssetsAtPath("" + SongPath, typeof(AudioClip));
+        songParts = Resources.LoadAll(SoundPath, typeof(AudioClip));
+        
         //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
-        foreach(AudioClip part in songParts)
+        /*
+        foreach(object part in songParts)
         {
             Debug.Log(part);
         }
+        */
     }
 
     /*
