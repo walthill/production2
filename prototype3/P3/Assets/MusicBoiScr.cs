@@ -17,12 +17,12 @@ public class MusicBoiScr : MonoBehaviour
     public AudioSource ChordSource;
     public string SoundPath;
     public string SongPath;
-    public int SongNum = 0;
+    public int SongNum = 2;
     //public List<GameObject> CapturePoints = new List<GameObject>();
     //public List<AudioClip> songParts = new List<AudioClip>();
     //public List<Object> songParts = new List<Object>();
     //public AudioClip[] songParts;
-    public Object[] songParts;
+    public AudioClip[] songParts;
     public AudioClip ChordClip;
     
 
@@ -32,16 +32,16 @@ public class MusicBoiScr : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //SoundPath = "file://" + Application.streamingAssetsPath + "/audio/music/Song0/";
+        //SoundPath = "file://" + Application.Resources + "/audio/music/Song0/";
         
         
-        SoundPath = "Assets/StreamingAssets/audio/music/Song2";
+        //SoundPath = "Assets/StreamingAssets/audio/music/Song"+SongNum;
         //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
 
 
 
-        Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
-        SongPath = "Assets/StreamingAssets/audio/music/Song" + SongNum;
+        //Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
+        SongPath = "audio/music/Song" + SongNum;
 
         // check out the following links in order to add sound files to a list
         // https://docs.unity3d.com/530/Documentation/ScriptReference/AssetDatabase.GetAssetPath.html
@@ -68,7 +68,11 @@ public class MusicBoiScr : MonoBehaviour
     {
 
         //this doesn't work for some reason
-        songParts = Resources.LoadAll(SoundPath, typeof(AudioClip));
+        songParts = Resources.LoadAll<AudioClip>(SongPath);
+        foreach (AudioClip part in songParts)
+        {
+            Debug.Log(part);
+        }
         
         //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
         /*
