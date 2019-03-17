@@ -137,6 +137,7 @@ public class SoundBoi : MonoBehaviour
     //this is called from MusicBoi
     public void AssignTracks()
     {
+        SetMusic();
         ChangeSongStaticSource.Play();
         isTimerGoing = true;
         ClearMusic();
@@ -175,7 +176,14 @@ public class SoundBoi : MonoBehaviour
     {
 
         
+        foreach(AudioSource slot in MusicSlotArray)
+        {
+            slot.volume = 0;
+        }
+        MusicSlotArray[0].volume = .6f;
 
+
+        /*
         musicSlot1.volume = 0;
         musicSlot2.volume = 0;
         musicSlot3.volume = 0;
@@ -206,7 +214,6 @@ public class SoundBoi : MonoBehaviour
         arpSource0.clip = arpSnd0;
         arpSource1.clip = arpSnd1;
         */
-
     }
 
 
@@ -271,23 +278,23 @@ public class SoundBoi : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            VolumeMusic1();
+            MusicSlotArray[1].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            VolumeMusic2();
+            MusicSlotArray[2].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            VolumeMusic3();
+            MusicSlotArray[3].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            VolumeMusic4();
+            MusicSlotArray[4].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            VolumeMusic5();
+            MusicSlotArray[5].volume = .6f;
         }
         if (Input.GetKey(KeyCode.Space))
         {
