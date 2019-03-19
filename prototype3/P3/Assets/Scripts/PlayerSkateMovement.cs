@@ -7,8 +7,6 @@ public class PlayerSkateMovement : MonoBehaviour
 {
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
-    //TODO: 
-
     public enum MoveType { SIM, ARCADE };
 
     [System.Serializable]
@@ -36,8 +34,9 @@ public class PlayerSkateMovement : MonoBehaviour
         public float maxRotationSpeed, rotationSpeed;
     }
 
-    [SerializeField] float zAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
-    public MoveType moveType;
+    [SerializeField] float leftStickXAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
+    
+	public MoveType moveType;
 
     [SerializeField] ArcadeMoveData arcadeData = new ArcadeMoveData();
     [SerializeField] SimMoveData simData;
@@ -47,7 +46,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField] float liftCoeffiecient = 0;
 
     const float SLOPE_RAY_DIST = 1f;
-    const float PLAYER_ALIGN_SPEED = 1;
+    const float PLAYER_ALIGN_SPEED = 15f;
 
     //Input vars
     float xMove;
@@ -101,15 +100,14 @@ public class PlayerSkateMovement : MonoBehaviour
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
+		AlignPlayerWithGround();
         RollerSkateMovement();
-        AlignPlayerWithGround();
     }
 
     void ProcessInput()
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
-
     }
 
     private void RollerSkateMovement()
@@ -138,9 +136,49 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if(moveType == MoveType.ARCADE)
         {
-            //Forward and back movement
-            if (accelButtonDown && isGrounded)
+           
+            if (!applyDownforce)
+            { 
+                if (xMove < -leftStickXAxisDeadzone) 
+                {
+					//TODO: reusable code here - make functions?
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+					
+					Vector3 vel = rb.velocity; //store current speed
+					rb.velocity =  Vector3.zero; 
+					rb.velocity = transform.forward.normalized * vel.magnitude; //change its direction
+                }
+
+                if (xMove > leftStickXAxisDeadzone)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+					
+					Vector3 vel = rb.velocity; //store current speed
+					rb.velocity = Vector3.zero; 
+					rb.velocity = transform.forward.normalized * vel.magnitude; //change its direction
+                }               
+            }
+            else
             {
+                if (xMove < 0) 
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
+                }
+
+                if (xMove > 0)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
+
+                }
+            }
+			
+			//Forward movement
+            if (accelButtonDown && isGrounded)
+            {				
                 float moveFactor = accelerationButton * arcadeData.moveSpeed;
 
                 Vector3 moveDir = objTransform.forward * moveFactor;                
@@ -153,43 +191,6 @@ public class PlayerSkateMovement : MonoBehaviour
                 else
                 {
                     rb.velocity += moveDir;
-                    /*
-                     * //Need to sim wheel friction
-                     * //Rotate veloctity vector - multiply by change in rotation
-                        //TODO: HORIZ VEL TOWARD 0?
-
-                        //Sphere collider??
-                    */
-                }
-            }
-
-            if (!applyDownforce)
-            { 
-                if (xMove < 0) //Bumper press for quick U-turn??
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                }
-
-                if (xMove > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                }               
-            }
-            else
-            {
-                if (xMove < 0) //Bumper press for quick U-turn??
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
-
-                if (xMove > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-
                 }
             }
         }
@@ -237,16 +238,17 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+	//TODO: camera collision pass. The raycast is a bit dumb
     void AlignPlayerWithGround()
     {
         //help @ https://bit.ly/2RMVeox
 
         //only align to gameobjects marked as ground layers
-        // LayerMask layerMask = LayerMask.GetMask("Player");
+        LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
         Ray ray = new Ray(objTransform.position, -objTransform.up);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
+        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
             isGrounded = true;
           
@@ -258,7 +260,6 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             isGrounded = false;
         }
-
     }
 
 

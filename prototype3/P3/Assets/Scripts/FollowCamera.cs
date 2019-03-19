@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    [SerializeField] Transform target = null;
  
     //Smooth camera vars
     [Header("Smooth Camera Values")]
@@ -12,14 +12,14 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float height = 0;
     [SerializeField] float damping = 0;
     [SerializeField] float rotationDamping = 0;
-    [SerializeField] Vector3 lookAtOffset;
+    [SerializeField] Vector3 lookAtOffset = new Vector3();
     [SerializeField] bool applyRotationDamp=true;
 
     //Camera collision vars
     [Header("Camera Collision Values")]
     [SerializeField] float raycastLength = 0;
     [SerializeField] float collisionCameraHeight = 0;
-    [SerializeField] Vector3 collisionRaycastOffset;
+    [SerializeField] Vector3 collisionRaycastOffset = new Vector3();
 
     //Camera knockback vars
     [Header("Camera Knockback")]
