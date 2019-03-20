@@ -1,0 +1,15 @@
+steps to use maya scripts:
+1. go to documents > maya > 2018 > scripts
+2. paste script there
+3. open the script editor in maya
+4. in a maya (not mel) tab, type:
+	import file_name
+	reload(file_name)
+	file_name.UIFunction()
+
+
+Example: 
+
+import rockGen
+reload(rockGen)
+rockGen.UIwindow()

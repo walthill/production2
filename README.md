@@ -3,6 +3,4 @@
 
 Production Wiki: https://bit.ly/2S9VLB0
 
-
-
 *Don't forget to enter hours*

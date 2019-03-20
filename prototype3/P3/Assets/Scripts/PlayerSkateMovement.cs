@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerSkateMovement : MonoBehaviour
 {
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
@@ -26,31 +25,25 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //clamp value - increase this for speed channels?
         public float maxVelocity; 
-        public float moveSpeed, 
-                     boostAcceleration, boostValue;
+        public float moveSpeed, boostAcceleration, 
+                     boostValue;
 
-        [HeaderAttribute("RotationData")]
-        public float medRotationSpeed;
-        public float maxRotationSpeed, rotationSpeed;
+        public float rotationSpeed;
     }
 
-    [SerializeField] bool leftStickTurning;
-    [SerializeField] float zAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
-    public MoveType moveType;
+    [SerializeField] float leftStickXAxisDeadzone = 0.25f;
+    
+	public MoveType moveType;
 
     [SerializeField] ArcadeMoveData arcadeData = new ArcadeMoveData();
-    [SerializeField] SimMoveData simData;
-
     [SerializeField] Transform respawn = null;
-
     [SerializeField] float liftCoeffiecient = 0;
 
     const float SLOPE_RAY_DIST = 1f;
-    const float PLAYER_ALIGN_SPEED = 1;
+    const float PLAYER_ALIGN_SPEED = 15f;
 
     //Input vars
-    float zMove, xMove;
-    float turnLeft, turnRight, rotationY;
+    float xMove, accelerationButton;
     bool accelButtonDown, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
@@ -61,7 +54,6 @@ public class PlayerSkateMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
 
         respawn.position = objTransform.position;
-        rb.drag = simData.turnDrag;
 
         if (moveType == MoveType.SIM)
             rb.useGravity = false;
@@ -70,14 +62,14 @@ public class PlayerSkateMovement : MonoBehaviour
     void Update()
     {
         ProcessInput();
-        Move();
+        MoveAnimation();
 
         if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
         {
             if (objTransform.position.y > -20)
             {
-                Debug.Log("APPLYING DOWN FORCE");
-                applyDownforce = true;
+              //  Debug.Log("APPLYING DOWN FORCE");
+               // applyDownforce = true;
             }
         }
         else
@@ -86,208 +78,125 @@ public class PlayerSkateMovement : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.R))
-        ResetPlayer();
+            ResetPlayer();
     }
 
     private void FixedUpdate()
     {
-        float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
-
         if(applyDownforce)
         {
+            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(lift*transform.up, objTransform.position);
         }
 
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
+		AlignPlayerWithGround();
         RollerSkateMovement();
-        AlignPlayerWithGround();
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 
     void ProcessInput()
     {
-        //NOTE: values between 0 and 1
-        turnLeft = Input.GetAxis("JoyTurnLeft");
-        turnRight = Input.GetAxis("JoyTurnRight");
-
         xMove = Input.GetAxis("JoyHorizontal");
-        
-        zMove = Input.GetAxis("JoyVertical");
+        accelerationButton = Input.GetAxis("JoyTurnRight");
     }
 
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
         {
-            if (turnLeft < 0)
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-
-            if (turnRight > 0)
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-
-            float rotationY = objTransform.eulerAngles.y;// + MODEL_ROTATION_FACTOR;
-
-            Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
-
-            //Add force based on player's current rotation and direction
-            //constantly applied, we just change the movespeed & turnspeed
-
-            rb.AddForce(updatedDirection * simData.baseTurnSpeed * simData.baseMoveSpeed, ForceMode.Acceleration);
         }
         else if(moveType == MoveType.ARCADE)
-        {
-            //Forward and back movement
-            if (accelButtonDown && isGrounded)
-            {
-                float moveFactor = zMove * arcadeData.moveSpeed;
-
-                //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = objTransform.forward * moveFactor;// *MODEL_ROTATION_MOVE_FACTOR;                
-                Vector3 vel = rb.velocity;
-
-                if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
-                {
-                    rb.velocity = vel.normalized * arcadeData.maxVelocity;
-                }
-                else
-                {
-                    rb.velocity += moveDir;
-                }
-            }
-
+        {        
             if (!applyDownforce)
-            {
-                Debug.Log(xMove);
-
-                if (leftStickTurning)
+            { 
+                if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
                 {
-                    if (xMove < 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-
-                    if (xMove > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-                }
-                else //TEMP for control testing
-                {
-                    if (turnLeft > 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y - (turnLeft * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-
-                    if (turnRight > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (turnRight * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                    }
-                }
+                    TurnPhysics();
+                }               
             }
             else
             {
-                if (leftStickTurning)
+                if (xMove < 0) 
                 {
-                    if (xMove < 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                    }
-
-                    if (xMove > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                    }
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
                 }
-                else //TEMP for control testing
-                {
-                    if (turnLeft > 0) //Bumper press for quick U-turn??
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z - (turnLeft * arcadeData.rotationSpeed));
-                    }
 
-                    if (turnRight > 0)
-                    {
-                        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (turnRight * arcadeData.rotationSpeed));
-                    }
+                if (xMove > 0)
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
                 }
             }
+
+            MovePhysics();
         }
     }
 
-    private void Move()
+    private void TurnPhysics()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        float turnFactor = xMove * arcadeData.rotationSpeed;
+        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
+
+        Vector3 vel = rb.velocity; //store current speed
+        rb.velocity = Vector3.zero;
+        rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+    }
+
+    private void MovePhysics()
+    {
+        //Forward movement
+        if (accelButtonDown && isGrounded)
+        {
+            float moveFactor = accelerationButton * arcadeData.moveSpeed;
+
+            Vector3 moveDir = objTransform.forward * moveFactor;
+            Vector3 vel = rb.velocity;
+
+            if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
+                rb.velocity = vel.normalized * arcadeData.maxVelocity;
+            else
+                rb.velocity += moveDir;
+        }
+    }
+
+    private void MoveAnimation()
     {
         if (moveType == MoveType.SIM)
         {
-            // TODO(low): expose input deadzone data
-            if (zMove > zAxisDeadzone) //accelerate
-            {
-                if (!accelButtonDown && simData.baseMoveSpeed < 10)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed++;
-                }
-            }
-            else if (zMove < -zAxisDeadzone) //deccelerate, reverse
-            {
-                if (!accelButtonDown && simData.baseMoveSpeed > 0)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed--;
-                }
-            }
-            else
-            {
-                accelButtonDown = false;
-            }
         }
         else if (moveType == MoveType.ARCADE)
         {
-            if(zMove > zAxisDeadzone)
+            if (accelerationButton > 0)
+
             {
                 accelButtonDown = true;
-            }
-            else if(zMove < -zAxisDeadzone)
-            {
-                accelButtonDown = true;
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
             }
             else
             {
-                accelButtonDown = false;
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
     }
 
+	//TODO: camera collision pass. The raycast is a bit dumb
     void AlignPlayerWithGround()
     {
         //help @ https://bit.ly/2RMVeox
 
         //only align to gameobjects marked as ground layers
-        // LayerMask layerMask = LayerMask.GetMask("Player");
+        LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
         Ray ray = new Ray(objTransform.position, -objTransform.up);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
+        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
             isGrounded = true;
-           // Debug.Log("hit the ground @ " + hit.normal);
+
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
@@ -296,23 +205,15 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             isGrounded = false;
         }
-
     }
 
 
     #region Getters and Setters
-    public void SetDrag()
-    {
-        //allow for designer to update rigidbody drag - SIM movement
-        rb.drag = simData.turnDrag;
-    }
-
-    public void ResetPlayer()
+    public void ResetPlayer() //TODO: reset speed threshold
     {
         objTransform.position = respawn.transform.position;
         objTransform.localRotation = Quaternion.identity;
-        simData.baseMoveSpeed = 1;
-
+   
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
