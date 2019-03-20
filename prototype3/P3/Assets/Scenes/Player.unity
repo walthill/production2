@@ -163,9 +163,9 @@ MonoBehaviour:
   rotationDamping: 30
   lookAtOffset: {x: 0, y: 2, z: 0}
   applyRotationDamp: 1
-  raycastLength: 2
+  raycastLength: 5
   collisionCameraHeight: 1
-  collisionRaycastOffset: {x: 0, y: 0, z: 0}
+  collisionRaycastOffset: {x: 0, y: 1, z: 0}
   timer: 0
   knockbackTime: 5
   knockbackSpeed: 1

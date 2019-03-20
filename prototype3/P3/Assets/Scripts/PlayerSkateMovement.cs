@@ -184,7 +184,6 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
-	//TODO: camera collision pass. The raycast is a bit dumb
     void AlignPlayerWithGround()
     {
         //help @ https://bit.ly/2RMVeox
