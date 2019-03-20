@@ -49,8 +49,7 @@ public class PlayerSkateMovement : MonoBehaviour
     const float PLAYER_ALIGN_SPEED = 15f;
 
     //Input vars
-    float xMove;
-    float rotationY, accelerationButton;
+    float xMove, accelerationButton;
     bool accelButtonDown, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
@@ -70,7 +69,7 @@ public class PlayerSkateMovement : MonoBehaviour
     void Update()
     {
         ProcessInput();
-        Move();
+        MoveAnimation();
 
         if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
         {
@@ -139,25 +138,9 @@ public class PlayerSkateMovement : MonoBehaviour
            
             if (!applyDownforce)
             { 
-                if (xMove < -leftStickXAxisDeadzone) 
+                if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
                 {
-					//TODO: reusable code here - make functions?
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-					
-					Vector3 vel = rb.velocity; //store current speed
-					rb.velocity =  Vector3.zero; 
-					rb.velocity = transform.forward.normalized * vel.magnitude; //change its direction
-                }
-
-                if (xMove > leftStickXAxisDeadzone)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (xMove * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-					
-					Vector3 vel = rb.velocity; //store current speed
-					rb.velocity = Vector3.zero; 
-					rb.velocity = transform.forward.normalized * vel.magnitude; //change its direction
+                    TurnPhysics();
                 }               
             }
             else
@@ -175,28 +158,46 @@ public class PlayerSkateMovement : MonoBehaviour
 
                 }
             }
-			
-			//Forward movement
-            if (accelButtonDown && isGrounded)
-            {				
-                float moveFactor = accelerationButton * arcadeData.moveSpeed;
 
-                Vector3 moveDir = objTransform.forward * moveFactor;                
-                Vector3 vel = rb.velocity;
+            MovePhysics();
+        }
+    }
 
-                if(vel.sqrMagnitude > arcadeData.maxVelocity*arcadeData.maxVelocity)
-                {
-                    rb.velocity = vel.normalized * arcadeData.maxVelocity;
-                }
-                else
-                {
-                    rb.velocity += moveDir;
-                }
+
+    private void TurnPhysics()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        float turnFactor = xMove * arcadeData.rotationSpeed;
+        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
+
+        Vector3 vel = rb.velocity; //store current speed
+        rb.velocity = Vector3.zero;
+        rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+    }
+
+    private void MovePhysics()
+    {
+        //Forward movement
+        if (accelButtonDown && isGrounded)
+        {
+            float moveFactor = accelerationButton * arcadeData.moveSpeed;
+
+            Vector3 moveDir = objTransform.forward * moveFactor;
+            Vector3 vel = rb.velocity;
+
+            if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
+            {
+                rb.velocity = vel.normalized * arcadeData.maxVelocity;
+            }
+            else
+            {
+                rb.velocity += moveDir;
             }
         }
     }
 
-    private void Move()
+    private void MoveAnimation()
     {
         if (moveType == MoveType.SIM)
         {
@@ -246,12 +247,11 @@ public class PlayerSkateMovement : MonoBehaviour
         //only align to gameobjects marked as ground layers
         LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
         Ray ray = new Ray(objTransform.position, -objTransform.up);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, layerToAlignWith))
+        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
             isGrounded = true;
-          
+
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
