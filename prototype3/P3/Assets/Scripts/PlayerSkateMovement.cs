@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerSkateMovement : MonoBehaviour
 {
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
@@ -26,23 +25,18 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //clamp value - increase this for speed channels?
         public float maxVelocity; 
-        public float moveSpeed, 
-                     boostAcceleration, boostValue;
+        public float moveSpeed, boostAcceleration, 
+                     boostValue;
 
-        [HeaderAttribute("RotationData")]
-        public float medRotationSpeed;
-        public float maxRotationSpeed, rotationSpeed;
+        public float rotationSpeed;
     }
 
-    [SerializeField] float leftStickXAxisDeadzone = 0.25f; //Alter this value for more precise movement control w/ new controls
+    [SerializeField] float leftStickXAxisDeadzone = 0.25f;
     
 	public MoveType moveType;
 
     [SerializeField] ArcadeMoveData arcadeData = new ArcadeMoveData();
-    [SerializeField] SimMoveData simData;
-
     [SerializeField] Transform respawn = null;
-
     [SerializeField] float liftCoeffiecient = 0;
 
     const float SLOPE_RAY_DIST = 1f;
@@ -60,7 +54,6 @@ public class PlayerSkateMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
 
         respawn.position = objTransform.position;
-        rb.drag = simData.turnDrag;
 
         if (moveType == MoveType.SIM)
             rb.useGravity = false;
@@ -113,29 +106,9 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (moveType == MoveType.SIM)
         {
-           /* if (turnLeft < 0)
-
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-
-            if (turnRight > 0)
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-            */
-            float rotationY = objTransform.eulerAngles.y;// + MODEL_ROTATION_FACTOR;
-
-            Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
-
-            //Add force based on player's current rotation and direction
-            //constantly applied, we just change the movespeed & turnspeed
-
-            rb.AddForce(updatedDirection * simData.baseTurnSpeed * simData.baseMoveSpeed, ForceMode.Acceleration);
         }
         else if(moveType == MoveType.ARCADE)
-        {
-           
+        {        
             if (!applyDownforce)
             { 
                 if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
@@ -155,14 +128,12 @@ public class PlayerSkateMovement : MonoBehaviour
                 {
                     rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                     objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-
                 }
             }
 
             MovePhysics();
         }
     }
-
 
     private void TurnPhysics()
     {
@@ -187,13 +158,9 @@ public class PlayerSkateMovement : MonoBehaviour
             Vector3 vel = rb.velocity;
 
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
-            {
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
-            }
             else
-            {
                 rb.velocity += moveDir;
-            }
         }
     }
 
@@ -201,28 +168,6 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (moveType == MoveType.SIM)
         {
-
-            /* expose input deadzone data
-            if (zMove > zAxisDeadzone) //accelerate
-            {
-                if (!accelButtonDown && simData.baseMoveSpeed < 10)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed++;
-                }
-            }
-            else if (zMove < -zAxisDeadzone) //deccelerate, reverse
-            {
-                if (!accelButtonDown && simData.baseMoveSpeed > 0)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed--;
-                }
-            }
-            else
-            {
-                accelButtonDown = false;
-            }*/
         }
         else if (moveType == MoveType.ARCADE)
         {
@@ -264,18 +209,11 @@ public class PlayerSkateMovement : MonoBehaviour
 
 
     #region Getters and Setters
-    public void SetDrag()
-    {
-        //allow for designer to update rigidbody drag - SIM movement
-        rb.drag = simData.turnDrag;
-    }
-
-    public void ResetPlayer()
+    public void ResetPlayer() //TODO: reset speed threshold
     {
         objTransform.position = respawn.transform.position;
         objTransform.localRotation = Quaternion.identity;
-        simData.baseMoveSpeed = 1;
-
+   
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
