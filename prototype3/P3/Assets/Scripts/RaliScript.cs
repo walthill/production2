@@ -40,6 +40,9 @@ public class RaliScript : MonoBehaviour
             startTime = Time.time;
             speed = player.GetComponent<Rigidbody>().velocity.magnitude;
 
+            startPoint = railPoints[0].position;
+            endPoint = railPoints[1].position;
+
             for(int i = 0; i< railPoints.Length; i++)
             {
                 Debug.Log(railPoints[i].position.ToString());
