@@ -113,6 +113,7 @@ NavMeshSettings:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1 &438803
 =======
 --- !u!1 &39785614
@@ -1062,6 +1063,8 @@ MeshFilter:
   m_GameObject: {fileID: 56992235}
   m_Mesh: {fileID: 2091234878}
 >>>>>>> ef53a4163c468b7f5382e755f1b465d20da8a3a4
+=======
+>>>>>>> parent of 0ef4ecb... hills
 --- !u!1001 &74073047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16568,6 +16571,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &2056412370 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: c008b2a2b856f3a40aff14018a991eee,
@@ -16675,3 +16679,5 @@ PrefabInstance:
   m_GameObject: {fileID: 2114475507}
   m_Mesh: {fileID: 655001022}
 >>>>>>> ef53a4163c468b7f5382e755f1b465d20da8a3a4
+=======
+>>>>>>> parent of 0ef4ecb... hills
