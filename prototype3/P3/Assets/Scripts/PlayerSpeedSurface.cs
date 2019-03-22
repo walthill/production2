@@ -29,9 +29,12 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     //My Vars
     [SerializeField]
-    bool isTouchingCharge = false;
+    bool isCharging = false;
     [SerializeField]
+
+    bool isTouchingCharge = false;
     bool isTouchingRelease = false;
+
     
     void Start()
     {
@@ -49,20 +52,55 @@ public class PlayerSpeedSurface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isCharging) //maybe add velocity check?
+        {
+            boostTimer += Time.deltaTime;
+
+            //if not on speed surface
+            if(!isTouchingRelease && !isTouchingCharge)
+            {
+                stopCharging();
+            }
+        }
         //when player presses A
         if (Input.GetButtonDown("JoyJump"))
         {
-
+            boostTimer = 0;
+            if (isTouchingCharge)
+            {
+                startCharging();
+            }
         }
 
         //when player releases A
         if (Input.GetButtonUp("JoyJump"))
         {
-
+            if (isTouchingRelease && isCharging)
+            {
+                speedBoost();
+                stopCharging();
+                SoundBoi.instance.ReleaseSound();
+            }
         }
 
     }
-
+    private void startCharging()
+    {
+        isCharging = true;
+        SoundBoi.instance.chargingSound();
+    }
+    private void stopCharging()
+    {
+        isCharging = false;
+        SoundBoi.instance.stopChargingSound();
+    }
+    private void speedBoost()
+    {
+        //speed player up in proportion to how big the boost time is up to max boost
+        boostVelocityValue = boostTimer*100;
+        maxVelocityIncrease = boostTimer*100;
+        playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == CHARGE_SURFACE)
