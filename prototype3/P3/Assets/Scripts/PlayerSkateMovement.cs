@@ -8,6 +8,7 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
+    public bool keyboardMovement;
 
     [System.Serializable]
     public struct SimMoveData
@@ -137,7 +138,7 @@ public class PlayerSkateMovement : MonoBehaviour
         else if(moveType == MoveType.ARCADE)
         {
             //Forward and back movement
-            if (accelButtonDown && isGrounded)
+            if (accelButtonDown)
             {
                 float moveFactor = accelerationButton * arcadeData.moveSpeed;
 
@@ -147,10 +148,12 @@ public class PlayerSkateMovement : MonoBehaviour
                 if(vel.sqrMagnitude > arcadeData.maxVelocity*arcadeData.maxVelocity)
                 {
                     rb.velocity = vel.normalized * arcadeData.maxVelocity;
+                    Debug.Log("Help Me: " + wtf);
                 }
                 else
                 {
                     rb.velocity += moveDir;
+                    Debug.Log("Help Me: " + wtf);
                 }
             }
 
