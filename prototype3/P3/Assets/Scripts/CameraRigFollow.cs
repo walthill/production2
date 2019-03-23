@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraRigFollow : MonoBehaviour
 {
-    [SerializeField] Transform rigAnchor;
+    [SerializeField] Transform rigAnchor = null;
 
     void Awake()
     {
