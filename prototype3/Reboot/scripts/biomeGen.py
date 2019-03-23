@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 import random
+import sys
 
 
 """
@@ -94,6 +95,8 @@ def makeHills():
 
 
 def makeCity():
+    seed = random.randrange(sys.maxsize)
+    random.Random(seed)
     bMin = cmds.intField('bMin', query=True, value=True)
     bMax = cmds.intField('bMax', query=True, value=True)
     geomAdd = cmds.checkBox('geomAdd', query=True, value=True)
@@ -101,7 +104,9 @@ def makeCity():
     bAmount = cmds.intSlider('bAmount', query=True, value=True)
     randomList = list(range(0,10))
     moveList = list(range(20, 50))
+    addMoveList = list(range(-50, 50))
     rotateList = list(range(0, 360))
+    negORpos = [-1, 1]
     spacing = 200
     topMove = 10
     bWidth = 50
@@ -118,12 +123,14 @@ def makeCity():
 
     for x in range(divisionNum):
         for y in range(bAmount/divisionNum):
-            build = buiilding(bMin, bMax, bWidth)
-            cmds.move(spacing * y, 0, spacing*x, build, relative=True)
+            addedMovement = random.choice(addMoveList)
+            build = building(bMin, bMax, bWidth)
+            cmds.move((spacing + addedMovement) * y, 0, (spacing + addedMovement)*x, build, relative=True)
             buildList.append(build)
             cmds.delete('.f[3]')
             chosenNum = random.choice(randomList)
             thisGotGeom = False
+            thisSubGeom = False
             if geomAdd == True and chosenNum >= 8:
                 thisGotGeom = True
                 faceList = ['.f[0]', '.f[2]', '.f[3]', '.f[4]']
@@ -140,9 +147,10 @@ def makeCity():
             cmds.polyExtrudeFacet('.f[1]', lsx=1.1, lsy=1.1)
             cmds.polyExtrudeFacet('.f[1]', ltz=topMove)
             cmds.polyExtrudeFacet('.f[1]', lsx=0.8, lsy=0.8)
-            cmds.polyExtrudeFacet('.f[1]', ltz=-topMove/2.0)
+            cmds.polyExtrudeFacet('.f[1]', ltz=-topMove/2.0, lsx=0.6, lsy=0.6)
             chosenNum = random.choice(randomList)
             if geomSub == True and chosenNum >= 8 and thisGotGeom != True:
+                thisSubGeom = True
                 heightTemp = random.choice(moveList)
                 moveTemp = random.choice(moveList)
                 moveTemp_2 = random.choice(moveList)
@@ -150,16 +158,41 @@ def makeCity():
                 tempObject = cmds.polyCylinder(r=bWidth*4, h=heightTemp, ch=False)
                 cmds.rotate(90, tempObject, relative=True)
                 cmds.rotate(rotateTemp, tempObject, relative=True)
-                cmds.move(spacing * y, heightTemp/2.0+(bMin-moveTemp-moveTemp_2), spacing*x, tempObject, relative=True)
+                cmds.move((spacing + addedMovement) * y, heightTemp/2.0+(bMin-moveTemp-moveTemp_2),
+                          (spacing + addedMovement)*x, tempObject, relative=True)
                 build = cmds.polyCBoolOp(build, tempObject, operation=2, ch=False)
                 cmds.polyCloseBorder(build)
-            cmds.polyTriangulate(build)
-            cmds.polyQuad(build)
+            chosenNum = random.choice(randomList)
+            if chosenNum >= 8 and thisGotGeom != True and thisSubGeom != True:
+                chosenNum = random.choice(randomList)
+                heightTemp_1 = random.choice(moveList)
+                heightTemp_2 = random.choice(moveList)
+                numberOne = random.choice(negORpos)
+                if chosenNum >= 5:
+                    beam = cmds.polyCube(w=bWidth, h=topMove, d=topMove, ch=False)
+                    cmds.move((spacing + addedMovement) * y, topMove/2.0, (spacing + addedMovement) * x, beam,
+                              relative=True)
+                    cmds.move(0, heightTemp_1 + heightTemp_2, (bWidth/2.0 + topMove/2.0)*numberOne, beam, relative=True)
+                if chosenNum < 5:
+                    beam = cmds.polyCube(w=topMove, h=topMove, d=bWidth, ch=False)
+                    cmds.move((spacing + addedMovement) * y, topMove / 2.0, (spacing + addedMovement) * x, beam,
+                              relative=True)
+                    cmds.move((bWidth / 2.0 + topMove / 2.0) * numberOne, heightTemp_1 + heightTemp_2, 0, beam,
+                              relative=True)
+            if x == 0 or y==0:
+                cmds.delete(build)
+                try:
+                    cmds.delete(beam)
+                except:
+                    pass
+            if build == True:
+                cmds.polyTriangulate(build)
+                cmds.polyQuad(build)
 
     cmds.select(clear=True)
 
 
-def buiilding(bMin, bMax, bWidth):
+def building(bMin, bMax, bWidth):
     try:
         heightList = list(range(bMin, bMax))
         bHeight = random.choice(heightList)
@@ -169,3 +202,25 @@ def buiilding(bMin, bMax, bWidth):
     except:
         cmds.error("Minimum Height was greater than Maximum Height or Minimum and Maximum Heights were the same. "
                    "Fix and try again.")
+
+def signpost():
+    height = 10
+    rad = 2
+    linePoints = []
+    curveAdjList = list(range(20, 30))
+
+    for x in range(3):
+        addedNum = random.choice(curveAdjList)
+        curveAdjList.remove(addedNum)
+        if x == 0:
+            addedNum = 2
+        point_1 = x , x + addedNum, 0
+        linePoints.append(point_1)
+
+    extrudeCurve = cmds.curve(p=linePoints)
+    rope = cmds.polyCylinder(r=rad, h=1, sx=6, ch=False)
+    rope = rope[0]
+    cmds.move(0, 1 / 2.0, 0, rope)
+    hsdvcf
+    cmds.polyExtrudeFacet(rope + '.f[7]', inputCurve=extrudeCurve, divisions=10, ch=False)
+    cmds.delete(extrudeCurve)
