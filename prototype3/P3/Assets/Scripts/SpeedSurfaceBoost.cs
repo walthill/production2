@@ -15,7 +15,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
     [SerializeField]
     float buildUpTime=0, timer=0;
     [SerializeField]
-    float boostAcceleration, boostVelocityValue, maxVelocityIncrease;
+    float boostAcceleration=0, boostVelocityValue=0, maxVelocityIncrease=0;
     bool aButtonHold, aButtonReleased, isHeldDown;
 
     PlayerSkateMovement playerMove;
