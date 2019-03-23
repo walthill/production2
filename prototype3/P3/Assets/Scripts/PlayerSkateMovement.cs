@@ -217,6 +217,10 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public ArcadeMoveData GetArcadeMoveData()
+    {
+        return arcadeData;
+    }
     public void IncreaseSpeed(float boostAcceleration)
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);

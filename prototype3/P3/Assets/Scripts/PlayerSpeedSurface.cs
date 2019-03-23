@@ -19,7 +19,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     float boostMultiplier = 2f;
 
     PlayerSkateMovement playerMove;
-
+    SpeedThresholdBoi speedBoi;
     [SerializeField]
     public Image speedIndicator;
     [SerializeField]
@@ -46,6 +46,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         speedText.gameObject.SetActive(false);
 
         playerMove = gameObject.GetComponent<PlayerSkateMovement>();
+        speedBoi = gameObject.GetComponent<SpeedThresholdBoi>();
 
         ParticleScript.instance.SpeedColor1();
     }
@@ -99,7 +100,8 @@ public class PlayerSpeedSurface : MonoBehaviour
         //speed player up in proportion to how big the boost time is up to max boost
         boostVelocityValue = boostLength*boostMultiplier;
         maxVelocityIncrease = boostLength*boostMultiplier;
-        playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
+        speedBoi.speedBoost(boostVelocityValue);
+        //playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
     }
     private void OnTriggerEnter(Collider other)
     {
