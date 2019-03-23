@@ -48,4 +48,12 @@ public class SpeedThresholdBoi : MonoBehaviour
         }
         currentSpeedChannel = (SpeedChannel)i;
     }
+    public bool checkSpeedThreshold(SpeedChannel speedRequired)
+    {
+        if(speedRequired == currentSpeedChannel)
+        {
+            return true;
+        }
+        return false;
+    }
 }

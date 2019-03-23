@@ -36,7 +36,6 @@ public class PlayerSpeedSurface : MonoBehaviour
     float boostVelocityValue = 0, maxVelocityIncrease = 0;
     [SerializeField]
     float boostLength; //distance the button was held down for.
-
     private void Awake()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
@@ -111,7 +110,11 @@ public class PlayerSpeedSurface : MonoBehaviour
             {
                 Debug.LogError("Was already touching Charge surface");
             }
-            isTouchingCharge = true;
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            if (validSurface)
+            {
+                isTouchingCharge = true;
+            }
         }
         if(other.tag == RELEASE_SURFACE)
         {
@@ -130,7 +133,11 @@ public class PlayerSpeedSurface : MonoBehaviour
             {
                 Debug.LogError("Was already not touching Charge surface");
             }
-            isTouchingCharge = false;
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            if (validSurface)
+            {
+                isTouchingCharge = false;
+            }
         }
         if (other.tag == RELEASE_SURFACE)
         {
