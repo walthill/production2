@@ -226,7 +226,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
-        Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+        //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     #endregion
 }

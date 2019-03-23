@@ -13,8 +13,6 @@ public class PlayerSpeedSurface : MonoBehaviour
     public SpeedChannel currentSpeedChannel;
 
     [SerializeField]
-    float boostTimer = 0; //how long the button has been held down for
-    [SerializeField]
     float boostAcceleration = 0, boostVelocityValue = 0, maxVelocityIncrease = 0;
 
     PlayerSkateMovement playerMove;
@@ -34,6 +32,10 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     bool isTouchingCharge = false;
     bool isTouchingRelease = false;
+    Vector3 startPosit, endPosit; //where the player presses and releases the button
+    [SerializeField]
+    float boostLength; //distance the button was held down for.
+
 
     
     void Start()
@@ -52,10 +54,8 @@ public class PlayerSpeedSurface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isCharging) //maybe add velocity check?
+        if (isCharging)
         {
-            boostTimer += Time.deltaTime;
-
             //if not on speed surface
             if(!isTouchingRelease && !isTouchingCharge)
             {
@@ -65,9 +65,9 @@ public class PlayerSpeedSurface : MonoBehaviour
         //when player presses A
         if (Input.GetButtonDown("JoyJump"))
         {
-            boostTimer = 0;
             if (isTouchingCharge)
             {
+                startPosit = transform.position;
                 startCharging();
             }
         }
@@ -77,6 +77,8 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (isTouchingRelease && isCharging)
             {
+                endPosit = transform.position;
+                boostLength = Vector3.Distance(startPosit, endPosit);
                 speedBoost();
                 stopCharging();
                 SoundBoi.instance.ReleaseSound();
@@ -97,9 +99,9 @@ public class PlayerSpeedSurface : MonoBehaviour
     private void speedBoost()
     {
         //speed player up in proportion to how big the boost time is up to max boost
-        boostVelocityValue = boostTimer*100;
-        maxVelocityIncrease = boostTimer*100;
-        playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
+        boostVelocityValue =100;
+        maxVelocityIncrease = 100;
+        //playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
     }
     private void OnTriggerEnter(Collider other)
     {
