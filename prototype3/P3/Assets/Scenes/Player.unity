@@ -179,30 +179,6 @@ MonoBehaviour:
   camMaxXAngle: 70
   camMinYAngle: -115
   camMaxYAngle: 115
---- !u!114 &63483745 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1661434824, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 368511532}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &186913299 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 279908638, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 368511532}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &219287394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -380,8 +356,7 @@ PrefabInstance:
       propertyPath: m_Drag
       value: 0.55
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1032722377, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!1 &382545323
 GameObject:
@@ -419,33 +394,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6789190845550848189}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &452646367 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1032722376, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 368511532}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &452646368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452646367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0299da9aaad72f54485b13a8074b1da0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSpeedChannel: 0
-  boostTimer: 0
-  boostAcceleration: 0.3
-  boostVelocityValue: 1.5
-  maxVelocityIncrease: 10
-  speedIndicator: {fileID: 63483745}
-  speedText: {fileID: 186913299}
-  isTouchingCharge: 0
-  isTouchingRelease: 0
 --- !u!1 &653620677
 GameObject:
   m_ObjectHideFlags: 0
