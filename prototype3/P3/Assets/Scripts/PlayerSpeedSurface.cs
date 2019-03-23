@@ -8,6 +8,9 @@ public class PlayerSpeedSurface : MonoBehaviour
     //TODO: move player indicator UI into its own class. Singleton?
     //TODO: add anims to player ui
 
+    //Current: Player speeds up based on distance between button press and release point
+    //TODO: perfect release based on distance to perfect release point
+
     const string CHARGE_SURFACE = "ChargeSurface", RELEASE_SURFACE = "ReleaseSurface";
     public SpeedChannel currentSpeedChannel;
 
@@ -34,7 +37,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     [SerializeField]
     float boostLength; //distance the button was held down for.
 
-    void Start()
+    private void Awake()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
         speedText = gameObject.GetComponentInChildren<Text>();
@@ -47,7 +50,6 @@ public class PlayerSpeedSurface : MonoBehaviour
         ParticleScript.instance.SpeedColor1();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isCharging)
