@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 1032722380}
   - component: {fileID: 1032722379}
   - component: {fileID: 1032722378}
-  - component: {fileID: 1032722377}
+  - component: {fileID: 1881121411489919166}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -256,24 +256,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddf882ab31e271429ae6295fe9f2a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zAxisDeadzone: 0.25
+  leftStickXAxisDeadzone: 0.25
   moveType: 1
   arcadeData:
     maxVelocity: 50
     moveSpeed: 0.5
     boostAcceleration: 0.5
     boostValue: 1
-    medRotationSpeed: 1
-    maxRotationSpeed: 2
     rotationSpeed: 1.25
-  simData:
-    baseTurnSpeed: 1
-    turnDrag: 0.55
-    baseMoveSpeed: 1
-    rotationSpeed: 0.5
   respawn: {fileID: 0}
   liftCoeffiecient: 0
---- !u!114 &1032722377
+--- !u!114 &1881121411489919166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,17 +275,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1032722376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ae67b82916f8843bbff97974277d1e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0299da9aaad72f54485b13a8074b1da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentSpeedChannel: 0
-  buildUpTime: 0.7
-  timer: 0
-  boostAcceleration: 0.3
-  boostVelocityValue: 1.5
-  maxVelocityIncrease: 10
+  boostMultiplier: 2
   speedIndicator: {fileID: 1661434824}
   speedText: {fileID: 279908638}
+  isCharging: 0
+  boostVelocityValue: 1.5
+  maxVelocityIncrease: 10
+  boostLength: 0
 --- !u!1 &1661434822
 GameObject:
   m_ObjectHideFlags: 0
