@@ -9,11 +9,11 @@ public class PlayerSpeedSurface : MonoBehaviour
     //TODO: add anims to player ui
 
     const string CHARGE_SURFACE = "ChargeSurface", RELEASE_SURFACE = "ReleaseSurface";
-
     public SpeedChannel currentSpeedChannel;
 
     [SerializeField]
-    float boostAcceleration = 0, boostVelocityValue = 0, maxVelocityIncrease = 0;
+    [Tooltip("Multiplier applied to the boost effect")]
+    float boostMultiplier = 2f;
 
     PlayerSkateMovement playerMove;
 
@@ -22,22 +22,18 @@ public class PlayerSpeedSurface : MonoBehaviour
     [SerializeField]
     public Text speedText;
 
-    bool perfectRelease, speedChange;
-
-
-    //My Vars
-    [SerializeField]
-    bool isCharging = false;
-    [SerializeField]
-
     bool isTouchingCharge = false;
     bool isTouchingRelease = false;
     Vector3 startPosit, endPosit; //where the player presses and releases the button
+    
+    [Header("Displays boost effects")]
+    [SerializeField]
+    bool isCharging = false;
+    [SerializeField]
+    float boostVelocityValue = 0, maxVelocityIncrease = 0;
     [SerializeField]
     float boostLength; //distance the button was held down for.
 
-
-    
     void Start()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
@@ -99,9 +95,9 @@ public class PlayerSpeedSurface : MonoBehaviour
     private void speedBoost()
     {
         //speed player up in proportion to how big the boost time is up to max boost
-        boostVelocityValue =100;
-        maxVelocityIncrease = 100;
-        //playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
+        boostVelocityValue = boostLength*boostMultiplier;
+        maxVelocityIncrease = boostLength*boostMultiplier;
+        playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
     }
     private void OnTriggerEnter(Collider other)
     {
