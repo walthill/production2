@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerSpeedSurface : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class PlayerSpeedSurface : MonoBehaviour
     //TODO: perfect release based on distance to perfect release point
 
     const string CHARGE_SURFACE = "ChargeSurface", RELEASE_SURFACE = "ReleaseSurface";
-    public SpeedChannel currentSpeedChannel;
 
     [SerializeField]
     [Tooltip("Multiplier applied to the boost effect")]
@@ -20,11 +18,7 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     PlayerSkateMovement playerMove;
     SpeedThresholdBoi speedBoi;
-    [SerializeField]
-    public Image speedIndicator;
-    [SerializeField]
-    public Text speedText;
-
+    
     bool isTouchingCharge = false;
     bool isTouchingRelease = false;
     Vector3 startPosit, endPosit; //where the player presses and releases the button
@@ -38,11 +32,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     float boostLength; //distance the button was held down for.
     private void Awake()
     {
-        speedIndicator = gameObject.GetComponentInChildren<Image>();
-        speedText = gameObject.GetComponentInChildren<Text>();
-
-        speedIndicator.gameObject.SetActive(false);
-        speedText.gameObject.SetActive(false);
+        
 
         playerMove = gameObject.GetComponent<PlayerSkateMovement>();
         speedBoi = gameObject.GetComponent<SpeedThresholdBoi>();

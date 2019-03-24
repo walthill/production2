@@ -7,6 +7,7 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
+    public bool keyboardMovement;
 
     [System.Serializable]
     public struct SimMoveData

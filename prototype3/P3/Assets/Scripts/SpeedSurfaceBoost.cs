@@ -29,7 +29,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
 
     bool perfectRelease, speedChange;
 
-    private void Awake()
+    private void Start()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
         speedText = gameObject.GetComponentInChildren<Text>();
