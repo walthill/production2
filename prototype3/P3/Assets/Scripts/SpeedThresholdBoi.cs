@@ -25,7 +25,6 @@ public class SpeedThresholdBoi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void speedBoost(float boostAmount)
@@ -42,7 +41,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         int i = 0;
         //find current threshold
         while (speeds[i] < moveData.maxVelocity
-            && i < (int)SpeedChannel.NUM_SPEEDS)
+            && i < (int)SpeedChannel.NUM_SPEEDS-1)
         {
             i++;
         }
@@ -55,5 +54,9 @@ public class SpeedThresholdBoi : MonoBehaviour
             return true;
         }
         return false;
+    }
+    public SpeedChannel getCurrentSpeedChannel()
+    {
+        return currentSpeedChannel;
     }
 }

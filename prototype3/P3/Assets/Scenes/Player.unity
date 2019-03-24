@@ -293,6 +293,11 @@ PrefabInstance:
       propertyPath: speeds.Array.data[4]
       value: 175
       objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: currentSpeedChannel
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1406194919, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -77.12
@@ -385,6 +390,11 @@ PrefabInstance:
     - target: {fileID: 1032722380, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_Drag
       value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: boostMultiplier
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
