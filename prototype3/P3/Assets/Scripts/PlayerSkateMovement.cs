@@ -218,6 +218,10 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public ArcadeMoveData GetArcadeMoveData()
+    {
+        return arcadeData;
+    }
     public void IncreaseSpeed(float boostAcceleration)
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
@@ -227,7 +231,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
-        Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+        //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     #endregion
 }
