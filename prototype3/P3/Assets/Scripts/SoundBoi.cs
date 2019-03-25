@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundBoi : MonoBehaviour
 {
     public static SoundBoi instance;
+    
+    
 
     [Header("General Feedback Sounds")]
     public AudioClip WheelSoundSlowSnd;
@@ -23,8 +26,11 @@ public class SoundBoi : MonoBehaviour
     public AudioClip musicSnd4;
     public AudioClip musicSnd5;
 
-    [Header("Music Sounds")]
+
+    //[Header("Music Sounds")]
     public AudioClip[] musicPartsArray;
+
+    
 
 
     /*
@@ -84,6 +90,17 @@ public class SoundBoi : MonoBehaviour
     float timerMax = 1;
     float timer = 0;
 
+    public AudioMixerGroup[] groupArray;
+    public AudioLowPassFilter[] lowPassArray;
+    public AudioMixer mixer;
+
+    bool Part1LowPass = false;
+    bool Part2LowPass = false;
+    bool Part3LowPass = false;
+    bool Part4LowPass = false;
+    bool Part5LowPass = false;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -97,6 +114,7 @@ public class SoundBoi : MonoBehaviour
         heldVolume5 = musicSlot5.volume;
         //SetMusic();
         LoadGeneralSounds();
+        
     }
 
 
@@ -228,6 +246,9 @@ public class SoundBoi : MonoBehaviour
         chargingSource.clip = ChargingSnd;
         ReleaseFeedBackSource.clip = ReleaseSnd;
         ChangeSongStaticSource.clip = StaticChangeSongSnd;
+
+        MusicSlotArray[1].volume = .6f;
+
     }
     public void ReleaseSound()
     {
@@ -278,23 +299,32 @@ public class SoundBoi : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            MusicSlotArray[1].volume = .6f;
+            VolumeMusic1();
+            //MusicSlotArray[1].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            MusicSlotArray[2].volume = .6f;
+            VolumeMusic2();
+
+            //MusicSlotArray[2].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            MusicSlotArray[3].volume = .6f;
+            VolumeMusic3();
+
+            //MusicSlotArray[3].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            MusicSlotArray[4].volume = .6f;
+            VolumeMusic4();
+
+            //MusicSlotArray[4].volume = .6f;
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            MusicSlotArray[5].volume = .6f;
+            VolumeMusic5();
+
+            //MusicSlotArray[5].volume = .6f;
         }
         if (Input.GetKey(KeyCode.Space))
         {
@@ -309,6 +339,7 @@ public class SoundBoi : MonoBehaviour
             ReleaseSound();
 
         }
+
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             PlaywheelSound();
@@ -329,6 +360,31 @@ public class SoundBoi : MonoBehaviour
             WaitForStatic();
         }
 
+        /////////////////////////////////////////////////////////
+        //
+        //
+        //   these bois draw the parts out of a low cut
+        //
+        //
+        /////////////////////////////////////////////////////////
+
+        if (Part1LowPass)
+        {
+            //mixer.GetFloat("lowPassPart1",MixerFloat);
+            mixer.SetFloat("lowPassPart1", +1000);
+            //float MixerFloat = 0;
+            
+            float MixerFloat=mixer.GetFloat("lowPassPart1",MixerFloat);
+            Debug.Log(MixerFloat);
+            if (MixerFloat == 22000)
+            {
+                Part1LowPass = false;
+            }
+        }
+
+
+
+
     }
 
     //these raise the volume of the sounds as speed inceases
@@ -337,23 +393,40 @@ public class SoundBoi : MonoBehaviour
     //right now they are triggered from update
     public void VolumeMusic1()
     {
-        musicSlot1.volume = heldVolume1;
+        //musicSlot1.volume = heldVolume1;
+        MusicSlotArray[1].volume = .6f;
+        //MusicSlotArray[1].outputAudioMixerGroup.audioMixer 
+        //outputAudioMixerGroup.
+        //MusicSlotArray[1].GetComponent<AudioMixerGroup>()    //<AudioLowPassFilter>().cutoffFrequency = (Mathf.Sin(Time.time) * 11010 + 11000);
+        //groupArray[1].AudioLowPassFilter
+        //lowPassArray[0] =
+        //.GetComponent<AudioLowPassFilter>().cutoffFrequency = (Mathf.Sin(Time.time) * 11010 + 11000);
+
+        //MusicSlotArray[1].GetComponent<AudioLowPassFilter>().cutoffFrequency =+ 11000;
+        //AudioLowPassFilter audioLow = MusicSlotArray[1].GetComponent<AudioLowPassFilter>();
+        //audioLow.cutoffFrequency = 11000;
+        Part1LowPass = true;
+        
     }
     public void VolumeMusic2()
     {
-        musicSlot2.volume = heldVolume2;
+        //musicSlot2.volume = heldVolume2;
+        MusicSlotArray[2].volume = .6f;
     }
     public void VolumeMusic3()
     {
-        musicSlot3.volume = heldVolume3;
+        //musicSlot3.volume = heldVolume3;\
+        MusicSlotArray[3].volume = .6f;
     }
     public void VolumeMusic4()
     {
-        musicSlot4.volume = heldVolume4;
+        //musicSlot4.volume = heldVolume4;
+        MusicSlotArray[4].volume = .6f;
     }
     public void VolumeMusic5()
     {
         musicSlot5.volume = heldVolume5;
+        MusicSlotArray[5].volume = .6f;
     }
 
 }
