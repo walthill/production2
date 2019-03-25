@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+//===Retired===//
 public class SpeedSurfaceBoost : MonoBehaviour
 {
     //TODO: move player indicator UI into its own class. Singleton?
@@ -15,7 +17,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
     [SerializeField]
     float buildUpTime=0, timer=0;
     [SerializeField]
-    float boostAcceleration, boostVelocityValue, maxVelocityIncrease;
+    float boostAcceleration=0, boostVelocityValue=0, maxVelocityIncrease=0;
     bool aButtonHold, aButtonReleased, isHeldDown;
 
     PlayerSkateMovement playerMove;
@@ -27,7 +29,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
 
     bool perfectRelease, speedChange;
 
-    private void Awake()
+    private void Start()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
         speedText = gameObject.GetComponentInChildren<Text>();
@@ -52,6 +54,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
                 timer += Time.deltaTime;
             }
 
+            //==Move this to speed Levels==
             if (timer >= buildUpTime)
             {
                 if (!speedChange)

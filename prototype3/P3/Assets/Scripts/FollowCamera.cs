@@ -4,54 +4,94 @@ using UnityEngine;
 
 public class FollowCamera : MonoBehaviour
 {
+    [SerializeField] Transform target = null;
+ 
     //Smooth camera vars
-    [SerializeField] Transform target;
-
     [Header("Smooth Camera Values")]
-    [SerializeField] float distance;
-    [SerializeField] float height;
-    [SerializeField] float damping;
-    [SerializeField] float rotationDamping;
-    [SerializeField] Vector3 lookAtOffset;
-    [SerializeField] bool applyRotationDamping;
+    [SerializeField] float distance = 0;
+    [SerializeField] float height = 0;
+    [SerializeField] float damping = 0;
+    [SerializeField] float rotationDamping = 0;
+    [SerializeField] Vector3 lookAtOffset = new Vector3();
+    [SerializeField] bool applyRotationDamp=true;
 
     //Camera collision vars
     [Header("Camera Collision Values")]
-    [SerializeField] float raycastLength;
-    [SerializeField] float collisionCameraHeight;
-    [SerializeField] Vector3 collisionRaycastOffset;
+    [SerializeField] float raycastLength = 0;
+    [SerializeField] float collisionCameraHeight = 0;
+    [SerializeField] Vector3 collisionRaycastOffset = new Vector3();
 
     //Camera knockback vars
     [Header("Camera Knockback")]
-    [SerializeField] float timer;
-    [SerializeField] float knockbackTime;
-    [SerializeField] float knockbackSpeed;
-    [SerializeField] float returnSpeed;
-    [SerializeField] float knockbackDistance;
-    [SerializeField] float returnDistance;
+    [SerializeField] float timer = 0; //tracks time spent in knockback
+    [SerializeField] float knockbackTime = 0;
+    [SerializeField] float knockbackSpeed = 0;
+    [SerializeField] float returnSpeed = 0;
+    [SerializeField] float knockbackDistance = 0;
+    [SerializeField] float returnDistance = 0;
+
+    //Free camera vars
+    [Header("Camera Rotation")]
+    [SerializeField] float inputDeadZone = 0;
+    [SerializeField] float resetRotationSpeed=0; //Make this a large value
+    [SerializeField] float camRotationSpeed = 0;
+    [SerializeField] float camMinXAngle = 0, camMaxXAngle = 0;
+    [SerializeField] float camMinYAngle = 0, camMaxYAngle = 0; //Clamp values for cam rotation
 
     float distanceToReach;
     bool hasKnockback = false;
+
+    float camYRotation,  camXRotation; //camera rotate input
+    bool lookBehindDown, lookBehindUp; //lookback input
+    bool lookBehindToggle, canLookBack = true;
+
+    Quaternion originalTargetRotation;
+
+    float xRot, yRot;
     
     private void Awake()
     {
+        originalTargetRotation = target.localRotation; //keep track of Quaternion at object rotation's 0,0,0
+        
+        //init knockback
         distanceToReach = distance + knockbackDistance;
         returnDistance = returnDistance + distance;
     }
 
+    private void Update()
+    {
+        lookBehindDown = Input.GetButton("JoyRSDown");
+        lookBehindUp = Input.GetButtonUp("JoyRSDown");
+
+        camYRotation = Input.GetAxis("JoyHorizontalRS");
+        camXRotation = Input.GetAxis("JoyVerticalRS");
+    }
+
     private void FixedUpdate()
+    {
+        if(lookBehindDown)
+            lookBehindToggle = true;
+        if(lookBehindUp)
+            lookBehindToggle = false;
+
+        CameraMove();
+    }
+
+    void CameraMove()
     {
         if (target)
         {
+
             Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
-            RaycastHit hitInfo;
+            Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
-            if (Physics.Raycast(ray, out hitInfo, raycastLength ))
+            //Camera collisions - TODO revisit this collision code 
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, raycastLength))
             {
-                if (hitInfo.transform != target) //make sure collision isn't the player
+                if (hitInfo.transform != target.parent.transform) //make sure collision isn't the player
                 {
                     Debug.Log("raycast hit" + hitInfo.collider.name);
 
@@ -65,19 +105,74 @@ public class FollowCamera : MonoBehaviour
 
             Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
 
-            if (applyRotationDamping)
+            if (applyRotationDamp)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationDamping);
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);//transform.eulerAngles.z = 0;
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
             }
             else
             {
                 transform.rotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
             }
 
+            FreeCameraMovement();
             CameraFallback();
         }
+    }
+
+    void FreeCameraMovement()
+    {
+        //Pan camera over/under player
+        if (camXRotation > inputDeadZone || camXRotation < -inputDeadZone) 
+        {
+            xRot += camXRotation * camRotationSpeed;            
+            xRot = Mathf.Clamp(xRot, camMinXAngle, camMaxXAngle);
+
+            target.localEulerAngles = new Vector3(xRot, target.localEulerAngles.y, target.localEulerAngles.z);
+        }
+        //Move camera left/right around player
+        else if (camYRotation > inputDeadZone || camYRotation < -inputDeadZone)
+        {            
+            yRot += camYRotation * camRotationSpeed;
+            yRot = Mathf.Clamp(yRot, camMinYAngle, camMaxYAngle);
+
+            target.localEulerAngles = new Vector3(target.localEulerAngles.x, yRot, target.localEulerAngles.z);
+        }
+        else if(lookBehindToggle) //Quick look back
+        {
+            if(canLookBack)
+            {
+                FlipAlignment(false);
+            }
+        }        
+        else if(!canLookBack)
+        {
+            float zPosOffset = 2;
+            FlipAlignment(true, zPosOffset);
+        }
+        else
+        {
+           ResetAlignment();
+        }
+
+    }
+
+    void FlipAlignment(bool ableToLookBack, float lookBackZOffset=0)
+    {
+        float behind = target.localEulerAngles.y + 180;
+        target.localEulerAngles = new Vector3(target.localEulerAngles.x, behind, target.localEulerAngles.z);
+        target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, target.localPosition.z + lookBackZOffset);
+        canLookBack = ableToLookBack;
+    }
+
+    void ResetAlignment() //TODO: wait a few frames before resetting to allow for quick camera swings
+    {
+        xRot = 0;
+        yRot = 0;
+        target.localRotation = Quaternion.RotateTowards(target.localRotation,
+                                                        originalTargetRotation, Time.deltaTime * resetRotationSpeed);
+        target.localPosition = new Vector3(0, 0, 0);
     }
 
     void CameraFallback()
