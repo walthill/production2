@@ -143,9 +143,12 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
 
-        Vector3 vel = rb.velocity; //store current speed
-        rb.velocity = Vector3.zero;
-        rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        if (isGrounded)
+        {
+            Vector3 vel = rb.velocity; //store current speed
+            rb.velocity = Vector3.zero;
+            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        }
     }
 
     private void MovePhysics()
