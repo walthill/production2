@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+//===Retired===//
 public class SpeedSurfaceBoost : MonoBehaviour
 {
     //TODO: move player indicator UI into its own class. Singleton?
@@ -52,6 +54,7 @@ public class SpeedSurfaceBoost : MonoBehaviour
                 timer += Time.deltaTime;
             }
 
+            //==Move this to speed Levels==
             if (timer >= buildUpTime)
             {
                 if (!speedChange)

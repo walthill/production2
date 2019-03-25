@@ -285,10 +285,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2041038741}
-  loadingSceneIndex: 0
+  loadingSceneIndex: 1
   mPersistentScenes: 
   mLevelScenes:
-  - sceneList: 0100000002000000
+  - sceneList: 020000000300000004000000
   - sceneList: 0500000006000000
 --- !u!4 &921691837
 Transform:
