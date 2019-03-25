@@ -7,6 +7,7 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
+    public bool keyboardMovement;
 
     [System.Serializable]
     public struct SimMoveData
@@ -184,7 +185,6 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
-	//TODO: camera collision pass. The raycast is a bit dumb
     void AlignPlayerWithGround()
     {
         //help @ https://bit.ly/2RMVeox
@@ -218,6 +218,10 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public ArcadeMoveData GetArcadeMoveData()
+    {
+        return arcadeData;
+    }
     public void IncreaseSpeed(float boostAcceleration)
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
@@ -227,7 +231,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
-        Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+        //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     #endregion
 }

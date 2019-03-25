@@ -86,14 +86,14 @@ public class FollowCamera : MonoBehaviour
             Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
-            RaycastHit hitInfo;
+            Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
-            //Camera collisions - TODO(low): revisit this collision code 
-            if (Physics.Raycast(ray, out hitInfo, raycastLength)) //TODO: shoot ray toward camera instead of straight back 
+            //Camera collisions - TODO revisit this collision code 
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, raycastLength))
             {
-                if (hitInfo.transform != target) //make sure collision isn't the player
+                if (hitInfo.transform != target.parent.transform) //make sure collision isn't the player
                 {
-                    // Debug.Log("raycast hit" + hitInfo.collider.name);
+                    Debug.Log("raycast hit" + hitInfo.collider.name);
 
                     wantedPosition = new Vector3(hitInfo.point.x,
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),
@@ -109,7 +109,7 @@ public class FollowCamera : MonoBehaviour
             {
                 Quaternion targetRotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationDamping);
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);//transform.eulerAngles.z = 0;
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
             }
             else
             {
@@ -166,7 +166,7 @@ public class FollowCamera : MonoBehaviour
         canLookBack = ableToLookBack;
     }
 
-    void ResetAlignment()
+    void ResetAlignment() //TODO: wait a few frames before resetting to allow for quick camera swings
     {
         xRot = 0;
         yRot = 0;

@@ -8,6 +8,7 @@ TagManager:
   - ReleaseSurface
   - boomBox
   - end
+  - Rail
   layers:
   - Default
   - TransparentFX
