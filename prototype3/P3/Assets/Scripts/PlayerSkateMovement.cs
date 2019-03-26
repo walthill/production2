@@ -48,7 +48,8 @@ public class PlayerSkateMovement : MonoBehaviour
     bool accelButtonDown, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
-
+    [SerializeField]
+    bool isDrfiting = false;
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -101,6 +102,8 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
+        //TODO
+        isDrfiting = Input.GetButton();
     }
 
     private void RollerSkateMovement()
@@ -143,15 +146,19 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
 
-        Vector3 vel = rb.velocity; //store current speed
-        rb.velocity = Vector3.zero;
-        rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        //TODO What would happen if we just take this part out while drifting?
+        if (!isDrfiting)
+        {
+            Vector3 vel = rb.velocity; //store current speed
+            rb.velocity = Vector3.zero;
+            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        }
     }
 
     private void MovePhysics()
     {
         //Forward movement
-        if (accelButtonDown && isGrounded)
+        if (accelButtonDown && isGrounded && !isDrfiting)
         {
             float moveFactor = accelerationButton * arcadeData.moveSpeed;
 
