@@ -42,7 +42,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
     const float SLOPE_RAY_DIST = 1f;
     const float PLAYER_ALIGN_SPEED = 15f;
-
+  
     //Input vars
     float xMove, accelerationButton;
     bool accelButtonDown, isGrounded, applyDownforce;
@@ -65,17 +65,17 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         MoveAnimation();
 
-        if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
+      //  if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
         {
-            if (objTransform.position.y > -20)
+         //   if (objTransform.position.y > -20)
             {
               //  Debug.Log("APPLYING DOWN FORCE");
-               // applyDownforce = true;
+              //  applyDownforce = true;
             }
         }
-        else
+       // else
         {
-            applyDownforce = false;
+       //     applyDownforce = false;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -84,17 +84,20 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(applyDownforce)
-        {
-            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
-            rb.AddForceAtPosition(lift*transform.up, objTransform.position);
-        }
-
+     
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
 		AlignPlayerWithGround();
         RollerSkateMovement();
+
+        if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
+        {
+            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
+            rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
+        }
+
+       // Debug.Log(rb.velocity.magnitude);
     }
 
     void ProcessInput()
@@ -110,16 +113,16 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if(moveType == MoveType.ARCADE)
         {        
-            if (!applyDownforce)
+            //if (applyDownforce)
             { 
                 if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
                 {
                     TurnPhysics();
                 }               
             }
-            else
+           // else
             {
-                if (xMove < 0) 
+               /* if (xMove < 0) 
                 {
                     rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                     objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
@@ -129,7 +132,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 {
                     rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                     objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
+                }*/
             }
 
             MovePhysics();
@@ -143,6 +146,7 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
 
+        //Align velocity vector with changed transform forward
         if (isGrounded)
         {
             Vector3 vel = rb.velocity; //store current speed
@@ -183,6 +187,7 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
+               // accelButtonDown = false;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
@@ -202,6 +207,18 @@ public class PlayerSkateMovement : MonoBehaviour
 
             //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+            Debug.Log(hit.normal);
+
+         //   if(hit.normal.y <= 0.9f)
+            {
+         //       applyDownforce = true;
+            }
+           // else
+            {
+         //       applyDownforce = false;
+            }
+
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
         }
         else
