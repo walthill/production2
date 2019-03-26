@@ -256,6 +256,7 @@ public class SoundBoi : MonoBehaviour
     }
     public void PlaywheelSound()
     {
+        WheelSource.volume = .1f;
         WheelSource.Play();
         Debug.Log("playing wheels");
         Debug.Log("volume is" + WheelSource.volume);
@@ -263,14 +264,18 @@ public class SoundBoi : MonoBehaviour
 
     public void WheelPitchUp()
     {
+        WheelSource.volume = WheelSource.volume + .02f;
         WheelSource.pitch = pitchNumber;
-        pitchNumber = pitchNumber + .1f;
+        pitchNumber = pitchNumber + .02f;
+        Debug.Log("pitch is: " + pitchNumber);
     }
 
     public void WheelPitchDown()
     {
+        WheelSource.volume = WheelSource.volume - .02f;
         WheelSource.pitch = pitchNumber;
-        pitchNumber = pitchNumber - .1f;
+        pitchNumber = pitchNumber - .02f;
+        Debug.Log("pitch is: " + pitchNumber);
     }
 
 
