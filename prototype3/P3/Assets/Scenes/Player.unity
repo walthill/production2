@@ -172,9 +172,9 @@ MonoBehaviour:
   returnSpeed: 1
   knockbackDistance: 2
   returnDistance: 1
-  inputDeadZone: 0.4
-  resetRotationSpeed: 100
-  camRotationSpeed: 1
+  inputDeadZone: 0.2
+  resetRotationSpeed: 200
+  camRotationSpeed: 10
   camMinXAngle: -25
   camMaxXAngle: 70
   camMinYAngle: -115
@@ -238,6 +238,14 @@ PrefabInstance:
       propertyPath: respawn
       value: 
       objectReference: {fileID: 653620678}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: arcadeData.rotationSpeed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: leftStickXAxisDeadzone
+      value: 0.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!4 &382545324 stripped
