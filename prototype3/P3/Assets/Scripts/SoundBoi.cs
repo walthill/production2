@@ -196,9 +196,9 @@ public class SoundBoi : MonoBehaviour
         
         foreach(AudioSource slot in MusicSlotArray)
         {
-            slot.volume = 0;
+            slot.volume = .6f;
         }
-        MusicSlotArray[0].volume = .6f;
+        //MusicSlotArray[0].volume = .6f;
 
 
         /*
@@ -247,7 +247,7 @@ public class SoundBoi : MonoBehaviour
         ReleaseFeedBackSource.clip = ReleaseSnd;
         ChangeSongStaticSource.clip = StaticChangeSongSnd;
 
-        MusicSlotArray[1].volume = .6f;
+        //MusicSlotArray[1].volume = .6f;
 
     }
     public void ReleaseSound()
@@ -360,30 +360,93 @@ public class SoundBoi : MonoBehaviour
             WaitForStatic();
         }
 
-        /////////////////////////////////////////////////////////
-        //
-        //
-        //   these bois draw the parts out of a low cut
-        //
-        //
-        /////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////
+        //                                                      //
+        //                                                      //
+        //   these bois draw the parts out of a low cut         //
+        //                                                      //
+        //                                                      //
+        //////////////////////////////////////////////////////////
 
         if (Part1LowPass)
         {
             //mixer.GetFloat("lowPassPart1",MixerFloat);
-            mixer.SetFloat("lowPassPart1", +1000);
-            //float MixerFloat = 0;
             
-            float MixerFloat=mixer.GetFloat("lowPassPart1",MixerFloat);
-            Debug.Log(MixerFloat);
-            if (MixerFloat == 22000)
+            //float MixerFloat = 0;
+            float MixerFloat = 0;
+            mixer.GetFloat("lowPassPart1", out MixerFloat);
+            mixer.SetFloat("lowPassPart1", MixerFloat*1.1f);
+            //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
+            //Debug.Log(MixerFloat);
+            if (MixerFloat >= 22000)
             {
                 Part1LowPass = false;
             }
         }
 
+        if (Part2LowPass)
+        {
+            //mixer.GetFloat("lowPassPart1",MixerFloat);
 
+            //float MixerFloat = 0;
+            float MixerFloat = 0;
+            mixer.GetFloat("lowPassPart2", out MixerFloat);
+            mixer.SetFloat("lowPassPart2", MixerFloat * 1.1f);
+            //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
+            //Debug.Log(MixerFloat);
+            if (MixerFloat >= 22000)
+            {
+                Part2LowPass = false;
+            }
+        }
 
+        if (Part3LowPass)
+        {
+            //mixer.GetFloat("lowPassPart1",MixerFloat);
+
+            //float MixerFloat = 0;
+            float MixerFloat = 0;
+            mixer.GetFloat("lowPassPart3", out MixerFloat);
+            mixer.SetFloat("lowPassPart3", MixerFloat * 1.1f);
+            //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
+            //Debug.Log(MixerFloat);
+            if (MixerFloat >= 22000)
+            {
+                Part3LowPass = false;
+            }
+        }
+
+        if (Part4LowPass)
+        {
+            //mixer.GetFloat("lowPassPart1",MixerFloat);
+
+            //float MixerFloat = 0;
+            float MixerFloat = 0;
+            mixer.GetFloat("lowPassPart4", out MixerFloat);
+            mixer.SetFloat("lowPassPart4", MixerFloat * 1.1f);
+            //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
+            //Debug.Log(MixerFloat);
+            if (MixerFloat >= 22000)
+            {
+                Part4LowPass = false;
+            }
+        }
+
+        if (Part5LowPass)
+        {
+            //mixer.GetFloat("lowPassPart1",MixerFloat);
+
+            //float MixerFloat = 0;
+            float MixerFloat = 0;
+            mixer.GetFloat("lowPassPart5", out MixerFloat);
+            mixer.SetFloat("lowPassPart5", MixerFloat * 1.1f);
+            //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
+            //Debug.Log(MixerFloat);
+            if (MixerFloat >= 22000)
+            {
+                Part5LowPass = false;
+            }
+        }
 
     }
 
@@ -394,7 +457,7 @@ public class SoundBoi : MonoBehaviour
     public void VolumeMusic1()
     {
         //musicSlot1.volume = heldVolume1;
-        MusicSlotArray[1].volume = .6f;
+        //MusicSlotArray[1].volume = .6f;
         //MusicSlotArray[1].outputAudioMixerGroup.audioMixer 
         //outputAudioMixerGroup.
         //MusicSlotArray[1].GetComponent<AudioMixerGroup>()    //<AudioLowPassFilter>().cutoffFrequency = (Mathf.Sin(Time.time) * 11010 + 11000);
@@ -411,22 +474,26 @@ public class SoundBoi : MonoBehaviour
     public void VolumeMusic2()
     {
         //musicSlot2.volume = heldVolume2;
-        MusicSlotArray[2].volume = .6f;
+        //MusicSlotArray[2].volume = .6f;
+        Part2LowPass = true;
     }
     public void VolumeMusic3()
     {
         //musicSlot3.volume = heldVolume3;\
-        MusicSlotArray[3].volume = .6f;
+        //MusicSlotArray[3].volume = .6f;
+        Part3LowPass = true;
     }
     public void VolumeMusic4()
     {
         //musicSlot4.volume = heldVolume4;
-        MusicSlotArray[4].volume = .6f;
+        //MusicSlotArray[4].volume = .6f;
+        Part4LowPass = true;
     }
     public void VolumeMusic5()
     {
-        musicSlot5.volume = heldVolume5;
-        MusicSlotArray[5].volume = .6f;
+        //musicSlot5.volume = heldVolume5;
+        //MusicSlotArray[5].volume = .6f;
+        Part5LowPass = true;
     }
 
 }
