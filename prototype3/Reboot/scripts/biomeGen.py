@@ -53,6 +53,10 @@ def rebootGenUI():
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.button(label='Make Some Buildings', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeCity())
 
+    # SECTION THREE: CITY SIGN POSTS
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.button(label='Make A Sign', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: signpost())
+
     #end line
     cmds.showWindow("UIwindow")
 
@@ -281,20 +285,58 @@ def signpost():
     height = 10
     rad = 2
     linePoints = []
-    curveAdjList = list(range(20, 30))
+    curveAdjList = list(range(10, 25))
+    smallAdj = list(range(-10, 10))
+    plusORMinus = [-1, 1]
 
-    for x in range(3):
+    for x in range(5):
         addedNum = random.choice(curveAdjList)
+        Small_addedNum = random.choice(smallAdj)
+        one = random.choice(plusORMinus)
         curveAdjList.remove(addedNum)
         if x == 0:
-            addedNum = 2
-        point_1 = x , x + addedNum, 0
+            addedNum = 12
+            Small_addedNum = 0
+        point_1 = x*addedNum/2*one + Small_addedNum, x * addedNum + addedNum, 0
         linePoints.append(point_1)
 
     extrudeCurve = cmds.curve(p=linePoints)
-    rope = cmds.polyCylinder(r=rad, h=1, sx=6, ch=False)
+    rope = cmds.polyCylinder(r=rad, h=height, sx=3, ch=False)
     rope = rope[0]
-    cmds.move(0, 1 / 2.0, 0, rope)
-    hsdvcf
-    cmds.polyExtrudeFacet(rope + '.f[7]', inputCurve=extrudeCurve, divisions=10, ch=False)
+    cmds.move(0, height / 2.0, 0, rope)
+    cmds.delete('.f[3]')
+    cmds.polyExtrudeFacet(rope + '.f[3]', inputCurve=extrudeCurve, divisions=12, ch=False)
     cmds.delete(extrudeCurve)
+    cmds.polyExtrudeFacet('.f[0:2]', ltz=3)
+    cmds.delete('.f[40]', '.f[42]', '.f[44]')
+    cmds.polyBevel('.e[3:26]', '.e[39:50]', '.e[76:78]', '.e[80]', '.e[82:83]', o=1.2)
+    cmds.select('.f[0]')
+    X, Y, Z = cmds.polyEvaluate(bc=True)
+    x1, x2 = X
+    y1, y2 = Y
+    z1, z2 = Z
+    xTotal = (x1 + x2) / 2
+    yTotal = (y1 + y2) / 2
+    zTotal = (z1 + z2) / 2
+    cmds.select(clear=True)
+    object, object_2 = signTops()
+    object = object[0]
+    object_2 = object_2[0]
+    cmds.move(xTotal, yTotal-5, zTotal, object, relative=True)
+    cmds.move(xTotal, yTotal-5, zTotal, object_2, relative=True)
+    rope = cmds.polyCBoolOp(rope, object, operation=2, ch=False)
+    cmds.polyCBoolOp(object_2, rope, operation=1)
+
+
+def signTops():
+    height = 20.0
+    width = height/2.0
+    depth = 3
+
+    signTop = cmds.polyCube(w=width, d=depth, h=height, ch=False)
+    cmds.move(height/2.0, signTop, moveY=True)
+    boolObj = cmds.duplicate(signTop)
+    cmds.polyExtrudeFacet('.f[0]', lsy=0.85, lsx=0.75)
+    cmds.polyExtrudeFacet('.f[0]', ltz=-depth/4.0)
+    cmds.polyBevel(signTop)
+    return signTop, boolObj
