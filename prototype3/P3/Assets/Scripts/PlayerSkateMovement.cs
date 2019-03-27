@@ -48,8 +48,15 @@ public class PlayerSkateMovement : MonoBehaviour
     bool accelButtonDown, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
+
+    //Drifting stuff
     [SerializeField]
     bool isDrifting = false;
+    [SerializeField]
+    Vector3 driftVelocity;
+    [SerializeField]
+    float driftStartTime;
+
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -102,9 +109,20 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
-        isDrifting = Input.GetButton("JoyDrift");
+        if (Input.GetButtonDown("JoyDrift")) startDrifting();
+        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
 
+    private void startDrifting()
+    {
+        isDrifting = true;
+        driftVelocity = rb.velocity;
+        driftStartTime = Time.time;
+    }
+    private void stopDrifting()
+    {
+        isDrifting = false;
+    }
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
