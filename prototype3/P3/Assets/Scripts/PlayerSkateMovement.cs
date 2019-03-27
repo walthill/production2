@@ -45,7 +45,7 @@ public class PlayerSkateMovement : MonoBehaviour
   
     //Input vars
     float xMove, accelerationButton;
-    bool accelButtonDown, isGrounded, applyDownforce;
+    bool accelButtonDown, jump, isGrounded, applyDownforce;
     Rigidbody rb;
     Transform objTransform;
 
@@ -91,6 +91,8 @@ public class PlayerSkateMovement : MonoBehaviour
 		AlignPlayerWithGround();
         RollerSkateMovement();
 
+        Jump();
+
         if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
         {
             float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
@@ -104,6 +106,15 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
+        jump = Input.GetButtonDown("JoyJump");
+    }
+
+    void Jump()
+    {
+        if(jump && isGrounded)
+        {
+            Debug.Log("JUMP");
+        }
     }
 
     private void RollerSkateMovement()
