@@ -109,8 +109,8 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
-        if (Input.GetButtonDown("JoyDrift")) startDrifting();
-        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
+        if (Input.GetAxis("JoyDrift") < 0.5) startDrifting();
+        if (Input.GetAxis("JoyDrift") > 0.5) stopDrifting();
     }
 
     private void startDrifting()
