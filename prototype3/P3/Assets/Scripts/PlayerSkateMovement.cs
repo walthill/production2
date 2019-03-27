@@ -183,6 +183,9 @@ public class PlayerSkateMovement : MonoBehaviour
             Vector3 vel;
             if (isDrifting)
             {
+                // if hitting a wall then stop.
+                if (rb.velocity.magnitude < 0.1)
+                    driftVelocity = Vector3.zero;
                 moveDir = Vector3.zero;
                 vel = driftVelocity;
             }
