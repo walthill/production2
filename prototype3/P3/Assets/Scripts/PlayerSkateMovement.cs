@@ -109,8 +109,8 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
-        if (Input.GetAxis("JoyDrift") < 0.5) startDrifting();
-        if (Input.GetAxis("JoyDrift") > 0.5) stopDrifting();
+        if (Input.GetButtonDown("JoyDrift")) startDrifting();
+        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
 
     private void startDrifting()
@@ -122,6 +122,8 @@ public class PlayerSkateMovement : MonoBehaviour
     private void stopDrifting()
     {
         isDrifting = false;
+        Vector3 vel = rb.velocity;
+        rb.velocity = transform.forward * vel.magnitude;
     }
     private void RollerSkateMovement()
     {
@@ -175,17 +177,25 @@ public class PlayerSkateMovement : MonoBehaviour
     private void MovePhysics()
     {
         //Forward movement
-        if (accelButtonDown && isGrounded && !isDrifting)
+        if (accelButtonDown && isGrounded)
         {
-            float moveFactor = accelerationButton * arcadeData.moveSpeed;
-
-            Vector3 moveDir = objTransform.forward * moveFactor;
-            Vector3 vel = rb.velocity;
-
+            Vector3 moveDir;
+            Vector3 vel;
+            if (isDrifting)
+            {
+                moveDir = Vector3.zero;
+                vel = driftVelocity;
+            }
+            else
+            {
+                float moveFactor = accelerationButton * arcadeData.moveSpeed;
+                moveDir = objTransform.forward * moveFactor;
+                vel = rb.velocity;
+            }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity += moveDir;
+                rb.velocity = vel + moveDir; //fix this
         }
     }
 
