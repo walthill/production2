@@ -49,6 +49,14 @@ public class PlayerSkateMovement : MonoBehaviour
     Rigidbody rb;
     Transform objTransform;
 
+    //Drifting stuff
+    [SerializeField]
+    bool isDrifting = false;
+    [SerializeField]
+    Vector3 driftVelocity;
+    [SerializeField]
+    float driftStartTime;
+
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -101,8 +109,22 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
+        if (Input.GetButtonDown("JoyDrift")) startDrifting();
+        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
 
+    private void startDrifting()
+    {
+        isDrifting = true;
+        driftVelocity = rb.velocity;
+        driftStartTime = Time.time;
+    }
+    private void stopDrifting()
+    {
+        isDrifting = false;
+        Vector3 vel = rb.velocity;
+        rb.velocity = transform.forward * vel.magnitude;
+    }
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
@@ -143,9 +165,13 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
 
-        Vector3 vel = rb.velocity; //store current speed
-        rb.velocity = Vector3.zero;
-        rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        //TODO What would happen if we just take this part out while drifting?
+        if (!isDrifting)
+        {
+            Vector3 vel = rb.velocity; //store current speed
+            rb.velocity = Vector3.zero;
+            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        }
     }
 
     private void MovePhysics()
@@ -153,15 +179,26 @@ public class PlayerSkateMovement : MonoBehaviour
         //Forward movement
         if (accelButtonDown && isGrounded)
         {
-            float moveFactor = accelerationButton * arcadeData.moveSpeed;
-
-            Vector3 moveDir = objTransform.forward * moveFactor;
-            Vector3 vel = rb.velocity;
-
+            Vector3 moveDir;
+            Vector3 vel;
+            if (isDrifting)
+            {
+                // if hitting a wall then stop.
+                if (rb.velocity.magnitude < 0.1)
+                    driftVelocity = Vector3.zero;
+                moveDir = Vector3.zero;
+                vel = driftVelocity;
+            }
+            else
+            {
+                float moveFactor = accelerationButton * arcadeData.moveSpeed;
+                moveDir = objTransform.forward * moveFactor;
+                vel = rb.velocity;
+            }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity += moveDir;
+                rb.velocity = vel + moveDir; //fix this
         }
     }
 
