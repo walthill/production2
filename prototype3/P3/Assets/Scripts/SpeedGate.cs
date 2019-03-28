@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpeedChannel { QUICK, SPEEDY, FAST, BLUR, LIGHTNING, WOW_SO_FAST, NUM_SPEEDS }
+
 
 public enum ObstacleType
 {
@@ -13,13 +13,13 @@ public class SpeedGate : MonoBehaviour
 {
 //    PlaceObstacle placeObstacle;
  //   ObstacleType obstacleType;
-    public SpeedChannel speedChannel;
+    public SpeedChannel speedRequired;
 
     private void Awake()
     {
-    /*    placeObstacle = gameObject.GetComponent<PlaceObstacle>();
-        obstacleType = placeObstacle.obstacleType;*/
-       // speedChannel = placeObstacle.speedChannel;
+        /*    placeObstacle = gameObject.GetComponent<PlaceObstacle>();
+            obstacleType = placeObstacle.obstacleType;*/
+        // speedChannel = placeObstacle.speedChannel;
     }
 
     void Update()
