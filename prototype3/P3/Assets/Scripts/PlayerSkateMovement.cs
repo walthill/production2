@@ -122,8 +122,10 @@ public class PlayerSkateMovement : MonoBehaviour
     private void stopDrifting()
     {
         isDrifting = false;
-        Vector3 vel = rb.velocity;
-        rb.velocity = transform.forward * vel.magnitude;
+        if (isGrounded)
+        {
+            rb.velocity = transform.forward * rb.velocity.magnitude;
+        }
     }
     private void RollerSkateMovement()
     {
