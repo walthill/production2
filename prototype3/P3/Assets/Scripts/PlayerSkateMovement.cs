@@ -198,7 +198,7 @@ public class PlayerSkateMovement : MonoBehaviour
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + moveDir; //fix this
+                rb.velocity = vel + moveDir;
         }
     }
 
