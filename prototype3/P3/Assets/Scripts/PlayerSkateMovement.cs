@@ -7,7 +7,6 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
-    public bool keyboardMovement;
 
     [System.Serializable]
     public struct SimMoveData
@@ -30,6 +29,7 @@ public class PlayerSkateMovement : MonoBehaviour
                      boostValue;
 
         public float rotationSpeed;
+        public float jumpForce;
     }
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
@@ -42,21 +42,24 @@ public class PlayerSkateMovement : MonoBehaviour
 
     const float SLOPE_RAY_DIST = 1f;
     const float PLAYER_ALIGN_SPEED = 15f;
-
+  
     //Input vars
     float xMove, accelerationButton;
-    bool accelButtonDown, isGrounded, applyDownforce;
+    bool accelButtonDown, jump, isGrounded, applyDownforce, isAirborne;
     Rigidbody rb;
+    float oldVel;
     Transform objTransform;
 
     //Drifting stuff
-    [SerializeField]
     bool isDrifting = false;
-    [SerializeField]
     Vector3 driftVelocity;
+    float driftSlowTimer; //when speed starts to decrease;
     [SerializeField]
-    float driftStartTime;
-
+    [Tooltip("How long before speed decreases")]
+    float driftTime = 2f;
+    [SerializeField]
+    [Tooltip("How long it takes to stop after slowing down while drifting.")]
+    float driftStopTime = 4f;
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -73,57 +76,62 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         MoveAnimation();
 
-        if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
-        {
-            if (objTransform.position.y > -20)
-            {
-              //  Debug.Log("APPLYING DOWN FORCE");
-               // applyDownforce = true;
-            }
-        }
-        else
-        {
-            applyDownforce = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
     }
 
     private void FixedUpdate()
-    {
-        if(applyDownforce)
-        {
-            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
-            rb.AddForceAtPosition(lift*transform.up, objTransform.position);
-        }
-
+    {   
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-
-		AlignPlayerWithGround();
+        
+        AlignPlayerWithGround();
         RollerSkateMovement();
+
+        JumpAlignRaycast();
+        JumpLandRaycast();
+        Jump();
+
+        if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
+        {
+            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
+            rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
+        }
     }
 
     void ProcessInput()
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight");
+        jump = Input.GetButtonDown("JoyJump");
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (Input.GetButtonUp("JoyDrift")) stopDrifting();
+    }
+
+    void Jump()
+    {
+        if(jump && isGrounded)
+        {
+            Debug.Log("JUMP");
+            rb.AddForce(new Vector3(rb.velocity.x/5, arcadeData.jumpForce, rb.velocity.z/5), ForceMode.Impulse);
+            isGrounded = false;
+            isAirborne = true;
+        }
     }
 
     private void startDrifting()
     {
         isDrifting = true;
         driftVelocity = rb.velocity;
-        driftStartTime = Time.time;
+        driftSlowTimer = Time.time + driftTime;
     }
     private void stopDrifting()
     {
         isDrifting = false;
-        Vector3 vel = rb.velocity;
-        rb.velocity = transform.forward * vel.magnitude;
+        if (isGrounded)
+        {
+            rb.velocity = transform.forward * rb.velocity.magnitude;
+        }
     }
     private void RollerSkateMovement()
     {
@@ -132,27 +140,10 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if(moveType == MoveType.ARCADE)
         {        
-            if (!applyDownforce)
-            { 
-                if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
-                {
-                    TurnPhysics();
-                }               
-            }
-            else
+            if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
-                if (xMove < 0) 
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
-
-                if (xMove > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
-            }
+                TurnPhysics();
+            }               
 
             MovePhysics();
         }
@@ -165,8 +156,8 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
 
-        //TODO What would happen if we just take this part out while drifting?
-        if (!isDrifting)
+        //Align velocity vector with changed transform forward
+        if (isGrounded && !isDrifting)
         {
             Vector3 vel = rb.velocity; //store current speed
             rb.velocity = Vector3.zero;
@@ -188,6 +179,11 @@ public class PlayerSkateMovement : MonoBehaviour
                     driftVelocity = Vector3.zero;
                 moveDir = Vector3.zero;
                 vel = driftVelocity;
+                float time = Time.time - driftSlowTimer;
+                if(time > 0 )
+                {
+                    driftVelocity -= driftVelocity * (time / driftStopTime);
+                }
             }
             else
             {
@@ -198,7 +194,7 @@ public class PlayerSkateMovement : MonoBehaviour
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + moveDir; //fix this
+                rb.velocity = vel + moveDir;
         }
     }
 
@@ -217,7 +213,46 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
+               // accelButtonDown = false;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
+            }
+        }
+    }
+
+    void JumpLandRaycast()
+    {
+        if(isAirborne)
+        {
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
+            {
+                Debug.Log("JUMP RAY HIT");
+                isAirborne = false;
+                rb.velocity = rb.velocity.normalized * oldVel;
+            }
+        }
+    }
+
+    //TODO: give player control over x rotation in midair? Simple anim tricks?
+    void JumpAlignRaycast()
+    {
+        if (isAirborne)
+        {
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 3.5f, layerToAlignWith))
+            {
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 12.0f);
             }
         }
     }
@@ -232,15 +267,24 @@ public class PlayerSkateMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
-            isGrounded = true;
+            if(!isAirborne)
+            {
+                isGrounded = true;
 
-            //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+
+                oldVel = rb.velocity.magnitude;
+            }
         }
         else
         {
             isGrounded = false;
+            isAirborne = true;
         }
     }
 
