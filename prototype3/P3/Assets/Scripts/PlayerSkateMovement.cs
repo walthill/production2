@@ -7,7 +7,6 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
-    public bool keyboardMovement;
 
     [System.Serializable]
     public struct SimMoveData
@@ -30,6 +29,7 @@ public class PlayerSkateMovement : MonoBehaviour
                      boostValue;
 
         public float rotationSpeed;
+        public float jumpForce;
     }
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
@@ -45,8 +45,9 @@ public class PlayerSkateMovement : MonoBehaviour
   
     //Input vars
     float xMove, accelerationButton;
-    bool accelButtonDown, jump, isGrounded, applyDownforce;
+    bool accelButtonDown, jump, isGrounded, applyDownforce, isAirborne;
     Rigidbody rb;
+    float oldVel;
     Transform objTransform;
 
     void Awake()
@@ -65,32 +66,20 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         MoveAnimation();
 
-      //  if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
-        {
-         //   if (objTransform.position.y > -20)
-            {
-              //  Debug.Log("APPLYING DOWN FORCE");
-              //  applyDownforce = true;
-            }
-        }
-       // else
-        {
-       //     applyDownforce = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
     }
 
     private void FixedUpdate()
-    {
-     
+    {   
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-
-		AlignPlayerWithGround();
+        
+        AlignPlayerWithGround();
         RollerSkateMovement();
 
+        JumpAlignRaycast();
+        JumpLandRaycast();
         Jump();
 
         if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
@@ -98,8 +87,6 @@ public class PlayerSkateMovement : MonoBehaviour
             float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
-
-       // Debug.Log(rb.velocity.magnitude);
     }
 
     void ProcessInput()
@@ -114,6 +101,9 @@ public class PlayerSkateMovement : MonoBehaviour
         if(jump && isGrounded)
         {
             Debug.Log("JUMP");
+            rb.AddForce(new Vector3(rb.velocity.x/5, arcadeData.jumpForce, rb.velocity.z/5), ForceMode.Impulse);
+            isGrounded = false;
+            isAirborne = true;
         }
     }
 
@@ -124,27 +114,10 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if(moveType == MoveType.ARCADE)
         {        
-            //if (applyDownforce)
-            { 
-                if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
-                {
-                    TurnPhysics();
-                }               
-            }
-           // else
+            if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
-               /* if (xMove < 0) 
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }
-
-                if (xMove > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z + (xMove * arcadeData.rotationSpeed));
-                }*/
-            }
+                TurnPhysics();
+            }               
 
             MovePhysics();
         }
@@ -204,6 +177,44 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+    void JumpLandRaycast()
+    {
+        if(isAirborne)
+        {
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
+            {
+                Debug.Log("JUMP RAY HIT");
+                isAirborne = false;
+                rb.velocity = rb.velocity.normalized * oldVel;
+            }
+        }
+    }
+
+    //TODO: give player control over x rotation in midair? Simple anim tricks?
+    void JumpAlignRaycast()
+    {
+        if (isAirborne)
+        {
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 3.5f, layerToAlignWith))
+            {
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 12.0f);
+            }
+        }
+    }
+
     void AlignPlayerWithGround()
     {
         //help @ https://bit.ly/2RMVeox
@@ -214,27 +225,24 @@ public class PlayerSkateMovement : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
-            isGrounded = true;
-
-            //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-
-            Debug.Log(hit.normal);
-
-         //   if(hit.normal.y <= 0.9f)
+            if(!isAirborne)
             {
-         //       applyDownforce = true;
-            }
-           // else
-            {
-         //       applyDownforce = false;
-            }
+                isGrounded = true;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+
+                oldVel = rb.velocity.magnitude;
+            }
         }
         else
         {
             isGrounded = false;
+            isAirborne = true;
         }
     }
 
