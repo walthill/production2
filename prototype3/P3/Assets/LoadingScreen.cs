@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
@@ -10,8 +8,8 @@ public class LoadingScreen : MonoBehaviour
     bool isLoading;
     AsyncOperation currentLoadingOperation;
 
-    [SerializeField] RectTransform barFillRectTransform;
-    [SerializeField] Text percentLoadedText;
+    [SerializeField] RectTransform barFillRectTransform = null;
+    [SerializeField] Text percentLoadedText = null;
 
     Vector3 barFillLocalScale;
 
