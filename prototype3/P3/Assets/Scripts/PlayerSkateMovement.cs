@@ -50,13 +50,15 @@ public class PlayerSkateMovement : MonoBehaviour
     Transform objTransform;
 
     //Drifting stuff
-    [SerializeField]
     bool isDrifting = false;
-    [SerializeField]
     Vector3 driftVelocity;
+    float driftSlowTimer; //when speed starts to decrease;
     [SerializeField]
-    float driftStartTime;
-
+    [Tooltip("How long before speed decreases")]
+    float driftTime = 2f;
+    [SerializeField]
+    [Tooltip("How long it takes to stop after slowing down while drifting.")]
+    float driftStopTime = 4f;
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -117,13 +119,15 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         isDrifting = true;
         driftVelocity = rb.velocity;
-        driftStartTime = Time.time;
+        driftSlowTimer = Time.time + driftTime;
     }
     private void stopDrifting()
     {
         isDrifting = false;
-        Vector3 vel = rb.velocity;
-        rb.velocity = transform.forward * vel.magnitude;
+        if (isGrounded)
+        {
+            rb.velocity = transform.forward * rb.velocity.magnitude;
+        }
     }
     private void RollerSkateMovement()
     {
@@ -188,6 +192,11 @@ public class PlayerSkateMovement : MonoBehaviour
                     driftVelocity = Vector3.zero;
                 moveDir = Vector3.zero;
                 vel = driftVelocity;
+                float time = Time.time - driftSlowTimer;
+                if(time > 0 )
+                {
+                    driftVelocity -= driftVelocity * (time / driftStopTime);
+                }
             }
             else
             {
@@ -198,7 +207,7 @@ public class PlayerSkateMovement : MonoBehaviour
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + moveDir; //fix this
+                rb.velocity = vel + moveDir;
         }
     }
 
