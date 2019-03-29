@@ -113,8 +113,12 @@ public class PlayerSkateMovement : MonoBehaviour
         if(jump && isGrounded)
         {
             Debug.Log("JUMP");
-            rb.AddForce(new Vector3(rb.velocity.x/5, arcadeData.jumpForce, rb.velocity.z/5), ForceMode.Impulse);
-            isGrounded = false;
+			
+            //jump applied to player local y
+			Vector3 jumpVec = arcadeData.jumpForce * objTransform.up;
+			rb.AddForceAtPosition(jumpVec, objTransform.position, ForceMode.Impulse);
+
+			isGrounded = false;
             isAirborne = true;
         }
     }
