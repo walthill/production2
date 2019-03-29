@@ -57,6 +57,18 @@ def rebootGenUI():
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.button(label='Make A Sign', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: signpost())
 
+    # SECTION FOUR: TRASH
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, columnWidth / 2), (2, columnWidth / 2)],
+                         parent="columnMain_A")
+    cmds.text("Min Height")
+    cmds.intField("tMin", min=10, max=100, step=1)
+    cmds.text("Max Height")
+    cmds.intField("tMax", min=50, max=200, step=1)
+    cmds.text("Trash Amount")
+    cmds.intSlider('tNum', minValue=1, maxValue=20, step=1)
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.button(label='Make Some Trash', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeTrash())
+
     #end line
     cmds.showWindow("UIwindow")
 
@@ -340,3 +352,52 @@ def signTops():
     cmds.polyExtrudeFacet('.f[0]', ltz=-depth/4.0)
     cmds.polyBevel(signTop)
     return signTop, boolObj
+
+
+def makeTrash():
+    tMin = cmds.intField('tMin', query=True, value=True)
+    tMax = cmds.intField('tMax', query=True, value=True)
+    faceList = list(range(0, 575))
+    edgesList = list(range(0, 1199))
+    vtxList = list(range(0, 624))
+    tNum = cmds.intSlider('tNum', query=True, value=True)
+    moveList = list(range(tMin, tMax))
+    seed = random.randrange(sys.maxsize)
+    random.Random(seed)
+
+    planeList = []
+    cmds.softSelect(sse=1)
+    cmds.softSelect(sse=1, ssd=50.0, ssc='0,1,2,1,0,2', ssf=2)
+
+    for x in range(2):
+        plane = cmds.polyPlane(w=400, h=400, sx=24, sy=24, ch=False, name="trash_#")
+        plane = plane[0]
+        for x in range(tNum):
+            itemSel = random.choice(faceList)
+            faceList.remove(itemSel)
+            itemSel = str(itemSel)
+            itemSel = '.f[' + itemSel + ']'
+            moveSel = random.choice(moveList)
+            cmds.move(moveSel, itemSel, moveY=True, relative=True)
+            cmds.polySoftEdge(itemSel, ws=1)
+        """
+        for x in range(tNum):
+            itemSel = random.choice(vtxList)
+            vtxList.remove(itemSel)
+            itemSel = str(itemSel)
+            itemSel = '.f[' + itemSel + ']'
+            moveSel = random.choice(moveList)
+            cmds.move(moveSel, itemSel, moveY=True, relative=True)
+        """
+        for x in range(tNum):
+            itemSel = random.choice(edgesList)
+            edgesList.remove(itemSel)
+            itemSel = str(itemSel)
+            itemSel = '.f[' + itemSel + ']'
+            itemSel = cmds.select(plane + itemSel)
+            moveSel = random.choice(moveList)
+            cmds.move(moveSel, itemSel, moveY=True, relative=True)
+        cmds.softSelect(sse=0)
+        planeList.append(plane)
+    cmds.polyCBoolOp(planeList[0], planeList[1], operation=1, classification=1, ch=False)
+    cmds.select(clear=True)
