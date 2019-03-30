@@ -243,7 +243,6 @@ Transform:
   - {fileID: 218031475}
   - {fileID: 8746182659600908358}
   - {fileID: 382545324}
-  - {fileID: 417538004}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -289,7 +288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddf882ab31e271429ae6295fe9f2a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyboardMovement: 0
   leftStickXAxisDeadzone: 0.25
   moveType: 1
   arcadeData:
@@ -298,6 +296,7 @@ MonoBehaviour:
     boostAcceleration: 0.5
     boostValue: 1
     rotationSpeed: 1.25
+    jumpForce: 0
   respawn: {fileID: 0}
   liftCoeffiecient: 0
   driftTime: 5
@@ -410,85 +409,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!1001 &417662286
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1406194919}
-    m_Modifications:
-    - target: {fileID: 100026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_Name
-      value: test
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 847822601dfaefd44997873af4395401, type: 2}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c, type: 3}
---- !u!4 &417538004 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400026, guid: 2a3d055537450d74fbcc1e7aa8ee5a6c,
-    type: 3}
-  m_PrefabInstance: {fileID: 417662286}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1613045200
 PrefabInstance:
   m_ObjectHideFlags: 0
