@@ -14,12 +14,18 @@ public class SpeedThresholdBoi : MonoBehaviour
 
     [SerializeField]
     SpeedChannel currentSpeedChannel = SpeedChannel.QUICK;
+    [SerializeField]
+    SpeedChannel maxSpeedChannel = SpeedChannel.QUICK;
     PlayerSkateMovement playerMovement;
     PlayerSkateMovement.ArcadeMoveData moveData;
     [SerializeField]
     public Image speedIndicator;
     [SerializeField]
     public Text speedText;
+    [SerializeField]
+    [Tooltip("What percent of the speed threshold the player starts at when breaking into a new threshold")]
+    float newChannelStartPercent = 0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,21 +35,30 @@ public class SpeedThresholdBoi : MonoBehaviour
         speedIndicator.gameObject.SetActive(false);
         speedText.gameObject.SetActive(false);
         playerMovement = gameObject.GetComponent<PlayerSkateMovement>();
-        setSpeedThreshold();
+        playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
+        playerMovement.setMaxVelocity(speeds[0]);
+        setCurrentSpeedChannel();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
-    public void speedBoost(float boostAmount)
+
+    public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
     {
-        float speedBoost = boostAmount;
-        float maxSpeedBoost = boostAmount;
-        playerMovement.Boost(speedBoost, maxSpeedBoost);
-        setSpeedThreshold();
-        setSoundAndUI();
+        if(maxSpeedChannel == surfaceChannel)
+        {
+            float speed = speeds[(int)maxSpeedChannel + 1];
+            playerMovement.setMaxVelocity(speed);
+            //set speed to % of channel max.
+            speed -= (speeds[(int)maxSpeedChannel + 1] - speeds[(int)maxSpeedChannel]) * (1.0f - newChannelStartPercent);
+            playerMovement.setSpeed(speed);
+        }
+        if (maxSpeedChannel > surfaceChannel)
+        {
+            float speedBoost = boostAmount;
+            playerMovement.Boost(speedBoost, 0f);
+            setCurrentSpeedChannel();
+            setSoundAndUI();
+        }
     }
 
     void setSoundAndUI()
@@ -81,7 +96,7 @@ public class SpeedThresholdBoi : MonoBehaviour
                 break;
         }
     }
-    void setSpeedThreshold()
+    void setCurrentSpeedChannel()
     {
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;

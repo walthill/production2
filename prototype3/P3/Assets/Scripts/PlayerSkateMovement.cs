@@ -24,7 +24,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public struct ArcadeMoveData
     {
         //clamp value - increase this for speed channels?
-        public float maxVelocity; 
+        public float maxVelocity, accelCap; 
         public float moveSpeed, boostAcceleration, 
                      boostValue;
 
@@ -314,9 +314,21 @@ public class PlayerSkateMovement : MonoBehaviour
 
     public void Boost(float boostValue, float maxVelocityIncrease)
     {
-        arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
+        arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+    }
+    public void setMaxVelocity(float maxVelocity)
+    {
+        arcadeData.maxVelocity = maxVelocity;
+    }
+    public void setAccelCap(float newAccelCap)
+    {
+        arcadeData.accelCap = newAccelCap;
+    }
+    public void setSpeed(float newSpeed)
+    {
+        rb.velocity = rb.velocity.normalized * newSpeed;
     }
     #endregion
 }
