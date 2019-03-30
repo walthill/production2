@@ -1,82 +1,89 @@
 fileFormatVersion: 2
-guid: 2a3d055537450d74fbcc1e7aa8ee5a6c
+guid: 17dd237d082d62a44acc972db4df2a4a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: head
-    100002: joint1
-    100004: joint5
-    100006: joint5 1
-    100008: joint6
-    100010: keft_side
-    100012: left
-    100014: right
-    100016: right__side
-    100018: skate
-    100020: skate 1
-    100022: skate_left
-    100024: skate_right
-    100026: //RootNode
-    100028: wheel
-    100030: wheel 1
-    100032: wheel1
-    100034: wheel2
-    100036: wheel3
-    100038: wheel4
-    100040: wheel5
-    100042: wheel6
-    400000: head
-    400002: joint1
-    400004: joint5
-    400006: joint5 1
-    400008: joint6
-    400010: keft_side
-    400012: left
-    400014: right
-    400016: right__side
-    400018: skate
-    400020: skate 1
-    400022: skate_left
-    400024: skate_right
-    400026: //RootNode
-    400028: wheel
-    400030: wheel 1
-    400032: wheel1
-    400034: wheel2
-    400036: wheel3
-    400038: wheel4
-    400040: wheel5
-    400042: wheel6
-    2100000: StingrayPBS1
-    2300000: head
-    3300000: head
-    4300000: head
-    4300002: right
-    4300004: skate
-    4300006: wheel
-    4300008: wheel4
-    4300010: wheel5
-    4300012: wheel6
-    4300014: left
-    4300016: skate
-    4300018: wheel
-    4300020: wheel1
-    4300022: wheel2
-    4300024: wheel3
+    100000: Animation_Scene_2:head
+    100002: Animation_Scene_2:left
+    100004: Animation_Scene_2:left_foot
+    100006: Animation_Scene_2:left_Joint
+    100008: Animation_Scene_2:left_knee
+    100010: Animation_Scene_2:left_side
+    100012: Animation_Scene_2:locator1
+    100014: Animation_Scene_2:right
+    100016: Animation_Scene_2:right__side
+    100018: Animation_Scene_2:right_foot
+    100020: Animation_Scene_2:right_joint
+    100022: Animation_Scene_2:right_knee
+    100024: Animation_Scene_2:skate
+    100026: Animation_Scene_2:skate 1
+    100028: Animation_Scene_2:skate_left
+    100030: Animation_Scene_2:skate_right
+    100032: Animation_Scene_2:wheel
+    100034: Animation_Scene_2:wheel 1
+    100036: Animation_Scene_2:wheel1
+    100038: Animation_Scene_2:wheel2
+    100040: Animation_Scene_2:wheel3
+    100042: Animation_Scene_2:wheel4
+    100044: Animation_Scene_2:wheel5
+    100046: Animation_Scene_2:wheel6
+    100048: //RootNode
+    400000: Animation_Scene_2:head
+    400002: Animation_Scene_2:left
+    400004: Animation_Scene_2:left_foot
+    400006: Animation_Scene_2:left_Joint
+    400008: Animation_Scene_2:left_knee
+    400010: Animation_Scene_2:left_side
+    400012: Animation_Scene_2:locator1
+    400014: Animation_Scene_2:right
+    400016: Animation_Scene_2:right__side
+    400018: Animation_Scene_2:right_foot
+    400020: Animation_Scene_2:right_joint
+    400022: Animation_Scene_2:right_knee
+    400024: Animation_Scene_2:skate
+    400026: Animation_Scene_2:skate 1
+    400028: Animation_Scene_2:skate_left
+    400030: Animation_Scene_2:skate_right
+    400032: Animation_Scene_2:wheel
+    400034: Animation_Scene_2:wheel 1
+    400036: Animation_Scene_2:wheel1
+    400038: Animation_Scene_2:wheel2
+    400040: Animation_Scene_2:wheel3
+    400042: Animation_Scene_2:wheel4
+    400044: Animation_Scene_2:wheel5
+    400046: Animation_Scene_2:wheel6
+    400048: //RootNode
+    2100000: Animation_Scene_2_StingrayPBS1
+    2300000: Animation_Scene_2:head
+    3300000: Animation_Scene_2:head
+    4300000: Animation_Scene_2:head
+    4300002: Animation_Scene_2:right
+    4300004: Animation_Scene_2:skate
+    4300006: Animation_Scene_2:wheel
+    4300008: Animation_Scene_2:wheel4
+    4300010: Animation_Scene_2:wheel5
+    4300012: Animation_Scene_2:wheel6
+    4300014: Animation_Scene_2:left
+    4300016: Animation_Scene_2:skate
+    4300018: Animation_Scene_2:wheel
+    4300020: Animation_Scene_2:wheel1
+    4300022: Animation_Scene_2:wheel2
+    4300024: Animation_Scene_2:wheel3
     7400000: Take 001
+    7400002: Take 001 (1)
     9500000: //RootNode
-    13700000: left
-    13700002: right
-    13700004: skate
-    13700006: skate 1
-    13700008: wheel
-    13700010: wheel 1
-    13700012: wheel1
-    13700014: wheel2
-    13700016: wheel3
-    13700018: wheel4
-    13700020: wheel5
-    13700022: wheel6
+    13700000: Animation_Scene_2:left
+    13700002: Animation_Scene_2:right
+    13700004: Animation_Scene_2:skate
+    13700006: Animation_Scene_2:skate 1
+    13700008: Animation_Scene_2:wheel
+    13700010: Animation_Scene_2:wheel 1
+    13700012: Animation_Scene_2:wheel1
+    13700014: Animation_Scene_2:wheel2
+    13700016: Animation_Scene_2:wheel3
+    13700018: Animation_Scene_2:wheel4
+    13700020: Animation_Scene_2:wheel5
+    13700022: Animation_Scene_2:wheel6
   externalObjects: {}
   materials:
     importMaterials: 1
