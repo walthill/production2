@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerSkateMovement : MonoBehaviour
 {
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
@@ -26,46 +25,47 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //clamp value - increase this for speed channels?
         public float maxVelocity; 
-        public float moveSpeed, 
-                     boostAcceleration, boostValue;
+        public float moveSpeed, boostAcceleration, 
+                     boostValue;
 
-        [HeaderAttribute("RotationData")]
-        public float medRotationSpeed;
-        public float maxRotationSpeed, rotationSpeed;
+        public float rotationSpeed;
+        public float jumpForce;
     }
 
-    public MoveType moveType;
+    [SerializeField] float leftStickXAxisDeadzone = 0.25f;
+    
+	public MoveType moveType;
 
-    [SerializeField]
-    ArcadeMoveData arcadeData = new ArcadeMoveData();
-    [SerializeField]
-    SimMoveData simData;
+    [SerializeField] ArcadeMoveData arcadeData = new ArcadeMoveData();
+    [SerializeField] Transform respawn = null;
+    [SerializeField] float liftCoeffiecient = 0;
 
-    [SerializeField]
-    Transform respawn = null;
-
-   // const float MODEL_ROTATION_FACTOR = 180f;
-    const float LEFT_STICK_DEADZONE = 0.35f;
-  //  const float MODEL_ROTATION_MOVE_FACTOR = -1f;
     const float SLOPE_RAY_DIST = 1f;
-    const float PLAYER_ALIGN_SPEED = 1;
-
+    const float PLAYER_ALIGN_SPEED = 15f;
+  
     //Input vars
-    float zMove;
-    float turnLeft, turnRight, rotationY;
-    bool accelButtonDown, isGrounded, applyDownforce;
+    float xMove, accelerationButton;
+    bool accelButtonDown, jump, isGrounded, applyDownforce, isAirborne;
     Rigidbody rb;
+    float oldVel;
     Transform objTransform;
 
-    [SerializeField] float liftCoeffiecient=0;
-
+    //Drifting stuff
+    bool isDrifting = false;
+    Vector3 driftVelocity;
+    float driftSlowTimer; //when speed starts to decrease;
+    [SerializeField]
+    [Tooltip("How long before speed decreases")]
+    float driftTime = 2f;
+    [SerializeField]
+    [Tooltip("How long it takes to stop after slowing down while drifting.")]
+    float driftStopTime = 4f;
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
         rb = gameObject.GetComponent<Rigidbody>();
 
         respawn.position = objTransform.position;
-        rb.drag = simData.turnDrag;
 
         if (moveType == MoveType.SIM)
             rb.useGravity = false;
@@ -74,170 +74,189 @@ public class PlayerSkateMovement : MonoBehaviour
     void Update()
     {
         ProcessInput();
-        Move();
-
-        if (objTransform.localEulerAngles.z > 20 || objTransform.localEulerAngles.z < -20)
-        {
-            if (objTransform.position.y > -20)
-            {
-                Debug.Log("APPLYING DOWN FORCE");
-                applyDownforce = true;
-            }
-        }
-        else
-        {
-            applyDownforce = false;
-        }
+        MoveAnimation();
 
         if (Input.GetKeyDown(KeyCode.R))
-        ResetPlayer();
+            ResetPlayer();
     }
 
     private void FixedUpdate()
-    {
-        float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
-
-        if(applyDownforce)
-        {
-            rb.AddForceAtPosition(lift*transform.up, objTransform.position);
-        }
-
+    {   
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-
-        RollerSkateMovement();
-        AlignPlayerWithGround();
-    }
-
-    private void LateUpdate()
-    {
         
+        AlignPlayerWithGround();
+        RollerSkateMovement();
+
+        JumpAlignRaycast();
+        JumpLandRaycast();
+        Jump();
+
+        if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
+        {
+            float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
+            rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
+        }
     }
 
     void ProcessInput()
     {
-        //NOTE: values between 0 and 1
-        turnLeft = Input.GetAxis("JoyTurnLeft");
-        turnRight = Input.GetAxis("JoyTurnRight");
-        zMove = Input.GetAxis("JoyVertical");
+        xMove = Input.GetAxis("JoyHorizontal");
+        accelerationButton = Input.GetAxis("JoyTurnRight");
+        jump = Input.GetButtonDown("JoyJump");
+        if (Input.GetButtonDown("JoyDrift")) startDrifting();
+        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
 
+    void Jump()
+    {
+        if(jump && isGrounded)
+        {
+            Debug.Log("JUMP");
+			
+            //jump applied to player local y
+			Vector3 jumpVec = arcadeData.jumpForce * objTransform.up;
+			rb.AddForceAtPosition(jumpVec, objTransform.position, ForceMode.Impulse);
+
+			isGrounded = false;
+            isAirborne = true;
+        }
+    }
+
+    private void startDrifting()
+    {
+        isDrifting = true;
+        driftVelocity = rb.velocity;
+        driftSlowTimer = Time.time + driftTime;
+    }
+    private void stopDrifting()
+    {
+        isDrifting = false;
+        if (isGrounded)
+        {
+            rb.velocity = transform.forward * rb.velocity.magnitude;
+        }
+    }
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
         {
-            if (turnLeft > 0)
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y - (turnLeft * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-
-            if (turnRight > 0)
-            {
-                objTransform.eulerAngles = new Vector3(objTransform.eulerAngles.x, (objTransform.eulerAngles.y + (turnRight * simData.rotationSpeed)), objTransform.eulerAngles.z);
-            }
-
-            float rotationY = objTransform.eulerAngles.y;// + MODEL_ROTATION_FACTOR;
-
-            Vector3 updatedDirection = new Vector3(Mathf.Cos(rotationY * Mathf.Deg2Rad), 0, -Mathf.Sin(rotationY * Mathf.Deg2Rad));
-
-            //Add force based on player's current rotation and direction
-            //constantly applied, we just change the movespeed & turnspeed
-
-            rb.AddForce(updatedDirection * simData.baseTurnSpeed * simData.baseMoveSpeed, ForceMode.Acceleration);
         }
         else if(moveType == MoveType.ARCADE)
+        {        
+            if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
+            {
+                TurnPhysics();
+            }               
+
+            MovePhysics();
+        }
+    }
+
+    private void TurnPhysics()
+    {
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        float turnFactor = xMove * arcadeData.rotationSpeed;
+        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
+
+        //Align velocity vector with changed transform forward
+        if (isGrounded && !isDrifting)
         {
-            //Forward and back movement
-            if (accelButtonDown && isGrounded)
+            Vector3 vel = rb.velocity; //store current speed
+            rb.velocity = Vector3.zero;
+            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
+        }
+    }
+
+    private void MovePhysics()
+    {
+        //Forward movement
+        if (accelButtonDown && isGrounded)
+        {
+            Vector3 moveDir;
+            Vector3 vel;
+            if (isDrifting)
             {
-                float moveFactor = zMove * arcadeData.moveSpeed;
-
-                //NOTE: issue with the model's transform forward. Using right instead
-                Vector3 moveDir = objTransform.forward * moveFactor;// *MODEL_ROTATION_MOVE_FACTOR;                
-                Vector3 vel = rb.velocity;
-
-                if(vel.sqrMagnitude> arcadeData.maxVelocity*arcadeData.maxVelocity)
+                // if hitting a wall then stop.
+                if (rb.velocity.magnitude < 0.1)
+                    driftVelocity = Vector3.zero;
+                moveDir = Vector3.zero;
+                vel = driftVelocity;
+                float time = Time.time - driftSlowTimer;
+                if(time > 0 )
                 {
-                    rb.velocity = vel.normalized * arcadeData.maxVelocity;
-                }
-                else
-                {
-                    rb.velocity += moveDir;
-                }
-            }
-
-            if (!applyDownforce)
-            {
-
-                if (turnLeft > 0) //Bumper press for quick U-turn??
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y - (turnLeft * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
-                }
-
-                if (turnRight > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + (turnRight * arcadeData.rotationSpeed), objTransform.localEulerAngles.z);
+                    driftVelocity -= driftVelocity * (time / driftStopTime);
                 }
             }
             else
             {
-                if (turnLeft > 0) //Bumper press for quick U-turn??
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y , objTransform.localEulerAngles.z + (turnLeft * arcadeData.rotationSpeed));
-                }
+                float moveFactor = accelerationButton * arcadeData.moveSpeed;
+                moveDir = objTransform.forward * moveFactor;
+                vel = rb.velocity;
+            }
+            if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
+                rb.velocity = vel.normalized * arcadeData.maxVelocity;
+            else
+                rb.velocity = vel + moveDir;
+        }
+    }
 
-                if (turnRight > 0)
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                    objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y, objTransform.localEulerAngles.z - (turnRight * arcadeData.rotationSpeed));
-                }
+    private void MoveAnimation()
+    {
+        if (moveType == MoveType.SIM)
+        {
+        }
+        else if (moveType == MoveType.ARCADE)
+        {
+            if (accelerationButton > 0)
 
+            {
+                accelButtonDown = true;
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
+            }
+            else
+            {
+               // accelButtonDown = false;
+                gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
     }
 
-    private void Move()
+    void JumpLandRaycast()
     {
-        if (moveType == MoveType.SIM)
+        if(isAirborne)
         {
-            // TODO(low): expose input deadzone data
-            if (zMove > LEFT_STICK_DEADZONE) //accelerate
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                if (!accelButtonDown && simData.baseMoveSpeed < 10)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed++;
-                }
-            }
-            else if (zMove < -LEFT_STICK_DEADZONE) //deccelerate, reverse
-            {
-                if (!accelButtonDown && simData.baseMoveSpeed > 0)
-                {
-                    accelButtonDown = true;
-                    simData.baseMoveSpeed--;
-                }
-            }
-            else
-            {
-                accelButtonDown = false;
+                Debug.Log("JUMP RAY HIT");
+                isAirborne = false;
+                rb.velocity = rb.velocity.normalized * oldVel;
             }
         }
-        else if (moveType == MoveType.ARCADE)
+    }
+
+    //TODO: give player control over x rotation in midair? Simple anim tricks?
+    void JumpAlignRaycast()
+    {
+        if (isAirborne)
         {
-            if(zMove > LEFT_STICK_DEADZONE)
+            //only align to gameobjects marked as ground layers
+            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 3.5f, layerToAlignWith))
             {
-                accelButtonDown = true;
-            }
-            else if(zMove < -LEFT_STICK_DEADZONE)
-            {
-                accelButtonDown = true;
-            }
-            else
-            {
-                accelButtonDown = false;
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 12.0f);
             }
         }
     }
@@ -247,43 +266,47 @@ public class PlayerSkateMovement : MonoBehaviour
         //help @ https://bit.ly/2RMVeox
 
         //only align to gameobjects marked as ground layers
-        // LayerMask layerMask = LayerMask.GetMask("Player");
+        LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
         Ray ray = new Ray(objTransform.position, -objTransform.up);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, SLOPE_RAY_DIST, 1 << 9))
+        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
-            isGrounded = true;
-           // Debug.Log("hit the ground @ " + hit.normal);
-            //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
-            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+            if(!isAirborne)
+            {
+                isGrounded = true;
+
+                //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
+                Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
+
+                //Debug.Log(hit.normal);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
+
+                oldVel = rb.velocity.magnitude;
+            }
         }
         else
         {
             isGrounded = false;
+            isAirborne = true;
         }
-
     }
 
 
     #region Getters and Setters
-    public void SetDrag()
-    {
-        //allow for designer to update rigidbody drag - SIM movement
-        rb.drag = simData.turnDrag;
-    }
-
-    public void ResetPlayer()
+    public void ResetPlayer() //TODO: reset speed threshold
     {
         objTransform.position = respawn.transform.position;
         objTransform.localRotation = Quaternion.identity;
-        simData.baseMoveSpeed = 1;
-
+   
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
 
+    public ArcadeMoveData GetArcadeMoveData()
+    {
+        return arcadeData;
+    }
     public void IncreaseSpeed(float boostAcceleration)
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
@@ -293,7 +316,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
-        Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+        //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     #endregion
 }
