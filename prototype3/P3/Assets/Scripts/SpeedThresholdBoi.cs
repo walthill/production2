@@ -40,15 +40,34 @@ public class SpeedThresholdBoi : MonoBehaviour
         playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
         playerMovement.setMaxVelocity(speeds[0]);
         setCurrentSpeedChannel();
-        setSoundAndUI();
+        setSound();
     }
 
     private void Update()
     {
         setCurrentSpeedChannel();
-        //TODO: send leo's UI stuff//
+        sendCurrentSpeed();
+        sendCurrentChannel();
     }
-
+    void sendCurrentChannel()
+    {
+        UISceneRelay.instance.setCurrentChannel(currentSpeedChannel);
+    }
+    void sendCurrentSpeed()
+    {
+        float speed = rb.velocity.magnitude;
+        float channelMin = 0;
+        float channelMax = speeds[(int)currentSpeedChannel];
+        if (currentSpeedChannel > 0)
+        {
+            channelMin = speeds[(int)currentSpeedChannel - 1];
+        }
+        //normalize speed within channel from 0-1
+        speed -= channelMin;
+        channelMax -= channelMin;
+        speed /= channelMax;
+        UISceneRelay.instance.setCurrentSpeed(speed);
+    }
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
     {
@@ -62,7 +81,7 @@ public class SpeedThresholdBoi : MonoBehaviour
             speed -= (speeds[(int)maxSpeedChannel + 1] - speeds[(int)maxSpeedChannel]) * (1.0f - newChannelStartPercent);
             playerMovement.setSpeed(speed);
             maxSpeedChannel++;
-            setSoundAndUI();
+            setSound();
         }
         else if (maxSpeedChannel >= surfaceChannel)
         {
@@ -73,36 +92,30 @@ public class SpeedThresholdBoi : MonoBehaviour
         setCurrentSpeedChannel();
     }
 
-    void setSoundAndUI()
+    void setSound()
     {
         switch (maxSpeedChannel)
         {
             case SpeedChannel.QUICK:
                 ParticleScript.instance.SpeedColor1();
-                DisplaySpeed(true, "100%");
                 break;
             case SpeedChannel.SPEEDY:
                 ParticleScript.instance.SpeedColor2();
                 SoundBoi.instance.VolumeMusic1();
-                DisplaySpeed(true, "200%");
                 break;
             case SpeedChannel.FAST:
                 ParticleScript.instance.SpeedColor3();
-                DisplaySpeed(true, "300%");
                 break;
             case SpeedChannel.BLUR:
                 ParticleScript.instance.SpeedColor4();
                 SoundBoi.instance.VolumeMusic2();
-                DisplaySpeed(true, "400%");
                 break;
             case SpeedChannel.LIGHTNING:
                 ParticleScript.instance.SpeedColor5();
-                DisplaySpeed(true, "500%");
                 break;
             case SpeedChannel.WOW_SO_FAST:
                 ParticleScript.instance.SpeedColor6();
                 SoundBoi.instance.VolumeMusic3();
-                DisplaySpeed(true, "MAX");
                 break;
             default:
                 break;
