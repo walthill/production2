@@ -44,7 +44,7 @@ public class SpeedThresholdBoi : MonoBehaviour
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
     {
-        if(maxSpeedChannel == surfaceChannel)
+        if(maxSpeedChannel == surfaceChannel && maxSpeedChannel != SpeedChannel.NUM_SPEEDS-1)
         {
             float speed = speeds[(int)maxSpeedChannel + 1];
             playerMovement.setMaxVelocity(speed);
@@ -54,13 +54,14 @@ public class SpeedThresholdBoi : MonoBehaviour
             playerMovement.setSpeed(speed);
             maxSpeedChannel++;
         }
-        if (maxSpeedChannel > surfaceChannel)
+        else if (maxSpeedChannel >= surfaceChannel)
         {
             float speedBoost = boostAmount;
             playerMovement.Boost(speedBoost, 0f);
             setCurrentSpeedChannel();
             setSoundAndUI();
         }
+        setCurrentSpeedChannel();
     }
 
     void setSoundAndUI()

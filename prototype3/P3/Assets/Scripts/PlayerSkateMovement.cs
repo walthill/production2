@@ -8,6 +8,8 @@ public class PlayerSkateMovement : MonoBehaviour
 
     public enum MoveType { SIM, ARCADE };
 
+    public float debugMoveSpeed;
+
     [System.Serializable]
     public struct SimMoveData
     {
@@ -97,12 +99,13 @@ public class PlayerSkateMovement : MonoBehaviour
             float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
+        debugMoveSpeed = rb.velocity.magnitude;
     }
 
     void ProcessInput()
     {
         xMove = Input.GetAxis("JoyHorizontal");
-        accelerationButton = Input.GetAxis("JoyTurnRight");
+        accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
         jump = Input.GetButtonDown("JoyJump");
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (Input.GetButtonUp("JoyDrift")) stopDrifting();
@@ -174,14 +177,14 @@ public class PlayerSkateMovement : MonoBehaviour
         //Forward movement
         if (accelButtonDown && isGrounded)
         {
-            Vector3 moveDir;
+            Vector3 acceleration; 
             Vector3 vel;
             if (isDrifting)
             {
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
-                moveDir = Vector3.zero;
+                acceleration = Vector3.zero;
                 vel = driftVelocity;
                 float time = Time.time - driftSlowTimer;
                 if(time > 0 )
@@ -192,13 +195,17 @@ public class PlayerSkateMovement : MonoBehaviour
             else
             {
                 float moveFactor = accelerationButton * arcadeData.moveSpeed;
-                moveDir = objTransform.forward * moveFactor;
+                acceleration = objTransform.forward * moveFactor;
                 vel = rb.velocity;
+            }
+            if(vel.sqrMagnitude > arcadeData.accelCap * arcadeData.accelCap)
+            {
+                acceleration = Vector3.zero;
             }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + moveDir;
+                rb.velocity = vel + acceleration;
         }
     }
 
@@ -217,7 +224,7 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
-               // accelButtonDown = false;
+                accelButtonDown = false;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
