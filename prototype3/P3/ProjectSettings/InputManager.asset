@@ -314,7 +314,7 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: enter
+    positiveButton: joystick button 2
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -390,13 +390,13 @@ InputManager:
     axis: 2
     joyNum: 0
   - serializedVersion: 3
-    m_Name: JoyCharge
+    m_Name: Submit
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 2
+    positiveButton: enter
     altNegativeButton: 
-    altPositiveButton: space
+    altPositiveButton: 
     gravity: 0
     dead: 0.001
     sensitivity: 1

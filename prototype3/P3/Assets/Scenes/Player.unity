@@ -262,6 +262,15 @@ PrefabInstance:
       propertyPath: arcadeData.jumpForce
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1032722380, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722379, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 0a9ad09939b22a24da66c746245b34d7,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!4 &382545324 stripped

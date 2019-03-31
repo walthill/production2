@@ -50,7 +50,9 @@ public class SpeedThresholdBoi : MonoBehaviour
             playerMovement.setMaxVelocity(speed);
             //set speed to % of channel max.
             speed -= (speeds[(int)maxSpeedChannel + 1] - speeds[(int)maxSpeedChannel]) * (1.0f - newChannelStartPercent);
+            Debug.Log(speed);
             playerMovement.setSpeed(speed);
+            maxSpeedChannel++;
         }
         if (maxSpeedChannel > surfaceChannel)
         {
