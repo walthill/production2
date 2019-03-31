@@ -26,11 +26,13 @@ public class SpeedThresholdBoi : MonoBehaviour
     [Tooltip("What percent of the speed threshold the player starts at when breaking into a new threshold")]
     float newChannelStartPercent = 0.5f;
 
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
         speedText = gameObject.GetComponentInChildren<Text>();
+        rb = gameObject.GetComponent<Rigidbody>();
 
         speedIndicator.gameObject.SetActive(false);
         speedText.gameObject.SetActive(false);
@@ -38,6 +40,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
         playerMovement.setMaxVelocity(speeds[0]);
         setCurrentSpeedChannel();
+        setSoundAndUI();
     }
 
     private void Update()
@@ -55,23 +58,22 @@ public class SpeedThresholdBoi : MonoBehaviour
             playerMovement.setMaxVelocity(speed);
             //set speed to % of channel max.
             speed -= (speeds[(int)maxSpeedChannel + 1] - speeds[(int)maxSpeedChannel]) * (1.0f - newChannelStartPercent);
-            Debug.Log(speed);
             playerMovement.setSpeed(speed);
             maxSpeedChannel++;
+            setSoundAndUI();
         }
         else if (maxSpeedChannel >= surfaceChannel)
         {
             float speedBoost = boostAmount;
             playerMovement.Boost(speedBoost, 0f);
             setCurrentSpeedChannel();
-            setSoundAndUI();
         }
         setCurrentSpeedChannel();
     }
 
     void setSoundAndUI()
     {
-        switch (currentSpeedChannel)
+        switch (maxSpeedChannel)
         {
             case SpeedChannel.QUICK:
                 ParticleScript.instance.SpeedColor1();
@@ -109,7 +111,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        while (speeds[i] < moveData.maxVelocity
+        while (speeds[i] < rb.velocity.magnitude
             && i < (int)SpeedChannel.NUM_SPEEDS-1)
         {
             i++;
