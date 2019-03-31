@@ -98,9 +98,9 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (isTouchingCharge)
             {
-                Debug.LogError("Was already touching Charge surface");
+               // Debug.LogError("Was already touching Charge surface");
             }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedGate>().speedRequired);
             if (validSurface)
             {
                 isTouchingCharge = true;
@@ -110,7 +110,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (isTouchingRelease)
             {
-                Debug.LogError("Was already touching release surface");
+                //Debug.LogError("Was already touching release surface");
             }
             isTouchingRelease = true;
         }
@@ -121,9 +121,9 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (!isTouchingCharge)
             {
-                Debug.LogError("Was already not touching Charge surface");
+                //Debug.LogError("Was already not touching Charge surface");
             }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedGate>().speedRequired);
             if (validSurface)
             {
                 isTouchingCharge = false;
@@ -133,7 +133,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (!isTouchingRelease)
             {
-                Debug.LogError("Was already not touching release surface");
+                //Debug.LogError("Was already not touching release surface");
             }
             isTouchingRelease = false;
         }
