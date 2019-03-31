@@ -310,6 +310,11 @@ PrefabInstance:
       propertyPath: arcadeData.jumpForce
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 8746182659600908359, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!4 &382545324 stripped
