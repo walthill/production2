@@ -18,8 +18,9 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     PlayerSkateMovement playerMove;
     SpeedThresholdBoi speedBoi;
-    
+    [SerializeField]
     bool isTouchingCharge = false;
+    [SerializeField]
     bool isTouchingRelease = false;
     Vector3 startPosit, endPosit; //where the player presses and releases the button
     
@@ -49,7 +50,6 @@ public class PlayerSpeedSurface : MonoBehaviour
                 stopCharging();
             }
         }
-        //when player presses A
         if (Input.GetButtonDown("JoyCharge"))
         {
             if (isTouchingCharge)
