@@ -98,9 +98,9 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (isTouchingCharge)
             {
-                //Debug.LogError("Was already touching Charge surface");
+               // Debug.LogError("Was already touching Charge surface");
             }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedGate>().speedRequired);
             if (validSurface)
             {
                 isTouchingCharge = true;
@@ -123,7 +123,7 @@ public class PlayerSpeedSurface : MonoBehaviour
             {
                 //Debug.LogError("Was already not touching Charge surface");
             }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
+            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedGate>().speedRequired);
             if (validSurface)
             {
                 isTouchingCharge = false;
