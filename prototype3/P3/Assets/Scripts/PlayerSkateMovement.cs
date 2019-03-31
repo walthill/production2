@@ -33,6 +33,9 @@ public class PlayerSkateMovement : MonoBehaviour
         public float rotationSpeed;
         public float jumpForce;
     }
+    [SerializeField]
+    [Tooltip("will control how fast the player slows down when not holding accelerate")]
+    float playerDrag = 0.7f;
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
     
@@ -209,6 +212,8 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+    //This also controls acceleration button
+    //TODO: refactor
     private void MoveAnimation()
     {
         if (moveType == MoveType.SIM)
@@ -220,11 +225,13 @@ public class PlayerSkateMovement : MonoBehaviour
 
             {
                 accelButtonDown = true;
+                rb.drag = 0f;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
             }
             else
             {
                 accelButtonDown = false;
+                rb.drag = playerDrag;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }

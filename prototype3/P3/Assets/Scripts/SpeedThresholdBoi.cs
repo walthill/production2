@@ -40,6 +40,11 @@ public class SpeedThresholdBoi : MonoBehaviour
         setCurrentSpeedChannel();
     }
 
+    private void Update()
+    {
+        setCurrentSpeedChannel();
+        //TODO: send leo's UI stuff//
+    }
 
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
