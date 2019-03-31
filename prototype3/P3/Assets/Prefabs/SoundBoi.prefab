@@ -208,6 +208,10 @@ MonoBehaviour:
   - {fileID: 422699231374681110}
   - {fileID: 3194689722271704646}
   - {fileID: 2844213422658610788}
+  groupArray: []
+  lowPassArray:
+  - {fileID: 0}
+  mixer: {fileID: 24100000, guid: 07c859b5785b8634287c4dcf590223bd, type: 2}
 --- !u!82 &4905406056331549035
 AudioSource:
   m_ObjectHideFlags: 0

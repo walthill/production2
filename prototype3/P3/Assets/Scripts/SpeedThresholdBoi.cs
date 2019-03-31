@@ -61,20 +61,23 @@ public class SpeedThresholdBoi : MonoBehaviour
                 break;
             case SpeedChannel.FAST:
                 ParticleScript.instance.SpeedColor3();
+                SoundBoi.instance.VolumeMusic2();
                 DisplaySpeed(true, "300%");
                 break;
             case SpeedChannel.BLUR:
                 ParticleScript.instance.SpeedColor4();
-                SoundBoi.instance.VolumeMusic2();
+                //SoundBoi.instance.VolumeMusic2();
+                SoundBoi.instance.VolumeMusic3();
                 DisplaySpeed(true, "400%");
                 break;
             case SpeedChannel.LIGHTNING:
                 ParticleScript.instance.SpeedColor5();
+                SoundBoi.instance.VolumeMusic4();
                 DisplaySpeed(true, "500%");
                 break;
             case SpeedChannel.WOW_SO_FAST:
                 ParticleScript.instance.SpeedColor6();
-                SoundBoi.instance.VolumeMusic3();
+                SoundBoi.instance.VolumeMusic5();
                 DisplaySpeed(true, "MAX");
                 break;
             default:

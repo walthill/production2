@@ -120,6 +120,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
 			isGrounded = false;
             isAirborne = true;
+            
         }
     }
 

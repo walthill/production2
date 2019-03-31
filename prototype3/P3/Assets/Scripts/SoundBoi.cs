@@ -166,7 +166,7 @@ public class SoundBoi : MonoBehaviour
             if (partIndex <= musicPartsArray.Length && slotIndex <= MusicSlotArray.Length)
             {
                 slot.clip = musicPartsArray[partIndex];
-                Debug.Log(musicPartsArray[partIndex].name + " assigned");
+                //Debug.Log(musicPartsArray[partIndex].name + " assigned");
                 partIndex++;
                 slotIndex++;
             }
@@ -182,7 +182,7 @@ public class SoundBoi : MonoBehaviour
         timer = timer + Time.deltaTime;
         if (timer >= timerMax)
         {
-            Debug.Log("timer is done");
+            //Debug.Log("timer is done");
             PlayMusic();
             timer = 0;
             isTimerGoing = false;

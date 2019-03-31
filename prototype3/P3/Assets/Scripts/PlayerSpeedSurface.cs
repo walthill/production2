@@ -53,8 +53,10 @@ public class PlayerSpeedSurface : MonoBehaviour
         //when player presses A
         if (Input.GetButtonDown("JoyJump"))
         {
+            Debug.Log("a is registrered");
             if (isTouchingCharge)
             {
+                Debug.Log("charging is registered");
                 startPosit = transform.position;
                 startCharging();
             }
@@ -96,13 +98,16 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         if(other.tag == CHARGE_SURFACE)
         {
+            Debug.Log("touching the thing");
             if (isTouchingCharge)
             {
+                //Debug.Log("touching the thing");
                // Debug.LogError("Was already touching Charge surface");
             }
             bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedGate>().speedRequired);
             if (validSurface)
             {
+                Debug.Log("valid surface");
                 isTouchingCharge = true;
             }
         }
