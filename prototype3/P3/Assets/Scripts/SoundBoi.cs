@@ -101,6 +101,9 @@ public class SoundBoi : MonoBehaviour
     bool Part5LowPass = false;
 
 
+
+    public bool makeChargeSound = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -284,18 +287,20 @@ public class SoundBoi : MonoBehaviour
         WheelSource.Stop();
     }
 
+    //thisssssssssssssssssssssss
+
     public void chargingSound()
     {
         chargingSource.Play();
         chargingSource.pitch = ChargingpitchNumber;
-        ChargingpitchNumber = ChargingpitchNumber+.1f;
+        ChargingpitchNumber = ChargingpitchNumber+.05f;
     }
 
     public void stopChargingSound()
     {
-
+        makeChargeSound = false;
         chargingSource.Stop();
-        ChargingpitchNumber = 1;
+        ChargingpitchNumber = .5f;
     }
 
 
@@ -331,7 +336,9 @@ public class SoundBoi : MonoBehaviour
 
             //MusicSlotArray[5].volume = .6f;
         }
-        if (Input.GetKey(KeyCode.Space))
+
+
+        if (makeChargeSound)
         {
             //PlaywheelSound();
             chargingSound();

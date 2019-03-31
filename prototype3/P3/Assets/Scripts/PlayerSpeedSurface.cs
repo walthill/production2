@@ -79,7 +79,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     private void startCharging()
     {
         isCharging = true;
-        SoundBoi.instance.chargingSound();
+        SoundBoi.instance.makeChargeSound = true;
     }
     private void stopCharging()
     {
