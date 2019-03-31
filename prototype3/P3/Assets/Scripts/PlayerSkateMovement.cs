@@ -27,7 +27,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //clamp value - increase this for speed channels?
         public float maxVelocity, accelCap; 
-        public float moveSpeed, boostAcceleration, 
+        public float accelMultiplier, boostAcceleration, 
                      boostValue;
 
         public float rotationSpeed;
@@ -197,7 +197,7 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
-                float moveFactor = accelerationButton * arcadeData.moveSpeed;
+                float moveFactor = accelerationButton * arcadeData.accelMultiplier;
                 acceleration = objTransform.forward * moveFactor;
                 vel = rb.velocity;
             }
@@ -323,13 +323,13 @@ public class PlayerSkateMovement : MonoBehaviour
     }
     public void IncreaseSpeed(float boostAcceleration)
     {
-        arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
+        arcadeData.accelMultiplier += (Time.deltaTime * boostAcceleration);
     }
 
     public void Boost(float boostValue, float maxVelocityIncrease)
     {
         arcadeData.maxVelocity += maxVelocityIncrease;
-        arcadeData.moveSpeed += (Time.deltaTime * boostValue);
+        rb.velocity += rb.velocity.normalized * boostValue;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     public void setMaxVelocity(float maxVelocity)

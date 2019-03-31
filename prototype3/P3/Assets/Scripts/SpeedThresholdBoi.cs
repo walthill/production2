@@ -52,7 +52,9 @@ public class SpeedThresholdBoi : MonoBehaviour
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
     {
-        if(maxSpeedChannel == surfaceChannel && maxSpeedChannel != SpeedChannel.NUM_SPEEDS-1)
+        if(maxSpeedChannel == surfaceChannel 
+            && currentSpeedChannel == maxSpeedChannel
+            && maxSpeedChannel != SpeedChannel.NUM_SPEEDS-1)
         {
             float speed = speeds[(int)maxSpeedChannel + 1];
             playerMovement.setMaxVelocity(speed);
@@ -112,7 +114,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         int i = 0;
         //find current threshold
         while (speeds[i] < rb.velocity.magnitude
-            && i < (int)SpeedChannel.NUM_SPEEDS-1)
+            && i < (int)maxSpeedChannel)
         {
             i++;
         }
