@@ -203,6 +203,7 @@ MonoBehaviour:
   bounceHeight: 0.495
   bounceSpeed: 1.31
   rotationSpeed: 15
+  collectableType: 0
 --- !u!135 &606553083596291653
 SphereCollider:
   m_ObjectHideFlags: 0

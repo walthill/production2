@@ -11,6 +11,8 @@ public class Collectable : MonoBehaviour
     [Range(10.0f, 20.0f)]
     public float rotationSpeed;
 
+    public CollectableTracker.collectableType collectableType;
+
     float startY;
 
     void Start()
@@ -44,5 +46,9 @@ public class Collectable : MonoBehaviour
         //
         //
         //MAKE LINK TO SOUND AND/OR PLAYER HERE
+        if(col.name == "Player")
+        {
+            col.GetComponent<CollectableTracker>().addCollectable(collectableType);
+        }
     }
 }
