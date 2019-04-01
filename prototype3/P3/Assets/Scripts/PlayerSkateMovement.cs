@@ -8,6 +8,8 @@ public class PlayerSkateMovement : MonoBehaviour
 
     public enum MoveType { SIM, ARCADE };
 
+    public float debugMoveSpeed;
+
     [System.Serializable]
     public struct SimMoveData
     {
@@ -24,13 +26,16 @@ public class PlayerSkateMovement : MonoBehaviour
     public struct ArcadeMoveData
     {
         //clamp value - increase this for speed channels?
-        public float maxVelocity; 
-        public float moveSpeed, boostAcceleration, 
+        public float maxVelocity, accelCap; 
+        public float accelMultiplier, boostAcceleration, 
                      boostValue;
 
         public float rotationSpeed;
         public float jumpForce;
     }
+    [SerializeField]
+    [Tooltip("will control how fast the player slows down when not holding accelerate")]
+    float playerDrag = 0.7f;
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
     
@@ -97,12 +102,13 @@ public class PlayerSkateMovement : MonoBehaviour
             float lift = liftCoeffiecient * rb.velocity.sqrMagnitude;
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
+        debugMoveSpeed = rb.velocity.magnitude;
     }
 
     void ProcessInput()
     {
         xMove = Input.GetAxis("JoyHorizontal");
-        accelerationButton = Input.GetAxis("JoyTurnRight");
+        accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
         jump = Input.GetButtonDown("JoyJump");
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (Input.GetButtonUp("JoyDrift")) stopDrifting();
@@ -174,14 +180,14 @@ public class PlayerSkateMovement : MonoBehaviour
         //Forward movement
         if (accelButtonDown && isGrounded)
         {
-            Vector3 moveDir;
+            Vector3 acceleration; 
             Vector3 vel;
             if (isDrifting)
             {
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
-                moveDir = Vector3.zero;
+                acceleration = Vector3.zero;
                 vel = driftVelocity;
                 float time = Time.time - driftSlowTimer;
                 if(time > 0 )
@@ -191,17 +197,23 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
-                float moveFactor = accelerationButton * arcadeData.moveSpeed;
-                moveDir = objTransform.forward * moveFactor;
+                float moveFactor = accelerationButton * arcadeData.accelMultiplier;
+                acceleration = objTransform.forward * moveFactor;
                 vel = rb.velocity;
+            }
+            if(vel.sqrMagnitude > arcadeData.accelCap * arcadeData.accelCap)
+            {
+                acceleration = Vector3.zero;
             }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + moveDir;
+                rb.velocity = vel + acceleration;
         }
     }
 
+    //This also controls acceleration button
+    //TODO: refactor
     private void MoveAnimation()
     {
         if (moveType == MoveType.SIM)
@@ -213,11 +225,13 @@ public class PlayerSkateMovement : MonoBehaviour
 
             {
                 accelButtonDown = true;
+                rb.drag = 0f;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
             }
             else
             {
-               // accelButtonDown = false;
+                accelButtonDown = false;
+                rb.drag = playerDrag;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
@@ -309,14 +323,26 @@ public class PlayerSkateMovement : MonoBehaviour
     }
     public void IncreaseSpeed(float boostAcceleration)
     {
-        arcadeData.moveSpeed += (Time.deltaTime * boostAcceleration);
+        arcadeData.accelMultiplier += (Time.deltaTime * boostAcceleration);
     }
 
     public void Boost(float boostValue, float maxVelocityIncrease)
     {
-        arcadeData.moveSpeed += (Time.deltaTime * boostValue);
         arcadeData.maxVelocity += maxVelocityIncrease;
+        rb.velocity += rb.velocity.normalized * boostValue;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
+    }
+    public void setMaxVelocity(float maxVelocity)
+    {
+        arcadeData.maxVelocity = maxVelocity;
+    }
+    public void setAccelCap(float newAccelCap)
+    {
+        arcadeData.accelCap = newAccelCap;
+    }
+    public void setSpeed(float newSpeed)
+    {
+        rb.velocity = rb.velocity.normalized * newSpeed;
     }
     #endregion
 }
