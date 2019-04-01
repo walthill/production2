@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Player.unity
     guid: 5423d31477805824e828b907b3d15c89
+  - enabled: 1
+    path: Assets/Scenes/UI.unity
+    guid: 92fcf09925d99324d9dd518b7e7f12ff
   - enabled: 0
     path: Assets/Scenes/NewLevelLayout.unity
     guid: a0f719b07a8c820418c48546dae9fa1a
