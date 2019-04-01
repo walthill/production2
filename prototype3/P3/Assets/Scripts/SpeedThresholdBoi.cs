@@ -105,17 +105,19 @@ public class SpeedThresholdBoi : MonoBehaviour
                 break;
             case SpeedChannel.FAST:
                 ParticleScript.instance.SpeedColor3();
+                SoundBoi.instance.VolumeMusic2();
                 break;
             case SpeedChannel.BLUR:
                 ParticleScript.instance.SpeedColor4();
-                SoundBoi.instance.VolumeMusic2();
+                SoundBoi.instance.VolumeMusic3();
                 break;
             case SpeedChannel.LIGHTNING:
                 ParticleScript.instance.SpeedColor5();
+                SoundBoi.instance.VolumeMusic4();
                 break;
             case SpeedChannel.WOW_SO_FAST:
                 ParticleScript.instance.SpeedColor6();
-                SoundBoi.instance.VolumeMusic3();
+                SoundBoi.instance.VolumeMusic5();
                 break;
             default:
                 break;
