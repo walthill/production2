@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1406194916}
   - component: {fileID: 1406194915}
   m_Layer: 0
-  m_Name: Player
+  m_Name: (old)Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,14 +27,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1406194914}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.74, z: -19.87}
+  m_LocalRotation: {x: -0, y: 0.9190938, z: -0, w: 0.394039}
+  m_LocalPosition: {x: -0.0040703835, y: 0.74, z: -19.860512}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7183705570847557029}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 133.58801, z: 0}
 --- !u!54 &1406194918
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -77,21 +77,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddf882ab31e271429ae6295fe9f2a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keyboardMovement: 0
+  leftStickXAxisDeadzone: 0.25
   moveType: 1
   arcadeData:
     maxVelocity: 50
     moveSpeed: 0.5
     boostAcceleration: 0.5
     boostValue: 1
-    medRotationSpeed: 1
-    maxRotationSpeed: 2
     rotationSpeed: 1.25
-  simData:
-    baseTurnSpeed: 1
-    turnDrag: 0.55
-    baseMoveSpeed: 1
-    rotationSpeed: 0.5
   respawn: {fileID: 0}
+  liftCoeffiecient: 0
 --- !u!114 &1406194915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,13 +100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7ae67b82916f8843bbff97974277d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
+  currentSpeedChannel: 0
   buildUpTime: 0.55
-
   timer: 0
   boostAcceleration: 0.3
   boostVelocityValue: 1.5
   maxVelocityIncrease: 10
+  speedIndicator: {fileID: 0}
+  speedText: {fileID: 0}
 --- !u!1 &1614938137
 GameObject:
   m_ObjectHideFlags: 0
