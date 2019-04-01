@@ -14,83 +14,122 @@ public class SpeedThresholdBoi : MonoBehaviour
 
     [SerializeField]
     SpeedChannel currentSpeedChannel = SpeedChannel.QUICK;
+    [SerializeField]
+    SpeedChannel maxSpeedChannel = SpeedChannel.QUICK;
     PlayerSkateMovement playerMovement;
     PlayerSkateMovement.ArcadeMoveData moveData;
     [SerializeField]
     public Image speedIndicator;
     [SerializeField]
     public Text speedText;
+    [SerializeField]
+    [Tooltip("What percent of the speed threshold the player starts at when breaking into a new threshold")]
+    float newChannelStartPercent = 0.5f;
+
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
         speedIndicator = gameObject.GetComponentInChildren<Image>();
         speedText = gameObject.GetComponentInChildren<Text>();
+        rb = gameObject.GetComponent<Rigidbody>();
 
         speedIndicator.gameObject.SetActive(false);
         speedText.gameObject.SetActive(false);
         playerMovement = gameObject.GetComponent<PlayerSkateMovement>();
-        setSpeedThreshold();
+        playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
+        playerMovement.setMaxVelocity(speeds[0]);
+        setCurrentSpeedChannel();
+        setSound();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        setCurrentSpeedChannel();
+        sendCurrentSpeed();
+        sendCurrentChannel();
+    }
+    void sendCurrentChannel()
+    {
+        UISceneRelay.instance.setCurrentChannel(currentSpeedChannel);
+    }
+    void sendCurrentSpeed()
+    {
+        float speed = rb.velocity.magnitude;
+        float channelMin = 0;
+        float channelMax = speeds[(int)currentSpeedChannel];
+        if (currentSpeedChannel > 0)
+        {
+            channelMin = speeds[(int)currentSpeedChannel - 1];
+        }
+        //normalize speed within channel from 0-1
+        speed -= channelMin;
+        channelMax -= channelMin;
+        speed /= channelMax;
+        UISceneRelay.instance.setCurrentSpeed(speed);
     }
 
-    public void speedBoost(float boostAmount)
+    public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
     {
-        float speedBoost = boostAmount;
-        float maxSpeedBoost = boostAmount;
-        playerMovement.Boost(speedBoost, maxSpeedBoost);
-        setSpeedThreshold();
-        setSoundAndUI();
+        if(maxSpeedChannel == surfaceChannel 
+            && currentSpeedChannel == maxSpeedChannel
+            && maxSpeedChannel != SpeedChannel.NUM_SPEEDS-1)
+        {
+            float speed = speeds[(int)maxSpeedChannel + 1];
+            playerMovement.setMaxVelocity(speed);
+            //set speed to % of channel max.
+            speed -= (speeds[(int)maxSpeedChannel + 1] - speeds[(int)maxSpeedChannel]) * (1.0f - newChannelStartPercent);
+            playerMovement.setSpeed(speed);
+            maxSpeedChannel++;
+            setSound();
+        }
+        else if (maxSpeedChannel >= surfaceChannel)
+        {
+            float speedBoost = boostAmount;
+            playerMovement.Boost(speedBoost, 0f);
+            setCurrentSpeedChannel();
+        }
+        setCurrentSpeedChannel();
     }
 
-    void setSoundAndUI()
+    void setSound()
     {
-        switch (currentSpeedChannel)
+        switch (maxSpeedChannel)
         {
             case SpeedChannel.QUICK:
                 ParticleScript.instance.SpeedColor1();
-                DisplaySpeed(true, "100%");
                 break;
             case SpeedChannel.SPEEDY:
                 ParticleScript.instance.SpeedColor2();
                 SoundBoi.instance.VolumeMusic1();
-                DisplaySpeed(true, "200%");
                 break;
             case SpeedChannel.FAST:
                 ParticleScript.instance.SpeedColor3();
                 SoundBoi.instance.VolumeMusic2();
-                DisplaySpeed(true, "300%");
                 break;
             case SpeedChannel.BLUR:
                 ParticleScript.instance.SpeedColor4();
-                //SoundBoi.instance.VolumeMusic2();
                 SoundBoi.instance.VolumeMusic3();
-                DisplaySpeed(true, "400%");
                 break;
             case SpeedChannel.LIGHTNING:
                 ParticleScript.instance.SpeedColor5();
                 SoundBoi.instance.VolumeMusic4();
-                DisplaySpeed(true, "500%");
                 break;
             case SpeedChannel.WOW_SO_FAST:
                 ParticleScript.instance.SpeedColor6();
                 SoundBoi.instance.VolumeMusic5();
-                DisplaySpeed(true, "MAX");
                 break;
             default:
                 break;
         }
     }
-    void setSpeedThreshold()
+    void setCurrentSpeedChannel()
     {
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        while (speeds[i] < moveData.maxVelocity
-            && i < (int)SpeedChannel.NUM_SPEEDS-1)
+        while (speeds[i] < rb.velocity.magnitude
+            && i < (int)maxSpeedChannel)
         {
             i++;
         }
