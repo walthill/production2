@@ -82,6 +82,7 @@ public class MusicBoiScr : MonoBehaviour
             Debug.Log(part);
         }
         */
+        updateSoundBoi();
     }
 
     public void nextSong()
