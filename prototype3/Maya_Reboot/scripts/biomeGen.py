@@ -363,10 +363,10 @@ def makeTrash():
     moveList = list(range(tMin, tMax))
     seed = random.randrange(sys.maxsize)
     random.Random(seed)
-    boolList = [True, False, True]
+    boolList = [True, False, True, True]
 
     planeList = []
-    for x in range(2):
+    for x in range(1):
         plane = cmds.polyPlane(w=400, h=400, sx=24, sy=24, ch=False, name="trash_#")
         plane = plane[0]
         for x in range(tNum):
@@ -376,6 +376,7 @@ def makeTrash():
             itemSel = '.f[' + itemSel + ']'
             moveSel = random.choice(moveList)
             cmds.move(moveSel, itemSel, moveY=True, relative=True)
+            cmds.move(moveSel * 1.5, plane + itemSel, moveZ=True, relative=True)
         for x in range(tNum):
             itemSel = random.choice(edgesList)
             xBool = random.choice(boolList)
@@ -385,9 +386,9 @@ def makeTrash():
             itemSel = '.e[' + itemSel + ']'
             moveSel = random.choice(moveList)
             cmds.move(moveSel, plane + itemSel, moveY=True, relative=True)
-            cmds.move(moveSel/1.5, plane + itemSel, moveZ=zBool, relative=True)
-            cmds.move(moveSel/1.5, plane + itemSel, moveX=xBool, relative=True)
+            cmds.move(moveSel*1.5, plane + itemSel, moveZ=True, relative=True)
+            #cmds.move(moveSel/1.5, plane + itemSel, moveX=xBool, relative=True)
         planeList.append(plane)
-    planes = cmds.polyCBoolOp(planeList[0], planeList[1], operation=1, classification=1, ch=False)
-    cmds.polySoftEdge(planes, ws=1)
+    #planes = cmds.polyCBoolOp(planeList[0], planeList[1], operation=1, classification=1, ch=False)
+    cmds.polySoftEdge(plane, ws=1)
     cmds.select(clear=True)
