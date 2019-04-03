@@ -55,11 +55,14 @@ def rebootGenUI():
 
     # SECTION THREE: CITY SIGN POSTS
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.separator(height=10, style="in")
     cmds.button(label='Make A Sign', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: signpost())
 
     # SECTION FOUR: TRASH
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, columnWidth / 2), (2, columnWidth / 2)],
                          parent="columnMain_A")
+    cmds.separator(height=10, style="in")
+    cmds.separator(height=10, style="in")
     cmds.text("Min Height")
     cmds.intField("tMin", min=10, max=100, step=1)
     cmds.text("Max Height")
@@ -68,6 +71,20 @@ def rebootGenUI():
     cmds.intSlider('tNum', minValue=1, maxValue=20, step=1)
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.button(label='Make Some Trash', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeTrash())
+
+    # SECTION FIVE: MAKE A WIRE
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.separator(height=10, style="in")
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, columnWidth / 2), (2, columnWidth / 2)],
+                         parent="columnMain_A")
+    cmds.text("Wire Size")
+    cmds.intSlider('wireSize', minValue=1, maxValue=20, value=1)
+    cmds.text("Wire Length")
+    cmds.intSlider('wireLength', minValue=10, maxValue=1000, value=500)
+    cmds.text("Wire Sag")
+    cmds.floatSlider('sagAmount', minValue=1, maxValue=50, step=0.1, value=1)
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.button(label='Make A Wire', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeAWire())
 
     #end line
     cmds.showWindow("UIwindow")
@@ -387,8 +404,49 @@ def makeTrash():
             moveSel = random.choice(moveList)
             cmds.move(moveSel, plane + itemSel, moveY=True, relative=True)
             cmds.move(moveSel*1.5, plane + itemSel, moveZ=True, relative=True)
-            #cmds.move(moveSel/1.5, plane + itemSel, moveX=xBool, relative=True)
         planeList.append(plane)
-    #planes = cmds.polyCBoolOp(planeList[0], planeList[1], operation=1, classification=1, ch=False)
     cmds.polySoftEdge(plane, ws=1)
+    cmds.select(clear=True)
+
+
+def makeAWire():
+    wireSize = cmds.intSlider('wireSize', query=True, value=True)
+    wireLength = cmds.intSlider('wireLength', query=True, value=True)
+    sagAmount = cmds.floatSlider('sagAmount', query=True, value=True)
+    linePoints = []
+    valDict = {}
+    plusMinus = -2
+    count = 3
+
+    for x in range(3):
+        valDict[x] = x*x
+
+    for x in range(2):
+        count -= 1
+        point = wireLength/4.0*plusMinus, valDict[count]*sagAmount, 0
+        if x == 0:
+            tempVarX = wireLength/4.0*plusMinus
+            tempVarY = valDict[count]*sagAmount
+        linePoints.append(point)
+        plusMinus += 1
+    point_0 = 0, 0, 0
+    linePoints.append(point_0)
+    for x in range(2):
+        plusMinus += 1
+        point = wireLength/4.0*plusMinus, valDict[count]*sagAmount, 0
+        linePoints.append(point)
+        count += 1
+
+    extrudeCurve = cmds.curve(p=linePoints)
+    wire = cmds.polyCylinder(r=wireSize, h=10, sx=5, ch=False)
+    wire = wire[0]
+    cmds.rotate(90, wire, rotateX=True, relative=True)
+    cmds.rotate(90, wire, rotateY=True, relative=True)
+    cmds.move(tempVarX-5.0, tempVarY, 0, wire, relative=True)
+    cmds.polyExtrudeFacet(wire + '.f[6]', inputCurve=extrudeCurve, divisions=12, ch=False)
+    cmds.delete(extrudeCurve)
+    cmds.delete('.f[0:5]')
+    cmds.polyCloseBorder(wire)
+    cmds.polyTriangulate(wire)
+    cmds.polyQuad(wire)
     cmds.select(clear=True)
