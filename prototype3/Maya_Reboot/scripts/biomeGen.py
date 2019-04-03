@@ -86,6 +86,15 @@ def rebootGenUI():
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.button(label='Make A Wire', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeAWire())
 
+    # SECTION SIX: GENERATE FENCE ON A PLANE
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.separator(height=10, style="in")
+    cmds.button(label='Make the Plane', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeAPlane())
+    cmds.text("Plane Name")
+    cmds.textField("planeName")
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.button(label='Make a Fence', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeAFence())
+
     #end line
     cmds.showWindow("UIwindow")
 
@@ -380,7 +389,6 @@ def makeTrash():
     moveList = list(range(tMin, tMax))
     seed = random.randrange(sys.maxsize)
     random.Random(seed)
-    boolList = [True, False, True, True]
 
     planeList = []
     for x in range(1):
@@ -396,8 +404,6 @@ def makeTrash():
             cmds.move(moveSel * 1.5, plane + itemSel, moveZ=True, relative=True)
         for x in range(tNum):
             itemSel = random.choice(edgesList)
-            xBool = random.choice(boolList)
-            zBool = random.choice(boolList)
             edgesList.remove(itemSel)
             itemSel = str(itemSel)
             itemSel = '.e[' + itemSel + ']'
@@ -450,3 +456,64 @@ def makeAWire():
     cmds.polyTriangulate(wire)
     cmds.polyQuad(wire)
     cmds.select(clear=True)
+
+
+def makeAPlane():
+    cmds.polyPlane(w=1000, h=10, sx=51, sy=1, ch=False, name="fencePlane_#")
+
+
+def makeAFence():
+    planeName = cmds.textField('planeName', query=True, text=True)
+    group = cmds.group(empty=True, world=True, name="fenceGroup_#")
+    valDict = {}
+    count = 0
+
+    for i in range(26):
+        face = str(count)
+        face = ".f[" + face + "]"
+        face = planeName + face
+        cmds.select(face)
+        X, Y, Z = cmds.polyEvaluate(bc=True)
+        x1, x2 = X
+        y1, y2 = Y
+        z1, z2 = Z
+        xTotal = (x1 + x2) / 2
+        yTotal = (y1 + y2) / 2
+        zTotal = (z1 + z2) / 2
+        valDict[i] = xTotal, yTotal, zTotal
+        count += 2
+
+    for i in range(26):
+        post = fencePost()
+        x, y, z = valDict[i]
+        if i != 0:
+            moveW = x-tempX-5
+            face = cmds.polyCube(w=moveW, h=75, d=5, ch=False, name="fenceInBetween_#")
+            cmds.move(tempX+moveW - moveW/2.0 + 2.5, (75/2.0 + 10) + (tempY), z-tempZ, face, relative=True)
+            cmds.polyAutoProjection(face)
+            cmds.parent(face,group)
+        cmds.move(x, y, z, post, relative=True)
+        cmds.parent(post, group)
+        tempX = x
+        tempY = y
+        tempZ = z
+    """for x in range(53):
+        edgeName = str(x)
+        edgeName = ".e[" + edgeName + "]"
+        cmds.delete(planeName + edgeName)
+    cmds.delete(planeName + ".vtx[1:50]", planeName + ".vtx[53:102]")"""
+    cmds.polyExtrudeFacet(planeName, ltz=50, ch=False)
+    cmds.move(-50, planeName, moveY=True, relative=True)
+    cmds.scale(5, planeName, scaleZ=True)
+    #cmds.polyBevel(planeName, o=2)
+    cmds.parent(planeName, group)
+    cmds.select(clear=True)
+
+
+def fencePost():
+    r=2.5
+    h=100
+    post = cmds.polyCylinder(r=r, h=h, subdivisionsAxis=10, ch=False, name="post_#")
+    cmds.move(0,  h/2, 0, post, relative=True)
+    post = post[0]
+    return post
