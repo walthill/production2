@@ -95,6 +95,11 @@ def rebootGenUI():
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.button(label='Make a Fence', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeAFence())
 
+    # SECTION SEVEN: FAVELA
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
+    cmds.separator(height=10, style="in")
+    cmds.button(label='Make Favela Building', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeFavela())
+
     #end line
     cmds.showWindow("UIwindow")
 
@@ -505,7 +510,6 @@ def makeAFence():
     cmds.polyExtrudeFacet(planeName, ltz=50, ch=False)
     cmds.move(-50, planeName, moveY=True, relative=True)
     cmds.scale(5, planeName, scaleZ=True)
-    #cmds.polyBevel(planeName, o=2)
     cmds.parent(planeName, group)
     cmds.select(clear=True)
 
@@ -516,4 +520,44 @@ def fencePost():
     post = cmds.polyCylinder(r=r, h=h, subdivisionsAxis=10, ch=False, name="post_#")
     cmds.move(0,  h/2, 0, post, relative=True)
     post = post[0]
+    cmds.polyTriangulate(post)
+    cmds.polyQuad(post)
     return post
+
+
+def makeFavela():
+    dimensionsList = list(range(200, 800))
+    faceList = ['.f[0]', '.f[1]', '.f[2]', '.f[4]', '.f[5]']
+    rangeNum = 5
+    blockGroup = []
+    for x in range(rangeNum):
+        width = random.choice(dimensionsList)
+        height = random.choice(dimensionsList) / 2.0
+        depth = random.choice(dimensionsList)
+        block = cmds.polyCube(w=width, h=height, d=depth, ch=False)
+        block = block[0]
+        cmds.move(height/2.0, block, relative=True, moveY=True)
+        if x != 0:
+            cmds.move(xTotal, yTotal, zTotal, block, relative=True)
+        chosenFace = random.choice(faceList)
+        cmds.select(block + chosenFace)
+        X, Y, Z = cmds.polyEvaluate(bc=True)
+        x1, x2 = X
+        y1, y2 = Y
+        z1, z2 = Z
+        xTotal = (x1 + x2) / 2
+        yTotal = (y1 + y2) / 2
+        zTotal = (z1 + z2) / 2
+        cmds.polyExtrudeFacet(block + '.f[1]', lsx=1.1, lsy=1.1)
+        cmds.polyExtrudeFacet(block + '.f[1]', ltz=20)
+        cmds.polyExtrudeFacet(block + '.f[1]', lsx=0.6, lsy=0.6, ltz=-20)
+        blockGroup.append(block)
+
+    build = cmds.polyCBoolOp(blockGroup[0], blockGroup[1], ch=False)
+    build = cmds.polyCBoolOp(build, blockGroup[2], ch=False)
+    build = cmds.polyCBoolOp(build, blockGroup[3], ch=False)
+    build = cmds.polyCBoolOp(build, blockGroup[4], ch=False)
+    build = cmds.rename(build, "favelaBuilding_#")
+    cmds.polyTriangulate(build)
+    cmds.polyQuad(build)
+    cmds.select(clear=True)
