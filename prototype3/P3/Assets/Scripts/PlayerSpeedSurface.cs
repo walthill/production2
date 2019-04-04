@@ -30,7 +30,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     float boostVelocityValue = 0;
     float boostLength; //distance the button was held down for.
     SpeedChannel surfaceChannel;
-    private void Awake()
+    private void Start()
     {
         
 
