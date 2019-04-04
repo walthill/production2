@@ -98,6 +98,7 @@ def rebootGenUI():
     # SECTION SEVEN: FAVELA
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, columnWidth)], parent="columnMain_A")
     cmds.separator(height=10, style="in")
+    cmds.intField('rangeNum', minValue=1, maxValue=5, value=1)
     cmds.button(label='Make Favela Building', height=30, bgc=(1.0, 1.0, 0.4), command=lambda args: makeFavela())
 
     #end line
@@ -528,7 +529,7 @@ def fencePost():
 def makeFavela():
     dimensionsList = list(range(200, 800))
     faceList = ['.f[0]', '.f[1]', '.f[2]', '.f[4]', '.f[5]']
-    rangeNum = 5
+    rangeNum = cmds.intField('rangeNum', query=True, value=True)
     blockGroup = []
     for x in range(rangeNum):
         width = random.choice(dimensionsList)
@@ -553,10 +554,16 @@ def makeFavela():
         cmds.polyExtrudeFacet(block + '.f[1]', lsx=0.6, lsy=0.6, ltz=-20)
         blockGroup.append(block)
 
-    build = cmds.polyCBoolOp(blockGroup[0], blockGroup[1], ch=False)
-    build = cmds.polyCBoolOp(build, blockGroup[2], ch=False)
-    build = cmds.polyCBoolOp(build, blockGroup[3], ch=False)
-    build = cmds.polyCBoolOp(build, blockGroup[4], ch=False)
+    if rangeNum == 1:
+        build = blockGroup[0]
+    if rangeNum > 1:
+        build = cmds.polyCBoolOp(blockGroup[0], blockGroup[1], ch=False)
+    if rangeNum > 2:
+        build = cmds.polyCBoolOp(build, blockGroup[2], ch=False)
+    if rangeNum > 3:
+        build = cmds.polyCBoolOp(build, blockGroup[3], ch=False)
+    if rangeNum > 4:
+        build = cmds.polyCBoolOp(build, blockGroup[4], ch=False)
     build = cmds.rename(build, "favelaBuilding_#")
     cmds.polyTriangulate(build)
     cmds.polyQuad(build)
