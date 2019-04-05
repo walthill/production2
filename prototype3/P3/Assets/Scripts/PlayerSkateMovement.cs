@@ -46,7 +46,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField] float liftCoeffiecient = 0;
 
     const float SLOPE_RAY_DIST = 1f;
-    const float PLAYER_ALIGN_SPEED = 15f;
+    const float PLAYER_ALIGN_SPEED = 10f;
   
     //Input vars
     float xMove, accelerationButton;
@@ -57,6 +57,11 @@ public class PlayerSkateMovement : MonoBehaviour
 
     //Drifting stuff
     bool isDrifting = false;
+    bool endOfDrift; //Flags smooth camera damping on drift release
+    bool isTurning;
+    Vector3 driftStartForward;
+    float driftCamTimeUntilReset = 0.25f;
+
     Vector3 driftVelocity;
     float driftSlowTimer; //when speed starts to decrease;
     [SerializeField]
@@ -65,10 +70,14 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     [Tooltip("How long it takes to stop after slowing down while drifting.")]
     float driftStopTime = 4f;
+
+    FollowCamera playerCam;
+
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
         rb = gameObject.GetComponent<Rigidbody>();
+        playerCam = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<FollowCamera>();
 
         respawn.position = objTransform.position;
 
@@ -81,6 +90,8 @@ public class PlayerSkateMovement : MonoBehaviour
         ProcessInput();
         MoveAnimation();
 
+        DriftCamRelease();
+
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
     }
@@ -92,7 +103,6 @@ public class PlayerSkateMovement : MonoBehaviour
         
         AlignPlayerWithGround();
         RollerSkateMovement();
-
         JumpAlignRaycast();
         JumpLandRaycast();
         Jump();
@@ -110,6 +120,7 @@ public class PlayerSkateMovement : MonoBehaviour
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
         jump = Input.GetButtonDown("JoyJump");
+
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
@@ -132,18 +143,39 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void startDrifting()
     {
+        driftStartForward = objTransform.forward;
+        
         isDrifting = true;
         driftVelocity = rb.velocity;
         driftSlowTimer = Time.time + driftTime;
     }
     private void stopDrifting()
     {
+        endOfDrift = true;
+
         isDrifting = false;
+
         if (isGrounded)
         {
             rb.velocity = transform.forward * rb.velocity.magnitude;
         }
     }
+
+    void DriftCamRelease()
+    {
+        if (accelButtonDown && endOfDrift)
+        {
+            //Apply camera drift effect when not moving forward
+            if (Vector3.Distance(driftStartForward.normalized, objTransform.forward.normalized) > 0.1)
+            {
+                playerCam.ApplyDriftDamping();
+                StartCoroutine(WaitAndChangeDamping(driftCamTimeUntilReset));
+            }
+
+            endOfDrift = false;
+        }
+    }
+
     private void RollerSkateMovement()
     {
         if (moveType == MoveType.SIM)
@@ -154,10 +186,16 @@ public class PlayerSkateMovement : MonoBehaviour
             if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
                 TurnPhysics();
-            }               
+            }              
 
             MovePhysics();
         }
+    }
+
+    private IEnumerator WaitAndChangeDamping(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        playerCam.ReturnToDefaultDamping();
     }
 
     private void TurnPhysics()
@@ -191,13 +229,19 @@ public class PlayerSkateMovement : MonoBehaviour
                 acceleration = Vector3.zero;
                 vel = driftVelocity;
                 float time = Time.time - driftSlowTimer;
+                
                 if(time > 0 )
                 {
                     driftVelocity -= driftVelocity * (time / driftStopTime);
+                    Debug.Log(driftVelocity);
                 }
             }
             else
             {
+                //Track player forward until drift released
+                if(!endOfDrift)
+                    driftStartForward = objTransform.forward;
+
                 float moveFactor = accelerationButton * arcadeData.accelMultiplier;
                 acceleration = objTransform.forward * moveFactor;
                 vel = rb.velocity;
@@ -238,6 +282,7 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+    #region Raycasts
     void JumpLandRaycast()
     {
         if(isAirborne)
@@ -288,6 +333,7 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             if(!isAirborne)
             {
+                //Alter rotation damping for smoother adjustment
                 isGrounded = true;
 
                 //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
@@ -306,7 +352,7 @@ public class PlayerSkateMovement : MonoBehaviour
             isAirborne = true;
         }
     }
-
+#endregion
 
     #region Getters and Setters
     public void ResetPlayer() //TODO: reset speed threshold

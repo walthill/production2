@@ -11,6 +11,7 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float distance = 0;
     [SerializeField] float height = 0;
     [SerializeField] float damping = 0;
+    [SerializeField] float driftDamping = 10;
     [SerializeField] float rotationDamping = 0;
     [SerializeField] Vector3 lookAtOffset = new Vector3();
     [SerializeField] bool applyRotationDamp=true;
@@ -22,13 +23,13 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] Vector3 collisionRaycastOffset = new Vector3();
 
     //Camera knockback vars
-    [Header("Camera Knockback")]
+/*    [Header("Camera Knockback")]
     [SerializeField] float timer = 0; //tracks time spent in knockback
     [SerializeField] float knockbackTime = 0;
     [SerializeField] float knockbackSpeed = 0;
     [SerializeField] float returnSpeed = 0;
     [SerializeField] float knockbackDistance = 0;
-    [SerializeField] float returnDistance = 0;
+    [SerializeField] float returnDistance = 0;*/
 
     //Free camera vars
     [Header("Camera Rotation")]
@@ -38,12 +39,12 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float camMinXAngle = 0, camMaxXAngle = 0;
     [SerializeField] float camMinYAngle = 0, camMaxYAngle = 0; //Clamp values for cam rotation
 
-    float distanceToReach;
+    float distanceToReach, originalDamping;
     bool hasKnockback = false;
 
     float camYRotation,  camXRotation; //camera rotate input
     bool lookBehindDown, lookBehindUp; //lookback input
-    bool lookBehindToggle, canLookBack = true;
+    bool lookBehindToggle, canLookBack = true, resetDamping, applyDamping;
 
     Quaternion originalTargetRotation;
 
@@ -52,10 +53,11 @@ public class FollowCamera : MonoBehaviour
     private void Awake()
     {
         originalTargetRotation = target.localRotation; //keep track of Quaternion at object rotation's 0,0,0
-        
+        originalDamping = damping;
+
         //init knockback
-        distanceToReach = distance + knockbackDistance;
-        returnDistance = returnDistance + distance;
+      //  distanceToReach = distance + knockbackDistance;
+       // returnDistance = returnDistance + distance;
     }
 
     private void Update()
@@ -65,10 +67,28 @@ public class FollowCamera : MonoBehaviour
 
         camYRotation = Input.GetAxis("JoyHorizontalRS");
         camXRotation = Input.GetAxis("JoyVerticalRS");
+
+        
     }
 
     private void FixedUpdate()
     {
+        //Lerp to default cam position
+        if (damping < originalDamping - 1 && resetDamping)
+        {
+            damping = Mathf.Lerp(damping, originalDamping, Time.deltaTime);
+        }
+        else
+            resetDamping = false;
+
+        //Lerp to drifting cam position by altering drift damp
+        if (damping > driftDamping + 1 && applyDamping)
+        {
+            damping = Mathf.Lerp(damping, driftDamping, Time.deltaTime * 2.1f);
+        }
+        else
+            applyDamping = false;
+
         if(lookBehindDown)
             lookBehindToggle = true;
         if(lookBehindUp)
@@ -101,7 +121,7 @@ public class FollowCamera : MonoBehaviour
                 }
             }
 
-            transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
+            transform.position = Vector3.Slerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
             Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
 
@@ -117,7 +137,7 @@ public class FollowCamera : MonoBehaviour
             }
 
             FreeCameraMovement();
-            CameraFallback();
+           // CameraFallback();
         }
     }
 
@@ -175,7 +195,7 @@ public class FollowCamera : MonoBehaviour
         target.localPosition = new Vector3(0, 0, 0);
     }
 
-    void CameraFallback()
+   /* void CameraFallback()
     {
         if (hasKnockback)
         {
@@ -193,7 +213,7 @@ public class FollowCamera : MonoBehaviour
             distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * returnSpeed);
             ToggleSpeedUI();
         }
-    }
+    }*/
 
     public void ToggleKnockback()
     {
@@ -205,5 +225,26 @@ public class FollowCamera : MonoBehaviour
         //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
         //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
         //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
+    }
+
+    public void SetRotationDamping(float val) 
+    {
+        rotationDamping = val;
+    }
+
+    public void SetDriftDamping(float val)
+    {
+        driftDamping = val;
+    }
+    public void ApplyDriftDamping()
+    {
+        resetDamping = false;
+        applyDamping = true;
+        //damping = driftDamping;
+    }
+
+    public void ReturnToDefaultDamping() 
+    {
+        resetDamping = true;
     }
 }
