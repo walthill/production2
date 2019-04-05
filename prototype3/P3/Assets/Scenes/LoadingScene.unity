@@ -362,7 +362,7 @@ MonoBehaviour:
   loadingSceneIndex: 1
   mPersistentScenes: 
   mLevelScenes:
-  - sceneList: 020000000300000004000000
+  - sceneList: 02000000030000000400000005000000
   - sceneList: 0500000006000000
 --- !u!4 &921691837
 Transform:

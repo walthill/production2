@@ -14,8 +14,8 @@ public class SceneLoadingBoi : MonoBehaviour
     // https://answers.unity.com/questions/242794/inspector-field-for-scene-asset.html
     // Check this out to make it easier to select scenes in editor
 
-    [SerializeField] LoadingScreen loadingScreen;
-    [SerializeField] int loadingSceneIndex;
+    [SerializeField] LoadingScreen loadingScreen = null;
+    [SerializeField] int loadingSceneIndex = 0;
 
     [SerializeField]
     [Tooltip("Index of scenes that should stay loaded")]

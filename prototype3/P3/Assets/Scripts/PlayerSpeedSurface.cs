@@ -18,19 +18,19 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     PlayerSkateMovement playerMove;
     SpeedThresholdBoi speedBoi;
-    
+    [SerializeField]
     bool isTouchingCharge = false;
+    [SerializeField]
     bool isTouchingRelease = false;
     Vector3 startPosit, endPosit; //where the player presses and releases the button
     
-    [Header("Displays boost effects")]
+    //[Header("Displays boost effects")]
     [SerializeField]
     bool isCharging = false;
-    [SerializeField]
-    float boostVelocityValue = 0, maxVelocityIncrease = 0;
-    [SerializeField]
+    float boostVelocityValue = 0;
     float boostLength; //distance the button was held down for.
-    private void Awake()
+    SpeedChannel surfaceChannel;
+    private void Start()
     {
         
 
@@ -50,18 +50,19 @@ public class PlayerSpeedSurface : MonoBehaviour
                 stopCharging();
             }
         }
-        //when player presses A
-        if (Input.GetButtonDown("JoyJump"))
+        if (Input.GetButtonDown("JoyCharge"))
         {
+            Debug.Log("a is registrered");
             if (isTouchingCharge)
             {
+                Debug.Log("charging is registered");
                 startPosit = transform.position;
                 startCharging();
             }
         }
 
         //when player releases A
-        if (Input.GetButtonUp("JoyJump"))
+        if (Input.GetButtonUp("JoyCharge"))
         {
             if (isTouchingRelease && isCharging)
             {
@@ -77,7 +78,7 @@ public class PlayerSpeedSurface : MonoBehaviour
     private void startCharging()
     {
         isCharging = true;
-        SoundBoi.instance.chargingSound();
+        SoundBoi.instance.makeChargeSound = true;
     }
     private void stopCharging()
     {
@@ -88,30 +89,17 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         //speed player up in proportion to how big the boost time is up to max boost
         boostVelocityValue = boostLength*boostMultiplier;
-        maxVelocityIncrease = boostLength*boostMultiplier;
-        speedBoi.speedBoost(boostVelocityValue);
-        //playerMove.Boost(boostVelocityValue, maxVelocityIncrease);
+        speedBoi.speedBoost(boostVelocityValue, surfaceChannel);
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == CHARGE_SURFACE)
         {
-            if (isTouchingCharge)
-            {
-                Debug.LogError("Was already touching Charge surface");
-            }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
-            if (validSurface)
-            {
-                isTouchingCharge = true;
-            }
+            isTouchingCharge = true;
+            surfaceChannel = other.gameObject.GetComponent<SpeedGate>().speedRequired;
         }
         if(other.tag == RELEASE_SURFACE)
         {
-            if (isTouchingRelease)
-            {
-                Debug.LogError("Was already touching release surface");
-            }
             isTouchingRelease = true;
         }
     }
@@ -119,22 +107,10 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         if (other.tag == CHARGE_SURFACE)
         {
-            if (!isTouchingCharge)
-            {
-                Debug.LogError("Was already not touching Charge surface");
-            }
-            bool validSurface = speedBoi.checkSpeedThreshold(other.GetComponent<SpeedSurfaceScript>().speedRequired);
-            if (validSurface)
-            {
-                isTouchingCharge = false;
-            }
+            isTouchingCharge = false;
         }
         if (other.tag == RELEASE_SURFACE)
         {
-            if (!isTouchingRelease)
-            {
-                Debug.LogError("Was already not touching release surface");
-            }
             isTouchingRelease = false;
         }
     }

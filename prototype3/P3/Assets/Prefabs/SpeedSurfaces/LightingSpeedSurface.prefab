@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 6486246872385698163}
   - component: {fileID: 6486246872385698162}
   - component: {fileID: 6486246872385697933}
-  - component: {fileID: 1367852703291082354}
+  - component: {fileID: 5596792749898986848}
   m_Layer: 0
   m_Name: Plane
   m_TagString: ChargeSurface
@@ -139,7 +139,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 9.999999, y: 0, z: 10.216429}
   m_Center: {x: 0, y: 0, z: -0.1082085}
---- !u!114 &1367852703291082354
+--- !u!114 &5596792749898986848
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6486246872385697932}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 278433e2189a21943ae160c4123dd527, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b1c3a976d9e4664ead4a56a83235d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speedRequired: 4

@@ -203,7 +203,7 @@ public class FollowCamera : MonoBehaviour
     public void ToggleSpeedUI()
     {
         //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
-        target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
-        target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
+        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
+        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
     }
 }
