@@ -5,16 +5,19 @@ using UnityEngine;
 public class RaliScript : MonoBehaviour
 {
     // Start is called before the first frame update
+    public bool isCurved;
     public Transform[] railPoints;
     public float timeOnRail;
     public Collider railCollider;
+    public float nextPointThreshold = .5f;
 
     bool playerIsOnRail = false;
     GameObject player = null;
-    Vector3 startPoint, endPoint;
+    Vector3 startPoint, nextPoint;
 
     float railDistance, startTime;
     float speed;
+    int iterPoint = 0;
 
     void Start()
     {
@@ -40,8 +43,9 @@ public class RaliScript : MonoBehaviour
             startTime = Time.time;
             speed = player.GetComponent<Rigidbody>().velocity.magnitude;
 
+
             startPoint = railPoints[0].position;
-            endPoint = railPoints[1].position;
+            nextPoint = railPoints[1].position;
 
             for(int i = 0; i< railPoints.Length; i++)
             {
@@ -55,11 +59,33 @@ public class RaliScript : MonoBehaviour
     {
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / railDistance;
-        player.GetComponent<Transform>().position = Vector3.Lerp(startPoint, endPoint, fracJourney);
-        if(fracJourney == 1.0f)
+        if (!isCurved)
         {
-            playerIsOnRail = false;
+            player.GetComponent<Transform>().position = Vector3.Lerp(startPoint, nextPoint, fracJourney);
         }
+        else
+        {
+            player.GetComponent<Transform>().position = Vector3.Slerp(startPoint, nextPoint, fracJourney);
+        }
+
+        if (Vector3.Distance(player.GetComponent<Transform>().position, nextPoint) <= nextPointThreshold)
+        {
+            iterPoint++;
+            if (iterPoint <= railPoints.Length)
+            {
+                goToNextPoint();
+            }
+            else
+            {
+                playerIsOnRail = false;
+            }
+        }
+    }
+
+    void goToNextPoint()
+    {
+        startPoint = railPoints[iterPoint].position;
+        nextPoint = railPoints[iterPoint + 1].position;
     }
 
 //GET AND SET
