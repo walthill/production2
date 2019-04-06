@@ -9,6 +9,8 @@ TagManager:
   - boomBox
   - end
   - Rail
+  - CameraRig
+  - Wall
   layers:
   - Default
   - TransparentFX
