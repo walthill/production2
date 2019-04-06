@@ -5,7 +5,7 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField] Transform target = null;
- 
+
     //Smooth camera vars
     [Header("Smooth Camera Values")]
     [SerializeField] float distance = 0;
@@ -31,14 +31,13 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float camMinYAngle = 0, camMaxYAngle = 0; //Clamp values for cam rotation
 
     float distanceToReach, originalDamping;
-    bool hasKnockback = false;
-
     float camYRotation,  camXRotation; //camera rotate input
-    bool resetDamping, applyDamping;
+    float xRot, yRot;
+
+    bool resetDamping =false, applyDamping=false;
 
     Quaternion originalTargetRotation;
 
-    float xRot, yRot;
     
     private void Awake()
     {
@@ -77,9 +76,9 @@ public class FollowCamera : MonoBehaviour
     {
         if (target)
         {
-
-            Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
-            Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
+            //TODO: remove .transform calls - the target variable is a transform
+            Vector3 wantedPosition = target.TransformPoint(new Vector3(0, height, -distance));
+            Vector3 backDirection = target.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
@@ -97,7 +96,7 @@ public class FollowCamera : MonoBehaviour
                 }
             }
 
-            transform.position = Vector3.Slerp(transform.position, wantedPosition, Time.deltaTime * damping);
+            transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
             Vector3 lookAtPosition = target.TransformPoint(lookAtOffset);
 
@@ -141,13 +140,6 @@ public class FollowCamera : MonoBehaviour
 
     }
 
-    void FlipAlignment(bool ableToLookBack, float lookBackZOffset=0)
-    {
-        float behind = target.localEulerAngles.y + 180;
-        target.localEulerAngles = new Vector3(target.localEulerAngles.x, behind, target.localEulerAngles.z);
-        target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, target.localPosition.z + lookBackZOffset);
-    }
-
     void ResetAlignment()
     {
         xRot = 0;
@@ -157,18 +149,7 @@ public class FollowCamera : MonoBehaviour
         target.localPosition = new Vector3(0, 0, 0);
     }
 
-    public void ToggleKnockback()
-    {
-        hasKnockback = true;
-    }
-
-    public void ToggleSpeedUI()
-    {
-        //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
-        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
-        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
-    }
-
+    #region Getters and Setters
     public void SetRotationDamping(float val) 
     {
         rotationDamping = val;
@@ -189,4 +170,5 @@ public class FollowCamera : MonoBehaviour
         resetDamping = true;
         applyDamping = false;
     }
+    #endregion
 }
