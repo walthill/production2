@@ -290,10 +290,6 @@ PrefabInstance:
       propertyPath: WIDTransform
       value: 
       objectReference: {fileID: 1985177580}
-    - target: {fileID: 352784546, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!4 &382545324 stripped
