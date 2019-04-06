@@ -53,8 +53,15 @@ public class SceneLoadingBoi : MonoBehaviour
     IEnumerator LoadingWait()
     {
         yield return new WaitForSeconds(1);
-        SceneManager.UnloadSceneAsync(loadingSceneIndex);
-        loadingScreen.Hide();
+
+        if (loadingScreen.Hide())
+        {
+            SceneManager.UnloadSceneAsync(loadingSceneIndex);
+        }
+        else
+        {
+            StartCoroutine(LoadingWait());
+        }
     }
 
     public void loadNextLevel()

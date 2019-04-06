@@ -167,7 +167,7 @@ public class SoundBoi : MonoBehaviour
         int slotIndex = 0;
         foreach (AudioSource slot in MusicSlotArray)
         {
-            if (partIndex <= musicPartsArray.Length && slotIndex <= MusicSlotArray.Length)
+            if (partIndex < musicPartsArray.Length && slotIndex < MusicSlotArray.Length)
             {
                 slot.clip = musicPartsArray[partIndex];
                 //Debug.Log(musicPartsArray[partIndex].name + " assigned");

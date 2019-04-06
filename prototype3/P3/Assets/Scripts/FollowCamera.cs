@@ -5,12 +5,13 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField] Transform target = null;
- 
+
     //Smooth camera vars
     [Header("Smooth Camera Values")]
     [SerializeField] float distance = 0;
     [SerializeField] float height = 0;
-    [SerializeField] float damping = 0;
+    [SerializeField] float damping = 100;
+    [SerializeField] float driftDamping = 10;
     [SerializeField] float rotationDamping = 0;
     [SerializeField] Vector3 lookAtOffset = new Vector3();
     [SerializeField] bool applyRotationDamp=true;
@@ -21,15 +22,6 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float collisionCameraHeight = 0;
     [SerializeField] Vector3 collisionRaycastOffset = new Vector3();
 
-    //Camera knockback vars
-    [Header("Camera Knockback")]
-    [SerializeField] float timer = 0; //tracks time spent in knockback
-    [SerializeField] float knockbackTime = 0;
-    [SerializeField] float knockbackSpeed = 0;
-    [SerializeField] float returnSpeed = 0;
-    [SerializeField] float knockbackDistance = 0;
-    [SerializeField] float returnDistance = 0;
-
     //Free camera vars
     [Header("Camera Rotation")]
     [SerializeField] float inputDeadZone = 0;
@@ -38,41 +30,44 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float camMinXAngle = 0, camMaxXAngle = 0;
     [SerializeField] float camMinYAngle = 0, camMaxYAngle = 0; //Clamp values for cam rotation
 
-    float distanceToReach;
-    bool hasKnockback = false;
-
+    float distanceToReach, originalDamping;
     float camYRotation,  camXRotation; //camera rotate input
-    bool lookBehindDown, lookBehindUp; //lookback input
-    bool lookBehindToggle, canLookBack = true;
+    float xRot, yRot;
+
+    bool resetDamping =false, applyDamping=false;
 
     Quaternion originalTargetRotation;
 
-    float xRot, yRot;
     
     private void Awake()
     {
         originalTargetRotation = target.localRotation; //keep track of Quaternion at object rotation's 0,0,0
-        
-        //init knockback
-        distanceToReach = distance + knockbackDistance;
-        returnDistance = returnDistance + distance;
+        originalDamping = damping;
     }
 
     private void Update()
     {
-        lookBehindDown = Input.GetButton("JoyRSDown");
-        lookBehindUp = Input.GetButtonUp("JoyRSDown");
-
         camYRotation = Input.GetAxis("JoyHorizontalRS");
-        camXRotation = Input.GetAxis("JoyVerticalRS");
+        camXRotation = Input.GetAxis("JoyVerticalRS");       
     }
 
     private void FixedUpdate()
     {
-        if(lookBehindDown)
-            lookBehindToggle = true;
-        if(lookBehindUp)
-            lookBehindToggle = false;
+        //Lerp to default cam position
+        if (damping < originalDamping - 1 && resetDamping)
+        {
+            damping = Mathf.Lerp(damping, originalDamping, Time.deltaTime);
+        }
+        else
+            resetDamping = false;
+
+        //Lerp to drifting cam position by altering drift damp
+        if (damping > driftDamping + 1 && applyDamping)
+        {
+            damping = Mathf.Lerp(damping, driftDamping, Time.deltaTime * 2.5f);
+        }
+        else
+            applyDamping = false;
 
         CameraMove();
     }
@@ -81,9 +76,9 @@ public class FollowCamera : MonoBehaviour
     {
         if (target)
         {
-
-            Vector3 wantedPosition = target.transform.TransformPoint(new Vector3(0, height, -distance));
-            Vector3 backDirection = target.transform.TransformDirection(-1 * Vector3.forward);
+            //TODO: remove .transform calls - the target variable is a transform
+            Vector3 wantedPosition = target.TransformPoint(new Vector3(0, height, -distance));
+            Vector3 backDirection = target.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
             Debug.DrawRay(ray.origin, ray.direction, Color.green);
@@ -117,7 +112,6 @@ public class FollowCamera : MonoBehaviour
             }
 
             FreeCameraMovement();
-            CameraFallback();
         }
     }
 
@@ -139,18 +133,6 @@ public class FollowCamera : MonoBehaviour
 
             target.localEulerAngles = new Vector3(target.localEulerAngles.x, yRot, target.localEulerAngles.z);
         }
-        else if(lookBehindToggle) //Quick look back
-        {
-            if(canLookBack)
-            {
-                FlipAlignment(false);
-            }
-        }        
-        else if(!canLookBack)
-        {
-            float zPosOffset = 2;
-            FlipAlignment(true, zPosOffset);
-        }
         else
         {
            ResetAlignment();
@@ -158,15 +140,7 @@ public class FollowCamera : MonoBehaviour
 
     }
 
-    void FlipAlignment(bool ableToLookBack, float lookBackZOffset=0)
-    {
-        float behind = target.localEulerAngles.y + 180;
-        target.localEulerAngles = new Vector3(target.localEulerAngles.x, behind, target.localEulerAngles.z);
-        target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, target.localPosition.z + lookBackZOffset);
-        canLookBack = ableToLookBack;
-    }
-
-    void ResetAlignment() //TODO: wait a few frames before resetting to allow for quick camera swings
+    void ResetAlignment()
     {
         xRot = 0;
         yRot = 0;
@@ -175,35 +149,26 @@ public class FollowCamera : MonoBehaviour
         target.localPosition = new Vector3(0, 0, 0);
     }
 
-    void CameraFallback()
+    #region Getters and Setters
+    public void SetRotationDamping(float val) 
     {
-        if (hasKnockback)
-        {
-            timer += Time.deltaTime;
-            distance = Mathf.Lerp(distance, distanceToReach, Time.deltaTime * knockbackSpeed);
-
-            if (timer >= knockbackTime)
-            {
-                hasKnockback = false;
-                timer = 0;
-            }
-        }
-        else if (!hasKnockback && distance > returnDistance)
-        {
-            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * returnSpeed);
-            ToggleSpeedUI();
-        }
+        rotationDamping = val;
     }
 
-    public void ToggleKnockback()
+    public void SetDriftDamping(float val)
     {
-        hasKnockback = true;
+        driftDamping = val;
+    }
+    public void ApplyDriftDamping()
+    {
+       resetDamping = false;
+       applyDamping = true;
     }
 
-    public void ToggleSpeedUI()
+    public void ReturnToDefaultDamping() 
     {
-        //TEMP - need to separate UI code out into own class (see todo in SurfaceSpeedBoost)
-        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedIndicator.gameObject.SetActive(false);
-        //target.gameObject.GetComponent<SpeedSurfaceBoost>().speedText.gameObject.SetActive(false);
+        resetDamping = true;
+        applyDamping = false;
     }
+    #endregion
 }
