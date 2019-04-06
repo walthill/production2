@@ -22,15 +22,6 @@ public class FollowCamera : MonoBehaviour
     [SerializeField] float collisionCameraHeight = 0;
     [SerializeField] Vector3 collisionRaycastOffset = new Vector3();
 
-    //Camera knockback vars
-/*    [Header("Camera Knockback")]
-    [SerializeField] float timer = 0; //tracks time spent in knockback
-    [SerializeField] float knockbackTime = 0;
-    [SerializeField] float knockbackSpeed = 0;
-    [SerializeField] float returnSpeed = 0;
-    [SerializeField] float knockbackDistance = 0;
-    [SerializeField] float returnDistance = 0;*/
-
     //Free camera vars
     [Header("Camera Rotation")]
     [SerializeField] float inputDeadZone = 0;
@@ -43,8 +34,7 @@ public class FollowCamera : MonoBehaviour
     bool hasKnockback = false;
 
     float camYRotation,  camXRotation; //camera rotate input
-    bool lookBehindDown, lookBehindUp; //lookback input
-    bool lookBehindToggle, canLookBack = true, resetDamping, applyDamping;
+    bool resetDamping, applyDamping;
 
     Quaternion originalTargetRotation;
 
@@ -54,21 +44,12 @@ public class FollowCamera : MonoBehaviour
     {
         originalTargetRotation = target.localRotation; //keep track of Quaternion at object rotation's 0,0,0
         originalDamping = damping;
-
-        //init knockback
-      //  distanceToReach = distance + knockbackDistance;
-       // returnDistance = returnDistance + distance;
     }
 
     private void Update()
     {
-        lookBehindDown = Input.GetButton("JoyRSDown");
-        lookBehindUp = Input.GetButtonUp("JoyRSDown");
-
         camYRotation = Input.GetAxis("JoyHorizontalRS");
-        camXRotation = Input.GetAxis("JoyVerticalRS");
-
-        
+        camXRotation = Input.GetAxis("JoyVerticalRS");       
     }
 
     private void FixedUpdate()
@@ -76,6 +57,8 @@ public class FollowCamera : MonoBehaviour
         //Lerp to default cam position
         if (damping < originalDamping - 1 && resetDamping)
         {
+            Debug.Log("EOD");
+
             damping = Mathf.Lerp(damping, originalDamping, Time.deltaTime);
         }
         else
@@ -84,15 +67,11 @@ public class FollowCamera : MonoBehaviour
         //Lerp to drifting cam position by altering drift damp
         if (damping > driftDamping + 1 && applyDamping)
         {
+            Debug.Log("DRIFTING");
             damping = Mathf.Lerp(damping, driftDamping, Time.deltaTime * 2.1f);
         }
         else
             applyDamping = false;
-
-        if(lookBehindDown)
-            lookBehindToggle = true;
-        if(lookBehindUp)
-            lookBehindToggle = false;
 
         CameraMove();
     }
@@ -137,7 +116,6 @@ public class FollowCamera : MonoBehaviour
             }
 
             FreeCameraMovement();
-           // CameraFallback();
         }
     }
 
@@ -159,18 +137,6 @@ public class FollowCamera : MonoBehaviour
 
             target.localEulerAngles = new Vector3(target.localEulerAngles.x, yRot, target.localEulerAngles.z);
         }
-        else if(lookBehindToggle) //Quick look back
-        {
-            if(canLookBack)
-            {
-                FlipAlignment(false);
-            }
-        }        
-        else if(!canLookBack)
-        {
-            float zPosOffset = 2;
-            FlipAlignment(true, zPosOffset);
-        }
         else
         {
            ResetAlignment();
@@ -183,10 +149,9 @@ public class FollowCamera : MonoBehaviour
         float behind = target.localEulerAngles.y + 180;
         target.localEulerAngles = new Vector3(target.localEulerAngles.x, behind, target.localEulerAngles.z);
         target.localPosition = new Vector3(target.localPosition.x, target.localPosition.y, target.localPosition.z + lookBackZOffset);
-        canLookBack = ableToLookBack;
     }
 
-    void ResetAlignment() //TODO: wait a few frames before resetting to allow for quick camera swings
+    void ResetAlignment()
     {
         xRot = 0;
         yRot = 0;
@@ -194,26 +159,6 @@ public class FollowCamera : MonoBehaviour
                                                         originalTargetRotation, Time.deltaTime * resetRotationSpeed);
         target.localPosition = new Vector3(0, 0, 0);
     }
-
-   /* void CameraFallback()
-    {
-        if (hasKnockback)
-        {
-            timer += Time.deltaTime;
-            distance = Mathf.Lerp(distance, distanceToReach, Time.deltaTime * knockbackSpeed);
-
-            if (timer >= knockbackTime)
-            {
-                hasKnockback = false;
-                timer = 0;
-            }
-        }
-        else if (!hasKnockback && distance > returnDistance)
-        {
-            distance = Mathf.Lerp(distance, returnDistance, Time.deltaTime * returnSpeed);
-            ToggleSpeedUI();
-        }
-    }*/
 
     public void ToggleKnockback()
     {
@@ -238,9 +183,8 @@ public class FollowCamera : MonoBehaviour
     }
     public void ApplyDriftDamping()
     {
-        resetDamping = false;
-        applyDamping = true;
-        //damping = driftDamping;
+       resetDamping = false;
+       applyDamping = true;
     }
 
     public void ReturnToDefaultDamping() 
