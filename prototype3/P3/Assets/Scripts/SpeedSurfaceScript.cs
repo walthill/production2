@@ -10,7 +10,7 @@ public class SpeedSurfaceScript : MonoBehaviour
 
     void Start()
     {
-        gameObject.GetComponent<SpeedGate>().speedRequired = speedRequired;
+        gameObject.GetComponentInChildren<SpeedGate>().speedRequired = speedRequired;
     }
 
     public void setActive(SpeedChannel maxSpeed)

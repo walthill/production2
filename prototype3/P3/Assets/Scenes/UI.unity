@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44846255, g: 0.49849945, b: 0.5756371, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1604,6 +1604,8 @@ MonoBehaviour:
   cellLockDivider: {fileID: 1213320797}
   textThatJustSaysCH: {fileID: 920376795}
   channelText: {fileID: 546105921}
+  speedToGoUp: 0.1
+  speedToGoDown: 0
 --- !u!1 &1933767651
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,14 +46,9 @@ public class SpeedThresholdBoi : MonoBehaviour
     private void Update()
     {
         setCurrentSpeedChannel();
-        sendCurrentSpeed();
-        sendCurrentChannel();
+        sendCurrentSpeedChannel();
     }
-    void sendCurrentChannel()
-    {
-        UISceneRelay.instance.setCurrentChannel(currentSpeedChannel);
-    }
-    void sendCurrentSpeed()
+    void sendCurrentSpeedChannel()
     {
         float speed = rb.velocity.magnitude;
         float channelMin = 0;
@@ -66,7 +61,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         speed -= channelMin;
         channelMax -= channelMin;
         speed /= channelMax;
-        UISceneRelay.instance.setCurrentSpeed(speed);
+        UISceneRelay.instance.setCurrentSpeedAndChannel(currentSpeedChannel, speed);
     }
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
