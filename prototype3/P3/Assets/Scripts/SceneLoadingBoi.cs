@@ -52,17 +52,28 @@ public class SceneLoadingBoi : MonoBehaviour
     
     IEnumerator LoadingWait()
     {
-        yield return new WaitForSeconds(1);
-
-        if (loadingScreen.Hide())
-        {
-            SceneManager.UnloadSceneAsync(loadingSceneIndex);
-        }
-        else
-        {
-            StartCoroutine(LoadingWait());
-        }
+        Time.timeScale = 0;
+        yield return waitForKeyPress(KeyCode.Space);
+        loadingScreen.Hide();
+        Time.timeScale = 1;
     }
+
+    //Stolen from https://forum.unity.com/threads/waiting-for-input-in-a-custom-function.474387/
+    private IEnumerator waitForKeyPress(KeyCode key)
+    {
+        bool done = false;
+        while (!done) // essentially a "while true", but with a bool to break out naturally
+        {
+            if (Input.GetKeyDown(key))
+            {
+                done = true; // breaks the loop
+            }
+            yield return null; // wait until next frame, then continue execution from here (loop continues)
+        }
+
+        // now this function returns
+    }
+    
 
     public void loadNextLevel()
     {
