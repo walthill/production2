@@ -34,8 +34,8 @@ public class SpeedThresholdBoi : MonoBehaviour
         speedText = gameObject.GetComponentInChildren<Text>();
         rb = gameObject.GetComponent<Rigidbody>();
 
-        speedIndicator.gameObject.SetActive(false);
-        speedText.gameObject.SetActive(false);
+//        speedIndicator.gameObject.SetActive(false);
+ //       speedText.gameObject.SetActive(false);
         playerMovement = gameObject.GetComponent<PlayerSkateMovement>();
         playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
         playerMovement.setMaxVelocity(speeds[0]);
