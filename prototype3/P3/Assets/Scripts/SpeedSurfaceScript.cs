@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class SpeedSurfaceScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    SpeedChannel speedRequired;
+    bool isEnabled = false;
+
     void Start()
     {
-        
+        gameObject.GetComponent<SpeedGate>().speedRequired = speedRequired;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void setActive(SpeedChannel maxSpeed)
     {
-        
+        if(maxSpeed >= speedRequired)
+        {
+            isEnabled = true;
+        }
+        else
+        {
+            isEnabled = false;
+        }
     }
 }
