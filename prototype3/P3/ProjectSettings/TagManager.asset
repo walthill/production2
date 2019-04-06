@@ -9,6 +9,7 @@ TagManager:
   - boomBox
   - end
   - Rail
+  - SpeedSurface
   layers:
   - Default
   - TransparentFX
