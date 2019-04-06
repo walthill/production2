@@ -58,9 +58,9 @@ public class PlayerSkateMovement : MonoBehaviour
     //Drifting stuff
     bool isDrifting = false;
     bool endOfDrift; //Flags smooth camera damping on drift release
-    bool isTurning;
     Vector3 driftStartForward;
-    float driftCamTimeUntilReset = 0.25f;
+    const float DRIFT_CAM_RESET_WAIT = 0.35f;
+    const float FACING_STRAIGHT_DIST = 0.1f;
 
     Vector3 driftVelocity;
     float driftSlowTimer; //when speed starts to decrease;
@@ -80,9 +80,6 @@ public class PlayerSkateMovement : MonoBehaviour
         playerCam = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<FollowCamera>();
 
         respawn.position = objTransform.position;
-
-        if (moveType == MoveType.SIM)
-            rb.useGravity = false;
     }
 
     void Update()
@@ -94,6 +91,16 @@ public class PlayerSkateMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer();
+    }
+
+    void ProcessInput()
+    {
+        xMove = Input.GetAxis("JoyHorizontal");
+        accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
+        jump = Input.GetButtonDown("JoyJump");
+
+        if (Input.GetButtonDown("JoyDrift")) startDrifting();
+        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
     }
 
     private void FixedUpdate()
@@ -115,32 +122,7 @@ public class PlayerSkateMovement : MonoBehaviour
         debugMoveSpeed = rb.velocity.magnitude;
     }
 
-    void ProcessInput()
-    {
-        xMove = Input.GetAxis("JoyHorizontal");
-        accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
-        jump = Input.GetButtonDown("JoyJump");
-
-        if (Input.GetButtonDown("JoyDrift")) startDrifting();
-        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
-    }
-
-    void Jump()
-    {
-        if(jump && isGrounded)
-        {
-            Debug.Log("JUMP");
-			
-            //jump applied to player local y
-			Vector3 jumpVec = arcadeData.jumpForce * objTransform.up;
-			rb.AddForceAtPosition(jumpVec, objTransform.position, ForceMode.Impulse);
-
-			isGrounded = false;
-            isAirborne = true;
-            
-        }
-    }
-
+    #region Drifting
     private void startDrifting()
     {
         driftStartForward = objTransform.forward;
@@ -152,7 +134,6 @@ public class PlayerSkateMovement : MonoBehaviour
     private void stopDrifting()
     {
         endOfDrift = true;
-
         isDrifting = false;
 
         if (isGrounded)
@@ -163,25 +144,42 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void DriftCamRelease()
     {
+        //Apply camera drift effect when not facing forward & drift button released
         if (accelButtonDown && endOfDrift)
         {
-            //Apply camera drift effect when not moving forward
-            if (Vector3.Distance(driftStartForward.normalized, objTransform.forward.normalized) > 0.1)
+            if (Vector3.Distance(driftStartForward.normalized, objTransform.forward.normalized) > FACING_STRAIGHT_DIST)
             {
                 playerCam.ApplyDriftDamping();
-                StartCoroutine(WaitAndChangeDamping(driftCamTimeUntilReset));
+                StartCoroutine(WaitAndChangeDamping(DRIFT_CAM_RESET_WAIT));
             }
 
             endOfDrift = false;
         }
     }
 
+    private IEnumerator WaitAndChangeDamping(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        playerCam.ReturnToDefaultDamping();
+    }
+    #endregion
+
+    void Jump()
+    {
+        if (jump && isGrounded)
+        {
+            //jump applied to player local y
+            Vector3 jumpVec = arcadeData.jumpForce * objTransform.up;
+            rb.AddForceAtPosition(jumpVec, objTransform.position, ForceMode.Impulse);
+
+            isGrounded = false;
+            isAirborne = true;
+        }
+    }
+
     private void RollerSkateMovement()
     {
-        if (moveType == MoveType.SIM)
-        {
-        }
-        else if(moveType == MoveType.ARCADE)
+        if(moveType == MoveType.ARCADE)
         {        
             if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
@@ -190,12 +188,6 @@ public class PlayerSkateMovement : MonoBehaviour
 
             MovePhysics();
         }
-    }
-
-    private IEnumerator WaitAndChangeDamping(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-        playerCam.ReturnToDefaultDamping();
     }
 
     private void TurnPhysics()
@@ -233,12 +225,11 @@ public class PlayerSkateMovement : MonoBehaviour
                 if(time > 0 )
                 {
                     driftVelocity -= driftVelocity * (time / driftStopTime);
-                    Debug.Log(driftVelocity);
                 }
             }
             else
             {
-                //Track player forward until drift released
+                //Save player forward unless drift button released
                 if(!endOfDrift)
                     driftStartForward = objTransform.forward;
 
@@ -258,16 +249,11 @@ public class PlayerSkateMovement : MonoBehaviour
     }
 
     //This also controls acceleration button
-    //TODO: refactor
     private void MoveAnimation()
     {
-        if (moveType == MoveType.SIM)
-        {
-        }
-        else if (moveType == MoveType.ARCADE)
+        if (moveType == MoveType.ARCADE)
         {
             if (accelerationButton > 0)
-
             {
                 accelButtonDown = true;
                 rb.drag = 0f;

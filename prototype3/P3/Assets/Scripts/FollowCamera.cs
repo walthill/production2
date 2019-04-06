@@ -10,7 +10,7 @@ public class FollowCamera : MonoBehaviour
     [Header("Smooth Camera Values")]
     [SerializeField] float distance = 0;
     [SerializeField] float height = 0;
-    [SerializeField] float damping = 0;
+    [SerializeField] float damping = 100;
     [SerializeField] float driftDamping = 10;
     [SerializeField] float rotationDamping = 0;
     [SerializeField] Vector3 lookAtOffset = new Vector3();
@@ -57,8 +57,6 @@ public class FollowCamera : MonoBehaviour
         //Lerp to default cam position
         if (damping < originalDamping - 1 && resetDamping)
         {
-            Debug.Log("EOD");
-
             damping = Mathf.Lerp(damping, originalDamping, Time.deltaTime);
         }
         else
@@ -67,8 +65,7 @@ public class FollowCamera : MonoBehaviour
         //Lerp to drifting cam position by altering drift damp
         if (damping > driftDamping + 1 && applyDamping)
         {
-            Debug.Log("DRIFTING");
-            damping = Mathf.Lerp(damping, driftDamping, Time.deltaTime * 2.1f);
+            damping = Mathf.Lerp(damping, driftDamping, Time.deltaTime * 2.5f);
         }
         else
             applyDamping = false;
@@ -190,5 +187,6 @@ public class FollowCamera : MonoBehaviour
     public void ReturnToDefaultDamping() 
     {
         resetDamping = true;
+        applyDamping = false;
     }
 }
