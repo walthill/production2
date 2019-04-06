@@ -25,7 +25,9 @@ public class SpeedThresholdBoi : MonoBehaviour
     [SerializeField]
     [Tooltip("What percent of the speed threshold the player starts at when breaking into a new threshold")]
     float newChannelStartPercent = 0.5f;
-
+    [SerializeField]
+    [Tooltip("How far you have to drop below a speed threshold to drop out of it")]
+    float speedChannelOffset = 0.3f;
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -59,6 +61,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         }
         //normalize speed within channel from 0-1
         speed -= channelMin;
+        speed = speed < 0 ? 0 : speed; 
         channelMax -= channelMin;
         speed /= channelMax;
         UISceneRelay.instance.setCurrentSpeedAndChannel(currentSpeedChannel, speed);
@@ -123,12 +126,28 @@ public class SpeedThresholdBoi : MonoBehaviour
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        while (speeds[i] < rb.velocity.magnitude
+        float velocity = rb.velocity.magnitude;
+
+        while (speeds[i] < velocity
             && i < (int)maxSpeedChannel)
         {
             i++;
         }
-        currentSpeedChannel = (SpeedChannel)i;
+        SpeedChannel newSpeedChannel = (SpeedChannel)i;
+
+        //prevent dropping out of speed channel unless speed is lower than offset
+        if(newSpeedChannel < currentSpeedChannel)
+        {
+            float diff = speeds[i] - velocity;
+            if(diff > speedChannelOffset)
+            {
+                currentSpeedChannel = newSpeedChannel;
+            }
+        }
+        else
+        {
+            currentSpeedChannel = newSpeedChannel;
+        }
     }
     public bool checkSpeedThreshold(SpeedChannel speedRequired)
     {
