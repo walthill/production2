@@ -103,6 +103,25 @@ public class PlayerSkateMovement : MonoBehaviour
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
         debugMoveSpeed = rb.velocity.magnitude;
+        sendSpeedToSoundBoi();
+    }
+    // this sends movespeed data to the sound boi optimize this if you want
+    //called from update sorry :(
+
+
+    void sendSpeedToSoundBoi()
+    {
+        if (isGrounded)
+        {
+            SoundBoi.instance.linkWheelSoundToSpeed(debugMoveSpeed);
+        }
+        
+        if (!isGrounded)
+        {
+            SoundBoi.instance.linkWheelSoundToSpeed(0);
+        }
+        
+        
     }
 
     void ProcessInput()

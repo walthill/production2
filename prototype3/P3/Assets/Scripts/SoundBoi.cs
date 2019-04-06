@@ -107,6 +107,7 @@ public class SoundBoi : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        //WheelSource.Play();
         instance = this;
 
         heldVolume0 = musicSlot0.volume;
@@ -135,7 +136,7 @@ public class SoundBoi : MonoBehaviour
         {
             slot.Play();
         }
-        
+        PlaywheelSound();
     }
 
     public void ClearMusic()
@@ -257,8 +258,23 @@ public class SoundBoi : MonoBehaviour
     {
         ReleaseFeedBackSource.Play();
     }
+
+
+    public void linkWheelSoundToSpeed(float speed)
+    {
+        if (speed > 0)
+        {
+            //PlaywheelSound();
+        }
+        WheelSource.volume = speed * .01f;
+        WheelSource.pitch = speed * .1f;
+        Debug.Log("link has been made speed is");
+
+    }
+
     public void PlaywheelSound()
     {
+
         WheelSource.volume = .1f;
         WheelSource.Play();
         Debug.Log("playing wheels");
