@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum SpeedChannel { QUICK, SPEEDY, FAST, BLUR, LIGHTNING, WOW_SO_FAST, NUM_SPEEDS }
+public enum SpeedChannel { QUICK, SPEEDY, FAST, BLUR, LIGHTNING, WOW_SO_FAST, LIVE_IN_DARKNESS, NUM_SPEEDS }
 
 public class SpeedThresholdBoi : MonoBehaviour
 {
@@ -25,7 +25,9 @@ public class SpeedThresholdBoi : MonoBehaviour
     [SerializeField]
     [Tooltip("What percent of the speed threshold the player starts at when breaking into a new threshold")]
     float newChannelStartPercent = 0.5f;
-
+    [SerializeField]
+    [Tooltip("How far you have to drop below a speed threshold to drop out of it")]
+    float speedChannelOffset = 0.3f;
     Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -46,14 +48,9 @@ public class SpeedThresholdBoi : MonoBehaviour
     private void Update()
     {
         setCurrentSpeedChannel();
-        sendCurrentSpeed();
-        sendCurrentChannel();
+        sendCurrentSpeedChannel();
     }
-    void sendCurrentChannel()
-    {
-        UISceneRelay.instance.setCurrentChannel(currentSpeedChannel);
-    }
-    void sendCurrentSpeed()
+    void sendCurrentSpeedChannel()
     {
         float speed = rb.velocity.magnitude;
         float channelMin = 0;
@@ -64,9 +61,10 @@ public class SpeedThresholdBoi : MonoBehaviour
         }
         //normalize speed within channel from 0-1
         speed -= channelMin;
+        speed = speed < 0 ? 0 : speed; 
         channelMax -= channelMin;
         speed /= channelMax;
-        UISceneRelay.instance.setCurrentSpeed(speed);
+        UISceneRelay.instance.setCurrentSpeedAndChannel(currentSpeedChannel, speed);
     }
 
     public void speedBoost(float boostAmount, SpeedChannel surfaceChannel)
@@ -128,12 +126,28 @@ public class SpeedThresholdBoi : MonoBehaviour
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        while (speeds[i] < rb.velocity.magnitude
+        float velocity = rb.velocity.magnitude;
+
+        while (speeds[i] < velocity
             && i < (int)maxSpeedChannel)
         {
             i++;
         }
-        currentSpeedChannel = (SpeedChannel)i;
+        SpeedChannel newSpeedChannel = (SpeedChannel)i;
+
+        //prevent dropping out of speed channel unless speed is lower than offset
+        if(newSpeedChannel < currentSpeedChannel)
+        {
+            float diff = speeds[i] - velocity;
+            if(diff > speedChannelOffset)
+            {
+                currentSpeedChannel = newSpeedChannel;
+            }
+        }
+        else
+        {
+            currentSpeedChannel = newSpeedChannel;
+        }
     }
     public bool checkSpeedThreshold(SpeedChannel speedRequired)
     {

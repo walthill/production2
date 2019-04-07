@@ -1604,6 +1604,8 @@ MonoBehaviour:
   cellLockDivider: {fileID: 1213320797}
   textThatJustSaysCH: {fileID: 920376795}
   channelText: {fileID: 546105921}
+  speedToGoUp: 0.1
+  speedToGoDown: 0
 --- !u!1 &1933767651
 GameObject:
   m_ObjectHideFlags: 0
