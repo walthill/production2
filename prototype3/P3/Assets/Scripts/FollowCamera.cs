@@ -24,8 +24,9 @@ public class FollowCamera : MonoBehaviour
 
     //Free camera vars
     [Header("Camera Rotation")]
+    [SerializeField] bool invertedYRotation = false;
     [SerializeField] float inputDeadZone = 0;
-    [SerializeField] float resetRotationSpeed=0; //Make this a large value
+    [SerializeField] float resetRotationSpeed=0;
     [SerializeField] float camRotationSpeed = 0;
     [SerializeField] float camMinXAngle = 0, camMaxXAngle = 0;
     [SerializeField] float camMinYAngle = 0, camMaxYAngle = 0; //Clamp values for cam rotation
@@ -34,25 +35,27 @@ public class FollowCamera : MonoBehaviour
     float camYRotation,  camXRotation; //camera rotate input
     float xRot, yRot;
 
-    bool resetDamping =false, applyDamping=false;
+    bool resetDamping = false, applyDamping= false;
 
     Quaternion originalTargetRotation;
-
-    
+	
     private void Awake()
     {
-        originalTargetRotation = target.localRotation; //keep track of Quaternion at object rotation's 0,0,0
+        originalTargetRotation = target.localRotation; //keep of object rotation's 0,0,0
         originalDamping = damping;
     }
 
     private void Update()
     {
         camYRotation = Input.GetAxis("JoyHorizontalRS");
-        camXRotation = Input.GetAxis("JoyVerticalRS");       
+        camXRotation = Input.GetAxis("JoyVerticalRS");
     }
 
     private void FixedUpdate()
     {
+        //DRIFTING CAMERA
+        // ----------------------------
+
         //Lerp to default cam position
         if (damping < originalDamping - 1 && resetDamping)
         {
@@ -69,6 +72,8 @@ public class FollowCamera : MonoBehaviour
         else
             applyDamping = false;
 
+
+		FreeCameraMovement();
         CameraMove();
     }
 
@@ -76,14 +81,13 @@ public class FollowCamera : MonoBehaviour
     {
         if (target)
         {
-            //TODO: remove .transform calls - the target variable is a transform
             Vector3 wantedPosition = target.TransformPoint(new Vector3(0, height, -distance));
             Vector3 backDirection = target.TransformDirection(-1 * Vector3.forward);
 
             Ray ray = new Ray(target.TransformPoint(collisionRaycastOffset), backDirection);
-            Debug.DrawRay(ray.origin, ray.direction, Color.green);
+            //Debug.DrawRay(ray.origin, ray.direction, Color.green);
 
-            //Camera collisions - TODO revisit this collision code 
+            //Camera collisions
             if (Physics.Raycast(ray, out RaycastHit hitInfo, raycastLength))
             {
                 if (hitInfo.transform != target.parent.transform) //make sure collision isn't the player
@@ -110,8 +114,6 @@ public class FollowCamera : MonoBehaviour
             {
                 transform.rotation = Quaternion.LookRotation(lookAtPosition - transform.position, target.up);
             }
-
-            FreeCameraMovement();
         }
     }
 
@@ -120,6 +122,9 @@ public class FollowCamera : MonoBehaviour
         //Pan camera over/under player
         if (camXRotation > inputDeadZone || camXRotation < -inputDeadZone) 
         {
+            if (!invertedYRotation)
+                camXRotation = -camXRotation;
+
             xRot += camXRotation * camRotationSpeed;            
             xRot = Mathf.Clamp(xRot, camMinXAngle, camMaxXAngle);
 
@@ -127,17 +132,16 @@ public class FollowCamera : MonoBehaviour
         }
         //Move camera left/right around player
         else if (camYRotation > inputDeadZone || camYRotation < -inputDeadZone)
-        {            
+        {
             yRot += camYRotation * camRotationSpeed;
             yRot = Mathf.Clamp(yRot, camMinYAngle, camMaxYAngle);
-
+			
             target.localEulerAngles = new Vector3(target.localEulerAngles.x, yRot, target.localEulerAngles.z);
         }
         else
         {
            ResetAlignment();
         }
-
     }
 
     void ResetAlignment()

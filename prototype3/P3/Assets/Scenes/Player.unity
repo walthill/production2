@@ -167,13 +167,14 @@ MonoBehaviour:
   raycastLength: 2.5
   collisionCameraHeight: 1
   collisionRaycastOffset: {x: 0, y: 1, z: 0}
+  invertedYRotation: 0
   inputDeadZone: 0.2
   resetRotationSpeed: 100
   camRotationSpeed: 3
-  camMinXAngle: -25
-  camMaxXAngle: 70
-  camMinYAngle: -115
-  camMaxYAngle: 115
+  camMinXAngle: -20
+  camMaxXAngle: 45
+  camMinYAngle: -45
+  camMaxYAngle: 45
 --- !u!1001 &368511532
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -270,6 +271,15 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 0.14000002
       objectReference: {fileID: 0}
+    - target: {fileID: 1032722379, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8746182659600908358, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
 --- !u!4 &382545324 stripped
@@ -326,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7ddc9f0176cd5543800988e59c6fda3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shuntForce: 5
 --- !u!1 &1364800569
 GameObject:
   m_ObjectHideFlags: 0
