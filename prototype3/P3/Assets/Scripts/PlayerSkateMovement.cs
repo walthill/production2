@@ -72,11 +72,13 @@ public class PlayerSkateMovement : MonoBehaviour
     float driftStopTime = 4f;
 
     FollowCamera playerCam;
+    LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
 
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
         rb = gameObject.GetComponent<Rigidbody>();
+        layerToAlignWith = LayerMask.GetMask("Ground");
         playerCam = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<FollowCamera>();
 
         respawn.position = objTransform.position;
@@ -273,8 +275,6 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if(isAirborne)
         {
-            //only align to gameobjects marked as ground layers
-            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
             Ray ray = new Ray(objTransform.position, -objTransform.up);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
@@ -291,8 +291,6 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (isAirborne)
         {
-            //only align to gameobjects marked as ground layers
-            LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
             Ray ray = new Ray(objTransform.position, -objTransform.up);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 3.5f, layerToAlignWith))
@@ -309,16 +307,15 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void AlignPlayerWithGround()
     {
-        //help @ https://bit.ly/2RMVeox
-
-        //only align to gameobjects marked as ground layers
-        LayerMask layerToAlignWith = LayerMask.GetMask("Ground");
-        Ray ray = new Ray(objTransform.position, -objTransform.up);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
+        if (!isAirborne)
         {
-            if(!isAirborne)
+            //help @ https://bit.ly/2RMVeox
+
+            Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
             {
+
                 //Alter rotation damping for smoother adjustment
                 isGrounded = true;
 
@@ -331,7 +328,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
                 oldVel = rb.velocity.magnitude;
             }
-        }
+        } 
         else
         {
             isGrounded = false;
