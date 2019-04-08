@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class ListWrapper
 {
+    public int lightingScene;
     public List<int> sceneList;
 }
 
@@ -13,6 +14,12 @@ public class SceneLoadingBoi : MonoBehaviour
 {
     // https://answers.unity.com/questions/242794/inspector-field-for-scene-asset.html
     // Check this out to make it easier to select scenes in editor
+
+        
+    /* ----------------------------------------------------
+        NOTE - Scene Indeces are based on BUILD NUMBER
+    /* ---------------------------------------------------- */
+
 
     [SerializeField] LoadingScreen loadingScreen = null;
     [SerializeField] int loadingSceneIndex = 0;
@@ -23,6 +30,7 @@ public class SceneLoadingBoi : MonoBehaviour
     [SerializeField]
     [Tooltip("Indexes of scenes to be loaded for each level")]
     public List<ListWrapper> mLevelScenes = new List<ListWrapper>();
+
     //keep track of which level indices have been loaded
     List<int> loadedLevels;
     int currentLevelIndex = 0;
@@ -45,6 +53,7 @@ public class SceneLoadingBoi : MonoBehaviour
         {
             loadingScreen.Show(SceneManager.LoadSceneAsync(sceneNum, LoadSceneMode.Additive));
         }
+
         loadedLevels.Add(index);
 
         StartCoroutine(LoadingWait());
@@ -53,7 +62,7 @@ public class SceneLoadingBoi : MonoBehaviour
     IEnumerator LoadingWait()
     {
         Time.timeScale = 0;
-        yield return waitForKeyPress(KeyCode.Space);
+        yield return waitForKeyPress(KeyCode.JoystickButton0);
         loadingScreen.Hide();
         Time.timeScale = 1;
     }
@@ -64,6 +73,18 @@ public class SceneLoadingBoi : MonoBehaviour
         bool done = false;
         while (!done) // essentially a "while true", but with a bool to break out naturally
         {
+            
+            //Attempt to set the lighting scene active until it loads in
+            try
+            {
+                Scene lightScene = SceneManager.GetSceneByBuildIndex(mLevelScenes[currentLevelIndex].lightingScene);
+                if (SceneManager.GetActiveScene().buildIndex != lightScene.buildIndex)
+                   SceneManager.SetActiveScene(lightScene);
+            } catch (System.Exception) {
+                Debug.Log("waiting for lighting scene to load");
+                // throw; MWAHAHAHAHAH - this is bad and I feel bad
+            }
+
             if (Input.GetKeyDown(key))
             {
                 done = true; // breaks the loop
@@ -73,7 +94,6 @@ public class SceneLoadingBoi : MonoBehaviour
 
         // now this function returns
     }
-    
 
     public void loadNextLevel()
     {
