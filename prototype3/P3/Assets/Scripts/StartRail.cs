@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndRail : MonoBehaviour
+public class StartRail : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -18,9 +18,9 @@ public class EndRail : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if(col.name == "Player")
+        if (col.name == "Player")
         {
-            GetComponentInParent<RaliScript>().startRailBackward(col);
+            GetComponentInParent<RaliScript>().startRailForward(col);
         }
     }
 }
