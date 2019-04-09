@@ -311,15 +311,14 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void AlignPlayerWithGround()
     {
-        if (!isAirborne)
+        //help @ https://bit.ly/2RMVeox
+
+        Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
-            //help @ https://bit.ly/2RMVeox
-
-            Ray ray = new Ray(objTransform.position, -objTransform.up);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
+            if (!isAirborne)
             {
-
                 //Alter rotation damping for smoother adjustment
                 isGrounded = true;
 
@@ -332,7 +331,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
                 oldVel = rb.velocity.magnitude;
             }
-        } 
+        }
         else
         {
             isGrounded = false;
