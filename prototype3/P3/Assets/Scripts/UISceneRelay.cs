@@ -24,4 +24,9 @@ public class UISceneRelay : MonoBehaviour
     {
         speedCells.SetCurrentSpeed(speedValueNormalized);
     }
+
+    public void setCurrentSpeedAndChannel(SpeedChannel currentChannel, float speedValueNormalized)
+    {
+        speedCells.SetCurrentChannelAndSpeed(currentChannel, speedValueNormalized);
+    }
 }

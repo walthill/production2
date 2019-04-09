@@ -27,6 +27,11 @@ public class UISpeedCellsManager : MonoBehaviour
     public Text textThatJustSaysCH;
     public Text channelText;
 
+    [Header("smooth transition vars")]
+    [SerializeField]
+    float speedToGoUp = 0.9f;
+    [SerializeField]
+    float speedToGoDown = 0.0f;
 
     // This just makes sure that the "Debug mode" doesnt ever launch during runtime //
     private void Awake()
@@ -94,7 +99,7 @@ public class UISpeedCellsManager : MonoBehaviour
     }
 
     public void SetCurrentChannel(SpeedChannel currentChannel)
-    {
+    { //deprecated
         currentSpeedChannel = currentChannel;
 
         ChangeCellSprites();
@@ -102,8 +107,36 @@ public class UISpeedCellsManager : MonoBehaviour
         MoveCellLockDivider();
     }
 
-    public void SetCurrentSpeed(float speedBarValue)
+    public void SetCurrentChannelAndSpeed(SpeedChannel currentChannel, float speedBarValue)
     {
+        if(currentSpeedChannel == currentChannel)
+        {
+            speedBar.value = speedBarValue;
+        }
+        else if(currentSpeedChannel < currentChannel)
+        {
+            if(speedBarValue > speedToGoUp)
+            {
+                Debug.Log(speedBarValue);
+                Debug.Log(currentChannel);
+                Debug.Log(currentSpeedChannel);
+                currentSpeedChannel = currentChannel;
+                speedBar.value = speedBarValue;
+            }
+        }
+        else
+        {
+            speedBar.value = speedBarValue;
+            currentSpeedChannel = currentChannel;
+        }
+
+        ChangeCellSprites();
+        ChangeChannelText();
+        MoveCellLockDivider();
+    }
+
+    public void SetCurrentSpeed(float speedBarValue)
+    { //deprecated
         speedBar.value = speedBarValue;
     }
 
