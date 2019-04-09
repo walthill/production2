@@ -126,6 +126,25 @@ public class PlayerSkateMovement : MonoBehaviour
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
         debugMoveSpeed = rb.velocity.magnitude;
+        sendSpeedToSoundBoi();
+    }
+    // this sends movespeed data to the sound boi optimize this if you want
+    //called from update sorry :(
+
+
+    void sendSpeedToSoundBoi()
+    {
+        if (isGrounded)
+        {
+            SoundBoi.instance.linkWheelSoundToSpeed(debugMoveSpeed);
+        }
+        
+        if (!isGrounded)
+        {
+            SoundBoi.instance.linkWheelSoundToSpeed(0);
+        }
+        
+        
     }
 
     #region Drifting
@@ -311,15 +330,14 @@ public class PlayerSkateMovement : MonoBehaviour
 
     void AlignPlayerWithGround()
     {
-        if (!isAirborne)
+        //help @ https://bit.ly/2RMVeox
+
+        Ray ray = new Ray(objTransform.position, -objTransform.up);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
-            //help @ https://bit.ly/2RMVeox
-
-            Ray ray = new Ray(objTransform.position, -objTransform.up);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
+            if (!isAirborne)
             {
-
                 //Alter rotation damping for smoother adjustment
                 isGrounded = true;
 
@@ -332,7 +350,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
                 oldVel = rb.velocity.magnitude;
             }
-        } 
+        }
         else
         {
             isGrounded = false;
