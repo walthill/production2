@@ -513,12 +513,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ee8e171540d72418109acf59181d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speeds: 19000000280000003c000000500000006400000096000000
+  speeds: 19000000280000003c00000050000000640000007d00000096000000
   currentSpeedChannel: 0
   maxSpeedChannel: 0
   speedIndicator: {fileID: 0}
   speedText: {fileID: 0}
   newChannelStartPercent: 0.5
+  speedChannelOffset: 0.3
 --- !u!114 &1842638562
 MonoBehaviour:
   m_ObjectHideFlags: 0

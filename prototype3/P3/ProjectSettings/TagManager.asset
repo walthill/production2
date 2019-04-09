@@ -9,6 +9,9 @@ TagManager:
   - boomBox
   - end
   - Rail
+  - SpeedSurface
+  - CameraRig
+  - Wall
   layers:
   - Default
   - TransparentFX
