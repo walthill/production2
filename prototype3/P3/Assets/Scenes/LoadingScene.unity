@@ -1931,7 +1931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2041038741}
   loadingSceneIndex: 1
-  mPersistentScenes: 
+  mPersistentScenes: 07000000
   mLevelScenes:
   - lightingScene: 5
     sceneList: 02000000030000000400000005000000
