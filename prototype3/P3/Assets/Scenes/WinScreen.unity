@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 1229066792}
   - component: {fileID: 1229066791}
   - component: {fileID: 1229066790}
+  - component: {fileID: 1229066794}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -413,6 +414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Title
+  willQuitTheGame: 0
+  tvDude: {fileID: 0}
+  lines: {fileID: 0}
+  title: {fileID: 0}
 --- !u!114 &1229066791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,7 +459,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1229066790}
-        m_MethodName: nextScene
+        m_MethodName: GoToNextScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -503,6 +508,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229066788}
   m_CullTransparentMesh: 0
+--- !u!114 &1229066794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229066788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63bd27155f2e60e47ae5112a86da9a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accessableButtons: 4a01000051010000
+  isSelected: 1
 --- !u!1 &1350579206
 GameObject:
   m_ObjectHideFlags: 0

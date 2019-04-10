@@ -12,46 +12,75 @@ public class MenuBoi : MonoBehaviour
 
     void Start()
     {
-        if (isPaused)
-        {
-            startPause();
-        }
-        else
-        {
-            unPause();
-        }
+        unPause();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.JoystickButton7))
         {
-            Debug.Log("Start Button Pressed");
-            if (isPaused == false)
+            Debug.Log("Button Pressed");
+            doPause();
+            StartCoroutine(startPause());
+        }
+    }
+
+    IEnumerator startPause()
+    {
+        Debug.Log("Started Pause");
+        Time.timeScale = 0.0f;
+        yield return new WaitForEndOfFrame(); //So it does not immediately unpause
+        while (isPaused)
+        {
+            yield return waitForKeyPress();
+        }
+        Debug.Log("Ended Pause");
+        Time.timeScale = 1.0f;
+        unPause();
+    }
+
+    private IEnumerator waitForKeyPress()
+    {
+        bool done = false;
+        while (!done) // essentially a "while true", but with a bool to break out naturally
+        {
+            //UnPause
+            if (Input.GetKeyDown(KeyCode.JoystickButton7))
             {
-                startPause();
-                //preTimeScale = Time.timeScale;
-                //Time.timeScale = 0.0f;
+                done = true; // breaks the loop
+                isPaused = false;
             }
-            else
+            if (Input.GetAxis("JoyVertical") > 0.5f)
             {
-                unPause();
-                //Time.timeScale = preTimeScale;
+                Debug.Log("Move Up");
+                //MOVE CURSOR UPWARD
+                done = true;
             }
+            if (Input.GetAxis("JoyVertical") < -0.5f)
+            {
+                //MOVE CURSOR DOWNWARD HERE
+                done = true;
+            }
+            if (Input.GetKeyDown(KeyCode.JoystickButton0))
+            {
+                //CLICK SELECTED BUTTON HERE
+                done = true;
+            }
+
+            yield return null; // wait until next frame, then continue execution from here (loop continues)
         }
     }
 
     public void unPause()
     {
         isPaused = false;
-        //Time.timeScale = preTimeScale;
         for(int i = 0; i < UIElements.Length; i++)
         {
             UIElements[i].SetActive(false);
         }
     }
 
-    void startPause()
+    public void doPause()
     {
         isPaused = true;
         for (int i = 0; i < UIElements.Length; i++)
@@ -60,6 +89,9 @@ public class MenuBoi : MonoBehaviour
         }
     }
 
-
+    public void invertCamera()
+    {
+        GameObject.Find("CameraRig").GetComponent<FollowCamera>().toggleInvert();
+    }
 
 }
