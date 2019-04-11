@@ -26,16 +26,14 @@ public class PlayerSkateMovement : MonoBehaviour
     public struct ArcadeMoveData
     {
         //clamp value - increase this for speed channels?
-        public float maxVelocity, accelCap; 
+        public float maxVelocity, accelCap, localMaxVelocity, targetVelocity; 
         public float accelMultiplier, boostAcceleration, 
                      boostValue;
 
         public float rotationSpeed;
         public float jumpForce;
     }
-    [SerializeField]
-    [Tooltip("will control how fast the player slows down when not holding accelerate")]
-    float playerDrag = 0.7f;
+
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
     
@@ -231,6 +229,11 @@ public class PlayerSkateMovement : MonoBehaviour
         }
     }
 
+    private void calcTargetVelocity()
+    {
+        arcadeData.localMaxVelocity
+
+    }
     private void MovePhysics()
     {
         //Forward movement
@@ -281,13 +284,11 @@ public class PlayerSkateMovement : MonoBehaviour
             if (accelerationButton > 0)
             {
                 accelButtonDown = true;
-                rb.drag = 0f;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
             }
             else
             {
                 accelButtonDown = false;
-                rb.drag = playerDrag;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
             }
         }
@@ -382,6 +383,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.maxVelocity += maxVelocityIncrease;
         rb.velocity += rb.velocity.normalized * boostValue;
+        arcadeData.localMaxVelocity = rb.velocity.magnitude;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     public void setMaxVelocity(float maxVelocity)
@@ -395,6 +397,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public void setSpeed(float newSpeed)
     {
         rb.velocity = rb.velocity.normalized * newSpeed;
+        arcadeData.localMaxVelocity = rb.velocity.magnitude;
     }
     #endregion
 }
