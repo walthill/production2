@@ -203,7 +203,8 @@ public class PlayerSkateMovement : MonoBehaviour
     private void RollerSkateMovement()
     {
         if(moveType == MoveType.ARCADE)
-        {        
+        {
+            calcTargetVelocity();
             if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
                 TurnPhysics();
@@ -231,7 +232,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void calcTargetVelocity()
     {
-        arcadeData.localMaxVelocity
+        arcadeData.targetVelocity = arcadeData.localMaxVelocity;
 
     }
     private void MovePhysics()
@@ -269,6 +270,9 @@ public class PlayerSkateMovement : MonoBehaviour
             {
                 acceleration = Vector3.zero;
             }
+            //TODO: temp
+            vel = vel.normalized * arcadeData.targetVelocity;
+
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
