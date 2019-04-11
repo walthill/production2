@@ -28,7 +28,7 @@ public class WinCollisionBoi : MonoBehaviour
 
         if (sp.getMaxSpeedChannel() > respawnEnabledChannel) //This condition can be altered as desired when it comes to design
         {
-            StartCoroutine(WaitAndLoadWinScene(1.75f));
+            StartCoroutine(WaitAndLoadWinScene(1.45f));
         }
         else
         {
