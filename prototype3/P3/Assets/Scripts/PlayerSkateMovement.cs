@@ -235,7 +235,7 @@ public class PlayerSkateMovement : MonoBehaviour
         arcadeData.targetVelocity = arcadeData.localMaxVelocity;
 
         //TODO: temp
-        //arcadeData.accelMultiplier = arcadeData.maxVelocity / 10f;// should = 1.5 at base channel
+        arcadeData.accelMultiplier = arcadeData.maxVelocity / 16.6f;// should = 1.5 at base channel
     }
     private void MovePhysics()
     {
