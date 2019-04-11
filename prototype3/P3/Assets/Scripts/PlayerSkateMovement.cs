@@ -234,6 +234,8 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         arcadeData.targetVelocity = arcadeData.localMaxVelocity;
 
+        //TODO: temp
+        //arcadeData.accelMultiplier = arcadeData.maxVelocity / 10f;// should = 1.5 at base channel
     }
     private void MovePhysics()
     {
@@ -271,11 +273,11 @@ public class PlayerSkateMovement : MonoBehaviour
                 acceleration = Vector3.zero;
             }
             //TODO: temp
-            arcadeData.targetVelocity += acceleration.magnitude;
-            arcadeData.localMaxVelocity += acceleration.magnitude;
-            vel = vel.normalized * arcadeData.targetVelocity;
+            //arcadeData.targetVelocity += acceleration.magnitude;
+            //arcadeData.localMaxVelocity += acceleration.magnitude;
+            //vel = vel.normalized * arcadeData.targetVelocity;
 
-            if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
+            if (true)//(vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
                 rb.velocity = vel + acceleration;
@@ -291,11 +293,13 @@ public class PlayerSkateMovement : MonoBehaviour
             {
                 accelButtonDown = true;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
+                //rb.drag = 0f;
             }
             else
             {
                 accelButtonDown = false;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
+                //rb.drag = 0.7f;
             }
         }
     }
