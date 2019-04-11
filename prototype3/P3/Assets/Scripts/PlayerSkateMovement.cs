@@ -74,7 +74,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [Tooltip("How time is slowed down by during drifting at max speed")]
     float maxDriftTimeScale = 0.5f;
     [SerializeField]
-    [Tooltip("should time slow down more at higher speeds?")]
+    [Tooltip("should time slow less at lower speeds?")]
     bool changeTimeBySpeed;
     float normalTimeScale;
     FollowCamera playerCam;
