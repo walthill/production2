@@ -203,6 +203,14 @@ public class ScoreBoi : MonoBehaviour
         return bestPossibleScore;
     }
 
+    public void HideClock()
+    {
+        timerText.gameObject.SetActive(false);
+    }
+    public void ShowClock()
+    {
+        timerText.gameObject.SetActive(true);
+    }
 
     public void RunGameClock()
     {

@@ -26,6 +26,9 @@ public class DisplayScore : MonoBehaviour
     //Called from animation trigger
     public void PlayerWin()
     {
+        UISceneRelay.instance.HideUI();
+        ScoreBoi.instance.HideClock();
+
         winScreenAnim.SetBool("win", true);
         totalScore = ScoreBoi.instance.CalculateScore();
         Debug.Log(totalScore);
