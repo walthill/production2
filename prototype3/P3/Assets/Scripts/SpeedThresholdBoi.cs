@@ -65,8 +65,8 @@ public class SpeedThresholdBoi : MonoBehaviour
             channelMin = speeds[(int)currentSpeedChannel - 1];
         }
         //normalize speed within channel from 0-1
-        Debug.Log(speed);
-        Debug.Log(channelMax);
+        //Debug.Log(speed);
+       // Debug.Log(channelMax);
         speed -= channelMin;
         speed = speed < 0 ? 0 : speed; 
         channelMax -= channelMin;
@@ -136,8 +136,8 @@ public class SpeedThresholdBoi : MonoBehaviour
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        float velocity = rb.velocity.magnitude;
-
+        //TODO: fix this
+        float velocity = playerMovement.debugMoveSpeed;
         while (speeds[i] < velocity
             && i < (int)maxSpeedChannel)
         {
