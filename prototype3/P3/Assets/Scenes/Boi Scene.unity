@@ -146,7 +146,7 @@ MonoBehaviour:
   itemsCollected: 0
   bestTimesPerSpeed: 1e0000005a000000f00000002c010000a4010000e0010000
   baseScore: 5000
-  timePenalty: 66
+  timePenalty: 144
   scoreBonus: 1.25
 --- !u!4 &741592338
 Transform:

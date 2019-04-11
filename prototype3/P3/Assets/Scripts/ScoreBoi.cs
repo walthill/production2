@@ -18,6 +18,7 @@ public class ScoreBoi : MonoBehaviour
     [SerializeField] int timePenalty = 66;
     [SerializeField] float scoreBonus = 1.25f;
 
+    SpeedChannel ch;
     float timeElapsed;
     int seconds, minutes, totalSeconds;
   
@@ -96,7 +97,7 @@ public class ScoreBoi : MonoBehaviour
 
     public int CalculateScore()
     {
-        SpeedChannel ch = PlayerSceneRelay.instance.getMaxSpeedChannel();
+        ch = PlayerSceneRelay.instance.getMaxSpeedChannel();
         float collectablesMultiplier = 1;
         int speedMultiplier = 1;
         int score = 0, totalScore = -1;
@@ -205,7 +206,12 @@ public class ScoreBoi : MonoBehaviour
         return bestPossibleScore;
     }
 
- 
+    public SpeedChannel GetHighestSpeedChannel()
+    {
+        ch = PlayerSceneRelay.instance.getMaxSpeedChannel();
+        return ch;
+    }
+
     public void HideClock()
     {
         timerText.gameObject.SetActive(false);

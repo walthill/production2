@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class DisplayScore : MonoBehaviour
 {
     [SerializeField] Text scoreText,timeText;
+    [SerializeField] Color[] scoreColors;
 
     Animator winScreenAnim;
     int totalScore;
@@ -14,16 +15,16 @@ public class DisplayScore : MonoBehaviour
     void Awake()
     {
         winScreenAnim = gameObject.GetComponent<Animator>();
+        SpeedChannel ch = ScoreBoi.instance.GetHighestSpeedChannel();
+        scoreText.color = scoreColors[(int)ch - 1];
+        timeText.text = ScoreBoi.instance.GetTime();
+        totalScore = ScoreBoi.instance.CalculateScore();
     }
 
     //Called from animation trigger
     public void PlayerWin()
     {
-        totalScore = ScoreBoi.instance.CalculateScore();
-        Debug.Log(totalScore);
-
-        timeText.text = ScoreBoi.instance.GetTime();
-
+        //Display score text in color of the coressponding channel
         StartCoroutine(CountScore(0.0001f));
     }
 
