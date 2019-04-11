@@ -132,4 +132,9 @@ public class SceneLoadingBoi : MonoBehaviour
         loadedLevels.Clear();
         loadedLevels.Add(currentLevelIndex);
     }
+
+    public void UnloadAllScenes()
+    {
+        unloadLevel(currentLevelIndex);
+    }
 }

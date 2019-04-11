@@ -7,6 +7,7 @@ public class ScoreBoi : MonoBehaviour
 {
     public static ScoreBoi instance;
 
+    [SerializeField] bool isGameRunning;
     [SerializeField] Text timerText = null;
     [SerializeField] int itemsCollected = 0;
 
@@ -18,8 +19,7 @@ public class ScoreBoi : MonoBehaviour
     [SerializeField] float scoreBonus = 1.25f;
 
     float timeElapsed;
-    int seconds, minutes;
-    bool isGameRunning;
+    int seconds, minutes, totalSeconds;
   
     /*      SCORING
      *      
@@ -37,7 +37,7 @@ public class ScoreBoi : MonoBehaviour
      *      
      *      To convert seconds into score, start with score value at max. Decrement every (x) seconds  
      *      
-     *      
+     *      [Best times currently in editor]
      *      CH 2
      *          Multiplier: 1 * 5,000 (where 5000 is the best time)
      *          Best Time: under 30 seconds
@@ -78,11 +78,13 @@ public class ScoreBoi : MonoBehaviour
             timeElapsed += Time.deltaTime;
 
             seconds = Mathf.FloorToInt(timeElapsed);
+            totalSeconds = seconds;
 
-            if (timeElapsed == 60)
+            if (seconds == 60)
             {
                 minutes += 1;
                 timeElapsed = 0;
+                seconds = 0;
             }
 
             if (seconds < 10)
@@ -183,7 +185,7 @@ public class ScoreBoi : MonoBehaviour
     {
         int score = 0;
 
-        if (seconds < bestTimesPerSpeed[speedChannelIndex])
+        if (totalSeconds < bestTimesPerSpeed[speedChannelIndex])
             score += 5000;
 
         return score;  
@@ -203,6 +205,7 @@ public class ScoreBoi : MonoBehaviour
         return bestPossibleScore;
     }
 
+ 
     public void HideClock()
     {
         timerText.gameObject.SetActive(false);
@@ -216,5 +219,13 @@ public class ScoreBoi : MonoBehaviour
     {
         isGameRunning = true;
     }
+    public void StopClock()
+    {
+        isGameRunning = false;
+    }
 
+    public string GetTime()
+    {
+        return timerText.text;
+    }
 }

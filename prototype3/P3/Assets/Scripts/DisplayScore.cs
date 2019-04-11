@@ -6,32 +6,24 @@ using UnityEngine.SceneManagement;
 
 public class DisplayScore : MonoBehaviour
 {
-    [SerializeField] Text scoreText;
+    [SerializeField] Text scoreText,timeText;
 
     Animator winScreenAnim;
     int totalScore;
 
-    // Start is called before the first frame update
     void Awake()
     {
         winScreenAnim = gameObject.GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     //Called from animation trigger
     public void PlayerWin()
     {
-        UISceneRelay.instance.HideUI();
-        ScoreBoi.instance.HideClock();
-
-        winScreenAnim.SetBool("win", true);
         totalScore = ScoreBoi.instance.CalculateScore();
         Debug.Log(totalScore);
+
+        timeText.text = ScoreBoi.instance.GetTime();
+
         StartCoroutine(CountScore(0.0001f));
     }
 
@@ -49,11 +41,11 @@ public class DisplayScore : MonoBehaviour
             else
             {
                 counter = totalScore;
+                scoreText.text = counter.ToString();
                 break;
             }
         }
 
-        yield return new WaitForSeconds(3);
-        SceneManager.LoadScene("WinScreen", LoadSceneMode.Single);
+        yield return new WaitForSeconds(1.5f);
     }
 }

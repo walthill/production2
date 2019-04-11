@@ -13,7 +13,6 @@ public class WinCollisionBoi : MonoBehaviour
     [SerializeField] SpeedChannel respawnEnabledChannel = SpeedChannel.QUICK;
 
     Animator fadeCanvasAnim;
-    DisplayScore displayScore;
     bool resetPlayer = false;
    
 
@@ -21,7 +20,6 @@ public class WinCollisionBoi : MonoBehaviour
     {
         instance = this;
         fadeCanvasAnim = gameObject.GetComponent<Animator>();
-        displayScore = GameObject.FindGameObjectWithTag("Finish").GetComponent<DisplayScore>();
     }
 
     public void PlayerHitWinTrigger(GameObject player)
@@ -29,14 +27,24 @@ public class WinCollisionBoi : MonoBehaviour
         SpeedThresholdBoi sp = player.GetComponent<SpeedThresholdBoi>();
 
         if (sp.getMaxSpeedChannel() > respawnEnabledChannel) //This condition can be altered as desired when it comes to design
-            displayScore.PlayerWin();
+        {
+            StartCoroutine(WaitAndLoadWinScene(1.75f));
+        }
         else
         {
             fadeCanvasAnim.SetBool("respawn", true);
         }
     }
 
-    private void Update()
+    IEnumerator WaitAndLoadWinScene(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        ScoreBoi.instance.HideClock();
+        LoadingSceneRelay.instance.UnloadLevelScenes();
+        SceneManager.LoadScene("WinScreen", LoadSceneMode.Additive);
+    }
+
+        private void Update()
     {
         if (resetPlayer)
             PlayerSceneRelay.instance.ResetPlayer(playerRespawnPoint); //lock player controls

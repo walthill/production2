@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8d445833b022b4a8e35400c0156b28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameRunning: 0
   timerText: {fileID: 977530216}
   itemsCollected: 0
   bestTimesPerSpeed: 1e0000005a000000f00000002c010000a4010000e0010000
@@ -195,8 +196,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -84.1, y: -43.7}
-  m_SizeDelta: {x: 168.2, y: 87.4}
+  m_AnchoredPosition: {x: -94.9, y: -45.4}
+  m_SizeDelta: {x: 189.8, y: 90.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &977530216
 MonoBehaviour:
@@ -220,7 +221,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 33e3e6106871ca04d824f65117b61c16, type: 3}
-    m_FontSize: 40
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 4
@@ -288,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
