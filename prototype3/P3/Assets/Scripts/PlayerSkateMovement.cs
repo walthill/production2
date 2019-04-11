@@ -271,6 +271,8 @@ public class PlayerSkateMovement : MonoBehaviour
                 acceleration = Vector3.zero;
             }
             //TODO: temp
+            arcadeData.targetVelocity += acceleration.magnitude;
+            arcadeData.localMaxVelocity += acceleration.magnitude;
             vel = vel.normalized * arcadeData.targetVelocity;
 
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
@@ -307,7 +309,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                Debug.Log("JUMP RAY HIT");
+                //Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
             }
@@ -401,7 +403,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public void setSpeed(float newSpeed)
     {
         rb.velocity = rb.velocity.normalized * newSpeed;
-        arcadeData.localMaxVelocity = rb.velocity.magnitude;
+        arcadeData.localMaxVelocity = newSpeed;
     }
     #endregion
 }
