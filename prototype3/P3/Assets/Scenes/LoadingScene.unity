@@ -1934,7 +1934,7 @@ MonoBehaviour:
   mPersistentScenes: 07000000
   mLevelScenes:
   - lightingScene: 5
-    sceneList: 02000000030000000400000005000000
+    sceneList: 0200000003000000040000000500000008000000
   - lightingScene: 0
     sceneList: 0500000006000000
 --- !u!4 &921691837
