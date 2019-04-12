@@ -183,6 +183,20 @@ public class SpeedThresholdBoi : MonoBehaviour
         speedText.gameObject.SetActive(showUI);
         speedText.text = textToDisplay;
     }
-
+	
+	public bool canUseSpeedSurface(SpeedChannel surfaceChannel)
+	{
+		if (maxSpeedChannel == surfaceChannel
+            && currentSpeedChannel == maxSpeedChannel
+            && maxSpeedChannel != SpeedChannel.NUM_SPEEDS - 1)
+        { //go to next threshold
+			return true;
+        }
+        else if (maxSpeedChannel >= surfaceChannel)
+        { //just do speed boost
+			return true;
+        }
+		return false;
+	}
 
 }
