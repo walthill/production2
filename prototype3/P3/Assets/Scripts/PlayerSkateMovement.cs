@@ -226,17 +226,8 @@ public class PlayerSkateMovement : MonoBehaviour
     private void TurnPhysics()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
         float turnFactor = xMove * arcadeData.rotationSpeed;
-        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
-
-        //Align velocity vector with changed transform forward
-        if (isGrounded && !isDrifting)
-        {
-            Vector3 vel = rb.velocity; //store current speed
-            rb.velocity = Vector3.zero;
-            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
-        }
+        transform.Rotate(new Vector3(0f, turnFactor, 0f));
     }
 
     private void calcTargetVelocity()
@@ -284,10 +275,8 @@ public class PlayerSkateMovement : MonoBehaviour
                 if(!endOfDrift)
                     driftStartForward = objTransform.forward;
 
-                //float moveFactor = accelerationButton * arcadeData.accelMultiplier;
-                //acceleration = objTransform.forward * moveFactor;
-                //vel = rb.velocity;
-                vel = rb.velocity.normalized * arcadeData.targetVelocity;
+                //vel = rb.velocity.normalized * arcadeData.targetVelocity;
+                vel = transform.forward.normalized * arcadeData.targetVelocity;
             }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
