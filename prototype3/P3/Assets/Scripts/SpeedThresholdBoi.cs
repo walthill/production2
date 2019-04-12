@@ -162,11 +162,6 @@ public class SpeedThresholdBoi : MonoBehaviour
         return currentSpeedChannel;
     }
 
-    public SpeedChannel getMaxSpeedChannel()
-    {
-        return maxSpeedChannel;
-    }
-
     void DisplaySpeed(bool showUI, string textToDisplay)
     {
         speedIndicator.gameObject.SetActive(showUI);
