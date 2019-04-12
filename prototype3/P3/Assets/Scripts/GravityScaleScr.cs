@@ -5,11 +5,9 @@ using UnityEngine;
 public class GravityScaleScr : MonoBehaviour
 {
     //ALSO THIS SCRIPT DOES SONG SWITCHING
-    
-    public Animator crouchanim;
+    public GameObject crouchCanvas;
     Rigidbody rb;
     public GameObject WIDTransform;
-    bool crouch;
     //public Vector3 down;
     //float gravScaler = 10;
 
@@ -18,7 +16,7 @@ public class GravityScaleScr : MonoBehaviour
     {
         //down = WIDTransform.transform.up * -1;
         rb = GetComponent<Rigidbody>();
-        
+        crouchCanvas.SetActive(false);
     }
 
     // Update is called once per frame
@@ -52,13 +50,11 @@ public class GravityScaleScr : MonoBehaviour
         }
         if (Input.GetButtonDown("JoyGrav"))
         {
-            
-            crouchanim.SetTrigger("isCrouching");
+            crouchCanvas.SetActive(true);
         }
         if (Input.GetButtonUp("JoyGrav"))
         {
-            
-            crouchanim.SetBool("isCrouching",false);
+            crouchCanvas.SetActive(false);
         }
 
     }
