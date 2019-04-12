@@ -113,7 +113,7 @@ public class PlayerSkateMovement : MonoBehaviour
         jump = Input.GetButtonDown("JoyJump");
 
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
-        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
+        if (!Input.GetButton("JoyDrift") && Time.timeScale > 0.01) stopDrifting();
     }
 
     private void FixedUpdate()
@@ -171,6 +171,11 @@ public class PlayerSkateMovement : MonoBehaviour
     }
     private void stopDrifting()
     {
+        if (!isDrifting)
+        {
+            return;
+            //TODO: clusterfuck
+        }
         endOfDrift = true;
         isDrifting = false;
         Time.timeScale = normalTimeScale;
