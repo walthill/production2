@@ -56,6 +56,7 @@ public class PlayerSkateMovement : MonoBehaviour
     Transform objTransform;
 
     //Drifting stuff
+    [SerializeField]
     bool isDrifting = false;
     bool endOfDrift; //Flags smooth camera damping on drift release
     Vector3 driftStartForward;
@@ -114,7 +115,7 @@ public class PlayerSkateMovement : MonoBehaviour
         jump = Input.GetButtonDown("JoyJump");
 
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
-        if (!Input.GetButton("JoyDrift") && Time.timeScale > 0.01) stopDrifting();
+        if (!Input.GetButton("JoyDrift") && Time.timeScale != 0f) stopDrifting();
     }
 
     private void FixedUpdate()
@@ -260,13 +261,14 @@ public class PlayerSkateMovement : MonoBehaviour
         { //decrease
             //arcadeData.localMaxVelocity-= .1f
             arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
-            arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
+            
         }
         else if (debugMoveSpeed > arcadeData.localMaxVelocity + diffToSpeedLoss)
         { //increase
             //arcadeData.localMaxVelocity += .1f
             arcadeData.localMaxVelocity = debugMoveSpeed;
         }
+        arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         if (accelButtonDown)
             arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime);
         arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
