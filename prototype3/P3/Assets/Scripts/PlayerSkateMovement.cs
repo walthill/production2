@@ -31,6 +31,7 @@ public class PlayerSkateMovement : MonoBehaviour
                      boostValue;
 
         public float rotationSpeed;
+        public float driftRotationSpeed;
         public float jumpForce;
     }
     [SerializeField]
@@ -243,8 +244,11 @@ public class PlayerSkateMovement : MonoBehaviour
     private void TurnPhysics()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
-        float turnFactor = xMove * arcadeData.rotationSpeed;
+        float turnFactor;
+        if (isDrifting)
+            turnFactor = xMove * arcadeData.rotationSpeed * (arcadeData.driftRotationSpeed + debugMoveSpeed / speedThresholdBoi.getMaxSpeed());
+        else
+            turnFactor = xMove * arcadeData.rotationSpeed;
         transform.Rotate(new Vector3(0f, turnFactor, 0f));
 
     }

@@ -184,5 +184,8 @@ public class SpeedThresholdBoi : MonoBehaviour
         speedText.text = textToDisplay;
     }
 
-
+    public float getMaxSpeed()
+    {
+        return speeds[(int)SpeedChannel.NUM_SPEEDS - 1];
+    }
 }
