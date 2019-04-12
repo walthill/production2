@@ -6,6 +6,9 @@ public class UISceneRelay : MonoBehaviour
 {
     public static UISceneRelay instance;
     UISpeedCellsManager speedCells;
+
+    [SerializeField] GameObject canvas;
+
     void Awake()
     {
         instance = this;
@@ -28,5 +31,14 @@ public class UISceneRelay : MonoBehaviour
     public void setCurrentSpeedAndChannel(SpeedChannel currentChannel, float speedValueNormalized)
     {
         speedCells.SetCurrentChannelAndSpeed(currentChannel, speedValueNormalized);
+    }
+
+    public void HideUI()
+    {
+        canvas.SetActive(false);
+    }
+    public void ShowUI()
+    {
+        canvas.SetActive(true);
     }
 }
