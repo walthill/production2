@@ -88,6 +88,7 @@ public class SceneLoadingBoi : MonoBehaviour
             if (Input.GetKeyDown(key))
             {
                 done = true; // breaks the loop
+                ScoreBoi.instance.RunGameClock(); //start clock - used to calculate score
             }
             yield return null; // wait until next frame, then continue execution from here (loop continues)
         }
@@ -130,5 +131,10 @@ public class SceneLoadingBoi : MonoBehaviour
         }
         loadedLevels.Clear();
         loadedLevels.Add(currentLevelIndex);
+    }
+
+    public void UnloadAllScenes()
+    {
+        unloadLevel(currentLevelIndex);
     }
 }
