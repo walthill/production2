@@ -8,6 +8,7 @@ public class UIControllerWrapper : MonoBehaviour
     public KeyCode[] accessableButtons;
     Button button;
     public bool isSelected;
+
     void Start()
     {
         button = this.gameObject.GetComponent<Button>();
@@ -37,6 +38,20 @@ public class UIControllerWrapper : MonoBehaviour
 
     public void setSelected(bool selected)
     {
+        if (selected == true)
+        {
+            gameObject.transform.Find("Arrow").gameObject.SetActive(true);
+            gameObject.transform.Find("Text_Left").GetComponent<Text>().color = new Color (89 / 255, 255 / 255, 69 / 255);
+            gameObject.transform.Find("Text_Right").GetComponent<Text>().color = new Color(89 / 255, 255 / 255, 69 / 255);
+        }
+        else
+        {
+            gameObject.transform.Find("Arrow").gameObject.SetActive(false);
+            gameObject.transform.Find("Text_Left").GetComponent<Text>().color = Color.white;
+            gameObject.transform.Find("Text_Right").GetComponent<Text>().color = Color.white;
+
+        }
+        Debug.Log(gameObject.name + " is " + selected.ToString());
         isSelected = selected;
     }
 }
