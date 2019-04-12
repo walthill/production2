@@ -39,6 +39,7 @@ public class MenuBoi : MonoBehaviour
     IEnumerator startPause()
     {
         Debug.Log("Started Pause");
+        preTimeScale = Time.timeScale;
         Time.timeScale = 0.0f;
         yield return new WaitForEndOfFrame(); //So it does not immediately unpause
         while (isPaused)
@@ -46,7 +47,7 @@ public class MenuBoi : MonoBehaviour
             yield return waitForKeyPress();
         }
         Debug.Log("Ended Pause");
-        Time.timeScale = 1.0f;
+        Time.timeScale = preTimeScale;
         unPause();
     }
 
