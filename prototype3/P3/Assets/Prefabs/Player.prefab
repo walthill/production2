@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &218031475
 RectTransform:
   m_ObjectHideFlags: 0
@@ -401,7 +401,6 @@ GameObject:
   - component: {fileID: 1881121411489919166}
   - component: {fileID: 9007623253124313016}
   - component: {fileID: 1842638562}
-  - component: {fileID: 860847346}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -454,10 +453,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 0a9ad09939b22a24da66c746245b34d7, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.2885299
+  m_Radius: 0.3239473
   m_Height: 1.4252849
   m_Direction: 1
-  m_Center: {x: -0.0034988536, y: 0.70000005, z: 0.14000002}
+  m_Center: {x: 0, y: 0.7, z: 0.14}
 --- !u!114 &1032722378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -481,13 +480,11 @@ MonoBehaviour:
     boostAcceleration: 0.5
     boostValue: 1
     rotationSpeed: 2.5
-    jumpForce: 5.5
+    jumpForce: 4
   respawn: {fileID: 0}
   liftCoeffiecient: 0.2
   driftTime: 5
   driftStopTime: 2
-  maxDriftTimeScale: 0.7
-  changeTimeBySpeed: 1
 --- !u!114 &1881121411489919166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,19 +534,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crouchCanvas: {fileID: 352784545}
   WIDTransform: {fileID: 0}
---- !u!114 &860847346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032722376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ddc9f0176cd5543800988e59c6fda3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shuntForce: 5
 --- !u!1 &1661434822
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,7 +708,7 @@ PrefabInstance:
     - target: {fileID: 8746182660135886230, guid: 53b766e89b9636046aedcaef62bc3a45,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.044
       objectReference: {fileID: 0}
     - target: {fileID: 8746182660135886230, guid: 53b766e89b9636046aedcaef62bc3a45,
         type: 3}
