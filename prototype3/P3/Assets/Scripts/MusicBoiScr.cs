@@ -24,9 +24,9 @@ public class MusicBoiScr : MonoBehaviour
     //public AudioClip[] songParts;
     public AudioClip[] songParts;
     public AudioClip ChordClip;
-    
 
-    
+    public bool changingSong = false;
+
 
     //end TEMP ###############################
     // Start is called before the first frame update
@@ -87,6 +87,7 @@ public class MusicBoiScr : MonoBehaviour
 
     public void nextSong()
     {
+        changingSong = true;
         //adjust the number of the song 
         SongNum++;
         //debug the number of the song so I can make sure it's working right
@@ -101,7 +102,7 @@ public class MusicBoiScr : MonoBehaviour
 
     public void prevSong()
     {
-        
+        changingSong = true;
         //adjust the number of the song 
         SongNum--;
         //debug the number of the song so I can make sure it's working right
@@ -131,6 +132,19 @@ public class MusicBoiScr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetAxis("JoyDPH") == 0)
+        {
+            changingSong = false;
+        }
+        if (Input.GetAxis("JoyDPH") > 0 && !changingSong)
+        {
+            nextSong();
+        }
+        if (Input.GetAxis("JoyDPH") < 0 && !changingSong)
+        {
+            prevSong();
+        }
         if (Input.GetKeyDown(KeyCode.X))
         {
             nextSong();

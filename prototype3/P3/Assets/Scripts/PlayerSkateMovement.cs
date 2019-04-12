@@ -211,6 +211,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
             isGrounded = false;
             isAirborne = true;
+            SoundBoi.instance.playJumpSound();
         }
     }
 
@@ -317,6 +318,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
+                SoundBoi.instance.playLandSound();
             }
         }
     }
