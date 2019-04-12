@@ -17,7 +17,7 @@ public class MusicBoiScr : MonoBehaviour
     public AudioSource ChordSource;
     //public string SoundPath;
     public string SongPath;
-    int SongNum = 0;
+    public int SongNum = 0;
     //public List<GameObject> CapturePoints = new List<GameObject>();
     //public List<AudioClip> songParts = new List<AudioClip>();
     //public List<Object> songParts = new List<Object>();
@@ -87,31 +87,40 @@ public class MusicBoiScr : MonoBehaviour
 
     public void nextSong()
     {
-        changingSong = true;
-        //adjust the number of the song 
-        SongNum++;
-        //debug the number of the song so I can make sure it's working right
-        Debug.Log("You're listening to song number: " + SongNum);
-        //adjust the string representing the path with the new song number
-        SongPath = "audio/music/Song" + SongNum;
-        //update the array
-        songParts = Resources.LoadAll<AudioClip>(SongPath);
-        updateSoundBoi();
+
+        if (SongNum < 4)
+        {
+            changingSong = true;
+            //adjust the number of the song 
+            SongNum++;
+            //debug the number of the song so I can make sure it's working right
+            Debug.Log("You're listening to song number: " + SongNum);
+            //adjust the string representing the path with the new song number
+            SongPath = "audio/music/Song" + SongNum;
+            //update the array
+            songParts = Resources.LoadAll<AudioClip>(SongPath);
+            updateSoundBoi();
+        }
+        
         
     }
 
     public void prevSong()
     {
-        changingSong = true;
-        //adjust the number of the song 
-        SongNum--;
-        //debug the number of the song so I can make sure it's working right
-        Debug.Log("You're listening to song number: " + SongNum);
-        //adjust the string representing the path with the new song number
-        SongPath = "audio/music/Song" + SongNum;
-        //update the array
-        songParts = Resources.LoadAll<AudioClip>(SongPath);
-        updateSoundBoi();
+        if (SongNum > 0)
+        {
+            changingSong = true;
+            //adjust the number of the song 
+            SongNum--;
+            //debug the number of the song so I can make sure it's working right
+            Debug.Log("You're listening to song number: " + SongNum);
+            //adjust the string representing the path with the new song number
+            SongPath = "audio/music/Song" + SongNum;
+            //update the array
+            songParts = Resources.LoadAll<AudioClip>(SongPath);
+            updateSoundBoi();
+        }
+        
     }
 
 
