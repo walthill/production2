@@ -15,7 +15,6 @@ public class ParticleScript : MonoBehaviour
     public Color color3;
     public Color color4;
     public Color color5;
-    public Color color6;
     //ParticleSystem ps = GetComponent<ParticleSystem>();
     //var col = ps.colorOverLifetime;
     //col.enabled = true;
