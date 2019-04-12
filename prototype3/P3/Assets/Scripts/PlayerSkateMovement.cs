@@ -103,7 +103,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
 
         if (Input.GetKeyDown(KeyCode.R))
-            ResetPlayer();
+            ResetPlayer(respawn);
     }
 
     void ProcessInput()
@@ -372,9 +372,9 @@ public class PlayerSkateMovement : MonoBehaviour
 #endregion
 
     #region Getters and Setters
-    public void ResetPlayer() //TODO: reset speed threshold
+    public void ResetPlayer(Transform t) //TODO: reset speed threshold
     {
-        objTransform.position = respawn.transform.position;
+        objTransform.position = t.position;
         objTransform.localRotation = Quaternion.identity;
    
         rb.velocity = Vector3.zero;
