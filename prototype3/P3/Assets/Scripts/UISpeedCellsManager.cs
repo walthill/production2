@@ -117,9 +117,9 @@ public class UISpeedCellsManager : MonoBehaviour
         {
             if(speedBarValue > speedToGoUp)
             {
-                Debug.Log(speedBarValue);
-                Debug.Log(currentChannel);
-                Debug.Log(currentSpeedChannel);
+               // Debug.Log(speedBarValue);
+               // Debug.Log(currentChannel);
+              //  Debug.Log(currentSpeedChannel);
                 currentSpeedChannel = currentChannel;
                 speedBar.value = speedBarValue;
             }

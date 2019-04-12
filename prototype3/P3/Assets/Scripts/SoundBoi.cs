@@ -289,7 +289,7 @@ public class SoundBoi : MonoBehaviour
         }
         WheelSource.volume = speed * .01f +.2f;
         WheelSource.pitch = speed * .01f +.5f;
-        Debug.Log("link has been made speed is");
+       // Debug.Log("link has been made speed is");
 
     }
 
@@ -298,8 +298,8 @@ public class SoundBoi : MonoBehaviour
 
         WheelSource.volume = .1f;
         WheelSource.Play();
-        Debug.Log("playing wheels");
-        Debug.Log("volume is" + WheelSource.volume);
+      //  Debug.Log("playing wheels");
+      //  Debug.Log("volume is" + WheelSource.volume);
     }
 
     public void WheelPitchUp()
@@ -307,7 +307,7 @@ public class SoundBoi : MonoBehaviour
         WheelSource.volume = WheelSource.volume + .02f;
         WheelSource.pitch = pitchNumber;
         pitchNumber = pitchNumber + .02f;
-        Debug.Log("pitch is: " + pitchNumber);
+       // Debug.Log("pitch is: " + pitchNumber);
     }
 
     public void WheelPitchDown()
@@ -315,7 +315,7 @@ public class SoundBoi : MonoBehaviour
         WheelSource.volume = WheelSource.volume - .02f;
         WheelSource.pitch = pitchNumber;
         pitchNumber = pitchNumber - .02f;
-        Debug.Log("pitch is: " + pitchNumber);
+      //  Debug.Log("pitch is: " + pitchNumber);
     }
 
 
