@@ -6,8 +6,12 @@ using UnityEngine.Audio;
 public class SoundBoi : MonoBehaviour
 {
     public static SoundBoi instance;
-    
-    
+
+    [Header("jumping and landing")]
+    public AudioClip jump;
+    public AudioClip land;
+    public AudioSource Jumpsauce;
+    public AudioSource lambSauce;
 
     [Header("General Feedback Sounds")]
     public AudioClip WheelSoundSlowSnd;
@@ -118,9 +122,26 @@ public class SoundBoi : MonoBehaviour
         heldVolume5 = musicSlot5.volume;
         //SetMusic();
         LoadGeneralSounds();
-        
+        Jumpsauce = gameObject.AddComponent<AudioSource>();
+        lambSauce = gameObject.AddComponent<AudioSource>();
+        Jumpsauce.pitch = .6f;
+        lambSauce.pitch = .7f;
+
+        Jumpsauce.clip = jump;
+        lambSauce.clip = land;
+
     }
 
+
+    public void playJumpSound()
+    {
+        Jumpsauce.Play();
+    }
+
+    public void playLandSound()
+    {
+        lambSauce.Play();
+    }
 
     public void PlayMusic()
     {
@@ -266,10 +287,9 @@ public class SoundBoi : MonoBehaviour
         {
             //PlaywheelSound();
         }
-        WheelSource.volume = speed * .01f;
-        WheelSource.pitch = speed * .1f;
-        //Debug.Log("link has been made speed is");
 
+        WheelSource.volume = speed * .01f +.2f;
+        WheelSource.pitch = speed * .01f +.5f;
     }
 
     public void PlaywheelSound()

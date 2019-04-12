@@ -246,6 +246,7 @@ PrefabInstance:
       propertyPath: WIDTransform
       value: 
       objectReference: {fileID: 1985177580}
+
     - target: {fileID: 1032722380, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_Interpolate
       value: 0

@@ -174,5 +174,10 @@ public class FollowCamera : MonoBehaviour
         resetDamping = true;
         applyDamping = false;
     }
+
+    public void toggleInvert()
+    {
+        invertedYRotation = !invertedYRotation;
+    }
     #endregion
 }

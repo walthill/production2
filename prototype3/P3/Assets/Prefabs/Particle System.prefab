@@ -4640,7 +4640,7 @@ ParticleSystem:
 --- !u!199 &8746182660135886224
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4711,12 +4711,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8897b9071ff6c614698bf1c6af54ad32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color0: {r: 1, g: 0.27058825, b: 0.27058825, a: 1}
-  color1: {r: 1, g: 0.9098039, b: 0.11764706, a: 1}
-  color2: {r: 0.7294118, g: 1, b: 0.14117648, a: 1}
-  color3: {r: 0, g: 0.78431374, b: 0.9372549, a: 1}
-  color4: {r: 0.8117647, g: 0, b: 0.9372549, a: 1}
-  color5: {r: 0.9372549, g: 0.9372549, b: 0.9372549, a: 1}
+  color0: {r: 0.854902, g: 0.85098046, b: 0.8117648, a: 1}
+  color1: {r: 1, g: 0.9686275, b: 0, a: 1}
+  color2: {r: 0.3921569, g: 0.8705883, b: 0.93725497, a: 1}
+  color3: {r: 0.5372549, g: 1, b: 0.5921569, a: 1}
+  color4: {r: 0.8588236, g: 0.098039225, b: 1, a: 1}
+  color5: {r: 0.8941177, g: 0.121568635, b: 0.121568635, a: 1}
+  color6: {r: 0.41176474, g: 0.48627454, b: 1, a: 1}
   EmissionRate: 0
   particleStartSize: 1
   EmissionsRateOnStart: 0
