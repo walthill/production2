@@ -39,20 +39,25 @@ public class SpeedThresholdBoi : MonoBehaviour
 //        speedIndicator.gameObject.SetActive(false);
  //       speedText.gameObject.SetActive(false);
         playerMovement = gameObject.GetComponent<PlayerSkateMovement>();
-        playerMovement.setAccelCap(speeds[0]);//set accel cap to lowest speed threshold
+        playerMovement.setAccelCap(speeds[(int)SpeedChannel.LIVE_IN_DARKNESS]);//set accel cap to lowest speed threshold
         playerMovement.setMaxVelocity(speeds[0]);
         setCurrentSpeedChannel();
         setSound();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         setCurrentSpeedChannel();
+    }
+    private void Update()
+    {
         sendCurrentSpeedChannel();
     }
     void sendCurrentSpeedChannel()
     {
-        float speed = rb.velocity.magnitude;
+        //float speed = rb.velocity.magnitude;
+        //TODO: Why? rb.velocity.magnitude != playerMovement.debugMoveSpeed :( 
+        float speed = playerMovement.debugMoveSpeed;
         float channelMin = 0;
         float channelMax = speeds[(int)currentSpeedChannel];
         if (currentSpeedChannel > 0)
@@ -60,10 +65,15 @@ public class SpeedThresholdBoi : MonoBehaviour
             channelMin = speeds[(int)currentSpeedChannel - 1];
         }
         //normalize speed within channel from 0-1
+        //Debug.Log(speed);
+       // Debug.Log(channelMax);
         speed -= channelMin;
         speed = speed < 0 ? 0 : speed; 
         channelMax -= channelMin;
+
+        
         speed /= channelMax;
+        
         UISceneRelay.instance.setCurrentSpeedAndChannel(currentSpeedChannel, speed);
     }
 
@@ -72,7 +82,7 @@ public class SpeedThresholdBoi : MonoBehaviour
         if(maxSpeedChannel == surfaceChannel 
             && currentSpeedChannel == maxSpeedChannel
             && maxSpeedChannel != SpeedChannel.NUM_SPEEDS-1)
-        {
+        { //go to next trheshold
             float speed = speeds[(int)maxSpeedChannel + 1];
             playerMovement.setMaxVelocity(speed);
             //set speed to % of channel max.
@@ -82,7 +92,7 @@ public class SpeedThresholdBoi : MonoBehaviour
             setSound();
         }
         else if (maxSpeedChannel >= surfaceChannel)
-        {
+        { //just do speed boost
             float speedBoost = boostAmount;
             playerMovement.Boost(speedBoost, 0f);
             setCurrentSpeedChannel();
@@ -126,8 +136,8 @@ public class SpeedThresholdBoi : MonoBehaviour
         moveData = playerMovement.GetArcadeMoveData();
         int i = 0;
         //find current threshold
-        float velocity = rb.velocity.magnitude;
-
+        //TODO: fix this
+        float velocity = playerMovement.debugMoveSpeed;
         while (speeds[i] < velocity
             && i < (int)maxSpeedChannel)
         {
@@ -173,4 +183,6 @@ public class SpeedThresholdBoi : MonoBehaviour
         speedText.gameObject.SetActive(showUI);
         speedText.text = textToDisplay;
     }
+
+
 }

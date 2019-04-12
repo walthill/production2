@@ -26,7 +26,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public struct ArcadeMoveData
     {
         //clamp value - increase this for speed channels?
-        public float maxVelocity, accelCap; 
+        public float maxVelocity, accelCap, localMaxVelocity, targetVelocity; 
         public float accelMultiplier, boostAcceleration, 
                      boostValue;
 
@@ -34,8 +34,7 @@ public class PlayerSkateMovement : MonoBehaviour
         public float jumpForce;
     }
     [SerializeField]
-    [Tooltip("will control how fast the player slows down when not holding accelerate")]
-    float playerDrag = 0.7f;
+    float diffToSpeedLoss = 20f;
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
     
@@ -88,6 +87,7 @@ public class PlayerSkateMovement : MonoBehaviour
         playerCam = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<FollowCamera>();
         speedThresholdBoi = gameObject.GetComponent<SpeedThresholdBoi>();
         respawn.position = objTransform.position;
+        arcadeData.localMaxVelocity = 25f; //min speed threshold
         normalTimeScale = Time.timeScale;
     }
 
@@ -117,7 +117,7 @@ public class PlayerSkateMovement : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {   
+    {
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
         
@@ -134,6 +134,7 @@ public class PlayerSkateMovement : MonoBehaviour
             rb.AddForceAtPosition(lift * -objTransform.up, objTransform.position, ForceMode.Force);
         }
         debugMoveSpeed = rb.velocity.magnitude;
+        calcTargetVelocity(); //after debug movespeed to use most current move speed.
         sendSpeedToSoundBoi();
     }
     // this sends movespeed data to the sound boi optimize this if you want
@@ -161,7 +162,7 @@ public class PlayerSkateMovement : MonoBehaviour
         driftStartForward = objTransform.forward;
         
         isDrifting = true;
-        driftVelocity = rb.velocity;
+        driftVelocity = rb.velocity.normalized*debugMoveSpeed;
         driftSlowTimer = Time.time + driftTime;
         float modDriftScale = changeTimeBySpeed? 
             1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f) 
@@ -175,7 +176,13 @@ public class PlayerSkateMovement : MonoBehaviour
         Time.timeScale = normalTimeScale;
         if (isGrounded)
         {
-            rb.velocity = transform.forward * rb.velocity.magnitude;
+            //rb.velocity = transform.forward * rb.velocity.magnitude;
+            setSpeed(driftVelocity.magnitude);
+
+            rb.velocity = transform.forward * driftVelocity.magnitude;
+            //TODO: clusterfuck
+            debugMoveSpeed = rb.velocity.magnitude;
+            arcadeData.targetVelocity = debugMoveSpeed;
         }
     }
 
@@ -218,7 +225,8 @@ public class PlayerSkateMovement : MonoBehaviour
     private void RollerSkateMovement()
     {
         if(moveType == MoveType.ARCADE)
-        {        
+        {
+            
             if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
                 TurnPhysics();
@@ -231,32 +239,41 @@ public class PlayerSkateMovement : MonoBehaviour
     private void TurnPhysics()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
         float turnFactor = xMove * arcadeData.rotationSpeed;
-        objTransform.localEulerAngles = new Vector3(objTransform.localEulerAngles.x, objTransform.localEulerAngles.y + turnFactor, objTransform.localEulerAngles.z);
-
-        //Align velocity vector with changed transform forward
-        if (isGrounded && !isDrifting)
-        {
-            Vector3 vel = rb.velocity; //store current speed
-            rb.velocity = Vector3.zero;
-            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
-        }
+        transform.Rotate(new Vector3(0f, turnFactor, 0f));
     }
 
+    private void calcTargetVelocity()
+    {
+        arcadeData.targetVelocity = rb.velocity.magnitude;
+        if(debugMoveSpeed < arcadeData.localMaxVelocity - diffToSpeedLoss)
+        { //decrease
+            //arcadeData.localMaxVelocity-= .1f
+            arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
+            arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
+        }
+        else if (debugMoveSpeed > arcadeData.localMaxVelocity + diffToSpeedLoss)
+        { //increase
+            //arcadeData.localMaxVelocity += .1f
+            arcadeData.localMaxVelocity = debugMoveSpeed;
+        }
+        if (accelButtonDown)
+            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime);
+        arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
+        float accel = accelerationButton * arcadeData.accelMultiplier;
+
+    }
     private void MovePhysics()
     {
         //Forward movement
         if (accelButtonDown && isGrounded)
         {
-            Vector3 acceleration; 
             Vector3 vel;
             if (isDrifting)
             {
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
-                acceleration = Vector3.zero;
                 vel = driftVelocity;
                 float time = Time.time - driftSlowTimer;
                 
@@ -271,18 +288,13 @@ public class PlayerSkateMovement : MonoBehaviour
                 if(!endOfDrift)
                     driftStartForward = objTransform.forward;
 
-                float moveFactor = accelerationButton * arcadeData.accelMultiplier;
-                acceleration = objTransform.forward * moveFactor;
-                vel = rb.velocity;
-            }
-            if(vel.sqrMagnitude > arcadeData.accelCap * arcadeData.accelCap)
-            {
-                acceleration = Vector3.zero;
+                //vel = rb.velocity.normalized * arcadeData.targetVelocity;
+                vel = transform.forward.normalized * arcadeData.targetVelocity;
             }
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
-                rb.velocity = vel + acceleration;
+                rb.velocity = vel;
         }
     }
 
@@ -294,14 +306,14 @@ public class PlayerSkateMovement : MonoBehaviour
             if (accelerationButton > 0)
             {
                 accelButtonDown = true;
-                rb.drag = 0f;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", true);
+                //rb.drag = 0f;
             }
             else
             {
                 accelButtonDown = false;
-                rb.drag = playerDrag;
                 gameObject.GetComponentInChildren<Animator>().SetBool("isSkating", false);
+                //rb.drag = 0.7f;
             }
         }
     }
@@ -315,7 +327,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                Debug.Log("JUMP RAY HIT");
+                //Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
                 SoundBoi.instance.playLandSound();
@@ -395,7 +407,9 @@ public class PlayerSkateMovement : MonoBehaviour
     public void Boost(float boostValue, float maxVelocityIncrease)
     {
         arcadeData.maxVelocity += maxVelocityIncrease;
-        rb.velocity += rb.velocity.normalized * boostValue;
+        rb.velocity = rb.velocity.normalized * (debugMoveSpeed + boostValue);
+        arcadeData.targetVelocity = rb.velocity.magnitude;
+        arcadeData.localMaxVelocity = rb.velocity.magnitude;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     public void setMaxVelocity(float maxVelocity)
@@ -409,6 +423,10 @@ public class PlayerSkateMovement : MonoBehaviour
     public void setSpeed(float newSpeed)
     {
         rb.velocity = rb.velocity.normalized * newSpeed;
+        //TODO: clusterfuck
+        debugMoveSpeed = rb.velocity.magnitude;
+        arcadeData.targetVelocity = debugMoveSpeed;
+        arcadeData.localMaxVelocity = newSpeed;
     }
     #endregion
 }
