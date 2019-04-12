@@ -52,8 +52,10 @@ public class PlayerSpeedSurface : MonoBehaviour
         }
         if (Input.GetButtonDown("JoyCharge"))
         {
+            Debug.Log("a is registrered");
             if (isTouchingCharge)
             {
+                Debug.Log("charging is registered");
                 startPosit = transform.position;
                 startCharging();
             }

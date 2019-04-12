@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpeedSurfaceScript : MonoBehaviour
 {
     [SerializeField]
-    SpeedChannel speedRequired = SpeedChannel.NUM_SPEEDS;
+    SpeedChannel speedRequired;
     bool isEnabled = false;
 
     void Start()

@@ -109,22 +109,22 @@ public class UISpeedCellsManager : MonoBehaviour
 
     public void SetCurrentChannelAndSpeed(SpeedChannel currentChannel, float speedBarValue)
     {
-       if(currentSpeedChannel == currentChannel)
-       {
-           speedBar.value = speedBarValue;
-       }
-       else if(currentSpeedChannel < currentChannel)
-       {
-           if(speedBarValue > speedToGoUp)
-           {
-               //Debug.Log(speedBarValue);
-               //Debug.Log(currentChannel);
-               //Debug.Log(currentSpeedChannel);
-               currentSpeedChannel = currentChannel;
-               speedBar.value = speedBarValue;
-           }
-       }
-       else
+        if(currentSpeedChannel == currentChannel)
+        {
+            speedBar.value = speedBarValue;
+        }
+        else if(currentSpeedChannel < currentChannel)
+        {
+            if(speedBarValue > speedToGoUp)
+            {
+                Debug.Log(speedBarValue);
+                Debug.Log(currentChannel);
+                Debug.Log(currentSpeedChannel);
+                currentSpeedChannel = currentChannel;
+                speedBar.value = speedBarValue;
+            }
+        }
+        else
         {
             speedBar.value = speedBarValue;
             currentSpeedChannel = currentChannel;
