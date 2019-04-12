@@ -166,6 +166,11 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             //rb.velocity = transform.forward * rb.velocity.magnitude;
             setSpeed(driftVelocity.magnitude);
+
+            rb.velocity = transform.forward * driftVelocity.magnitude;
+            //TODO: clusterfuck
+            debugMoveSpeed = rb.velocity.magnitude;
+            arcadeData.targetVelocity = debugMoveSpeed;
         }
     }
 
@@ -236,15 +241,17 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void calcTargetVelocity()
     {
+        arcadeData.targetVelocity = rb.velocity.magnitude;
         if(debugMoveSpeed < arcadeData.localMaxVelocity - diffToSpeedLoss)
         { //decrease
             //arcadeData.localMaxVelocity-= .1f
             arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
+            arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         }
         else if (debugMoveSpeed > arcadeData.localMaxVelocity + diffToSpeedLoss)
         { //increase
             //arcadeData.localMaxVelocity += .1f
-            arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
+            arcadeData.localMaxVelocity = debugMoveSpeed;
         }
         if (accelButtonDown)
             arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime);
@@ -397,7 +404,8 @@ public class PlayerSkateMovement : MonoBehaviour
     public void Boost(float boostValue, float maxVelocityIncrease)
     {
         arcadeData.maxVelocity += maxVelocityIncrease;
-        rb.velocity += rb.velocity.normalized * boostValue;
+        rb.velocity = rb.velocity.normalized * (debugMoveSpeed + boostValue);
+        arcadeData.targetVelocity = rb.velocity.magnitude;
         arcadeData.localMaxVelocity = rb.velocity.magnitude;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
