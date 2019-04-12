@@ -50,7 +50,9 @@ public class PlayerSkateMovement : MonoBehaviour
   
     //Input vars
     float xMove, accelerationButton;
-    bool accelButtonDown, jump, isGrounded, applyDownforce, isAirborne;
+    [SerializeField]
+    bool isGrounded;
+    bool accelButtonDown, jump, applyDownforce, isAirborne;
     Rigidbody rb;
     float oldVel;
     Transform objTransform;
@@ -251,7 +253,6 @@ public class PlayerSkateMovement : MonoBehaviour
         else
             turnFactor = xMove * arcadeData.rotationSpeed;
         transform.Rotate(new Vector3(0f, turnFactor, 0f));
-
     }
 
     private void calcTargetVelocity()
@@ -270,10 +271,8 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         if (accelButtonDown)
-            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime);
+            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); //
         arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
-        float accel = accelerationButton * arcadeData.accelMultiplier;
-
     }
 
     private void MovePhysics()

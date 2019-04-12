@@ -489,6 +489,8 @@ MonoBehaviour:
     jumpForce: 5.5
   respawn: {fileID: 0}
   liftCoeffiecient: 0.2
+  isGrounded: 0
+  isDrifting: 0
   driftTime: 5
   driftStopTime: 2
   maxDriftTimeScale: 0.7
