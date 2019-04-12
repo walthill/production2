@@ -88,7 +88,7 @@ public class PlayerSkateMovement : MonoBehaviour
         speedThresholdBoi = gameObject.GetComponent<SpeedThresholdBoi>();
         respawn.position = objTransform.position;
         arcadeData.localMaxVelocity = 25f;
-        normalTimeScale = Time.timeScale;
+        normalTimeScale = 1f;
     }
 
     void Update()
@@ -242,13 +242,6 @@ public class PlayerSkateMovement : MonoBehaviour
         float turnFactor = xMove * arcadeData.rotationSpeed;
         transform.Rotate(new Vector3(0f, turnFactor, 0f));
 
-        //Align velocity vector with changed transform forward
-        if (isGrounded && !isDrifting)
-        {
-            Vector3 vel = rb.velocity; //store current speed
-            rb.velocity = Vector3.zero;
-            rb.velocity = objTransform.forward.normalized * vel.magnitude; //change its direction
-        }
     }
 
     private void calcTargetVelocity()
@@ -420,6 +413,7 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.velocity = rb.velocity.normalized * (debugMoveSpeed + boostValue);
         arcadeData.targetVelocity = rb.velocity.magnitude;
         arcadeData.localMaxVelocity = rb.velocity.magnitude;
+        debugMoveSpeed = rb.velocity.magnitude;
         //Camera.main.GetComponent<FollowCamera>().ToggleKnockback();
     }
     public void setMaxVelocity(float maxVelocity)
@@ -432,6 +426,7 @@ public class PlayerSkateMovement : MonoBehaviour
     }
     public void setSpeed(float newSpeed)
     {
+        rb.velocity = transform.forward * newSpeed;
         //TODO: clusterfuck
         debugMoveSpeed = rb.velocity.magnitude;
         arcadeData.targetVelocity = debugMoveSpeed;
