@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -118,6 +118,7 @@ public class PlayerSkateMovement : MonoBehaviour
         RollerSkateMovement();
         JumpAlignRaycast();
         JumpLandRaycast();
+
         Jump();
 
         if (accelButtonDown && isGrounded) //research: https://answers.unity.com/questions/1362513/custom-gravity-to-drive-car-on-walls.html
@@ -298,7 +299,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if(isAirborne)
         {
-            Ray ray = new Ray(objTransform.position, -objTransform.up);
+            Ray ray = new Ray(objTransform.position, -Vector3.up);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
@@ -314,7 +315,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         if (isAirborne)
         {
-            Ray ray = new Ray(objTransform.position, -objTransform.up);
+            Ray ray = new Ray(objTransform.position, -Vector3.up);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 3.5f, layerToAlignWith))
             {
