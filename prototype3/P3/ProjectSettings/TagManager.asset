@@ -12,7 +12,6 @@ TagManager:
   - SpeedSurface
   - CameraRig
   - Wall
-  - SceneBoi
   layers:
   - Default
   - TransparentFX
