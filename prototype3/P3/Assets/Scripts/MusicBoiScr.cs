@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class MusicBoiScr : MonoBehaviour
 {
-    public bool changingSong = false;
     //temp have audio sources on this object attatched to this script.
     //clips are pulled from folders then loaded into sources then played
     //Start TEMP ####################################
@@ -88,7 +87,6 @@ public class MusicBoiScr : MonoBehaviour
 
     public void nextSong()
     {
-        changingSong = true;
         //adjust the number of the song 
         SongNum++;
         //debug the number of the song so I can make sure it's working right
@@ -98,13 +96,12 @@ public class MusicBoiScr : MonoBehaviour
         //update the array
         songParts = Resources.LoadAll<AudioClip>(SongPath);
         updateSoundBoi();
-
         
     }
 
     public void prevSong()
     {
-        changingSong = true;
+        
         //adjust the number of the song 
         SongNum--;
         //debug the number of the song so I can make sure it's working right
@@ -134,18 +131,6 @@ public class MusicBoiScr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetAxis("JoyDPH") == 0)
-        {
-            changingSong = false;
-        }
-        if (Input.GetAxis("JoyDPH") > 0&&!changingSong)
-        {
-            nextSong();
-        }
-        if (Input.GetAxis("JoyDPH") < 0 && !changingSong)
-        {
-            prevSong();
-        }
         if (Input.GetKeyDown(KeyCode.X))
         {
             nextSong();
