@@ -61,7 +61,7 @@ public class PlayerSkateMovement : MonoBehaviour
     Vector3 driftStartForward;
     const float DRIFT_CAM_RESET_WAIT = 0.35f;
     const float FACING_STRAIGHT_DIST = 0.1f;
-    SpeedThresholdBoi speedThresholdBoi;
+
     Vector3 driftVelocity;
     float driftSlowTimer; //when speed starts to decrease;
     [SerializeField]
@@ -70,13 +70,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     [Tooltip("How long it takes to stop after slowing down while drifting.")]
     float driftStopTime = 4f;
-    [SerializeField]
-    [Tooltip("How time is slowed down by during drifting at max speed")]
-    float maxDriftTimeScale = 0.5f;
-    [SerializeField]
-    [Tooltip("should time slow less at lower speeds?")]
-    bool changeTimeBySpeed;
-    float normalTimeScale;
+
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
 
@@ -86,9 +80,8 @@ public class PlayerSkateMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         layerToAlignWith = LayerMask.GetMask("Ground");
         playerCam = GameObject.FindGameObjectWithTag("CameraRig").GetComponent<FollowCamera>();
-        speedThresholdBoi = gameObject.GetComponent<SpeedThresholdBoi>();
+
         respawn.position = objTransform.position;
-        normalTimeScale = Time.timeScale;
     }
 
     void Update()
@@ -163,16 +156,12 @@ public class PlayerSkateMovement : MonoBehaviour
         isDrifting = true;
         driftVelocity = rb.velocity;
         driftSlowTimer = Time.time + driftTime;
-        float modDriftScale = changeTimeBySpeed? 
-            1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f) 
-            : maxDriftTimeScale;
-        Time.timeScale = Time.timeScale * modDriftScale;
     }
     private void stopDrifting()
     {
         endOfDrift = true;
         isDrifting = false;
-        Time.timeScale = normalTimeScale;
+
         if (isGrounded)
         {
             rb.velocity = transform.forward * rb.velocity.magnitude;
