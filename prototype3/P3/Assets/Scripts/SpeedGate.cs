@@ -15,34 +15,5 @@ public class SpeedGate : MonoBehaviour
  //   ObstacleType obstacleType;
     public SpeedChannel speedRequired;
 
-    private void Awake()
-    {
-        /*    placeObstacle = gameObject.GetComponent<PlaceObstacle>();
-            obstacleType = placeObstacle.obstacleType;*/
-        // speedChannel = placeObstacle.speedChannel;
-    }
 
-    void Update()
-    {
-       /* if(obstacleType == ObstacleType.JUMP)
-        {
-
-        }
-        else if (obstacleType == ObstacleType.GRIND)
-        {
-
-        }
-        else if (obstacleType == ObstacleType.LOOP)
-        {
-
-        }
-        else if (obstacleType == ObstacleType.BOOST)
-        {
-
-        }
-        else if (obstacleType == ObstacleType.UNDEFINED || obstacleType == ObstacleType.NUM_OBSTACLES)
-        {
-
-        }*/
-    }
 }

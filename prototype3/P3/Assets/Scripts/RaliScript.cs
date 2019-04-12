@@ -5,21 +5,21 @@ using UnityEngine;
 public class RaliScript : MonoBehaviour
 {
     // Start is called before the first frame update
+    public bool isCurved;
     public Transform[] railPoints;
     public float timeOnRail;
     public Collider railCollider;
+    [Range(0.0f, 1.0f)]
+    public float nextPointThreshold = .1f;
 
     bool playerIsOnRail = false;
+    bool rideForwards = true;
     GameObject player = null;
-    Vector3 startPoint, endPoint;
+    Vector3 startPoint, nextPoint;
 
     float railDistance, startTime;
     float speed;
-
-    void Start()
-    {
-        railDistance = Vector3.Distance(railPoints[0].position, railPoints[1].position);
-    }
+    int iterPoint = 0;
 
     // Update is called once per frame
     void Update()
@@ -27,37 +27,105 @@ public class RaliScript : MonoBehaviour
         if(playerIsOnRail && player != null)
         {
             rideRail();
-            Debug.Log("Riding Rail");
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void initGrind()
     {
-        if (other.name == "Player")
-        {
-            player = other.gameObject;
-            playerIsOnRail = true;
-            startTime = Time.time;
-            speed = player.GetComponent<Rigidbody>().velocity.magnitude;
-
-            startPoint = railPoints[0].position;
-            endPoint = railPoints[1].position;
-
-            for(int i = 0; i< railPoints.Length; i++)
-            {
-                Debug.Log(railPoints[i].position.ToString());
-            }
-        }
-       
+        startTime = Time.time;
+        speed = player.GetComponent<Rigidbody>().velocity.magnitude;
+        startPoint = railPoints[iterPoint].position;
+        if (rideForwards)
+            nextPoint = railPoints[iterPoint + 1].position;
+        else
+            nextPoint = railPoints[iterPoint - 1].position;
     }
 
     void rideRail()
     {
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / railDistance;
-        player.GetComponent<Transform>().position = Vector3.Lerp(startPoint, endPoint, fracJourney);
-        if(fracJourney == 1.0f)
+        if (!isCurved)
         {
+            player.GetComponent<Transform>().position = Vector3.Lerp(startPoint, nextPoint, fracJourney);
+        }
+        else
+        {
+            player.GetComponent<Transform>().position = Vector3.Slerp(startPoint, nextPoint, fracJourney);
+        }
+
+        if (nextPointThreshold >= fracJourney)
+        {
+            goToNextPoint();
+        }
+    }
+
+    void calcDistance()
+    {
+        if (rideForwards)
+            railDistance = Vector3.Distance(railPoints[iterPoint].position, railPoints[iterPoint + 1].position);
+        else
+            railDistance = Vector3.Distance(railPoints[iterPoint].position, railPoints[iterPoint - 1].position);
+    }
+
+    void goToNextPoint()
+    {
+        if (rideForwards)
+        {
+            iterPoint++;
+            if (iterPoint < railPoints.Length)
+            {
+                startPoint = railPoints[iterPoint].position;
+                nextPoint = railPoints[iterPoint + 1].position;
+            }
+            else
+            {
+                playerIsOnRail = false;
+            }
+        }
+        else
+        {
+            iterPoint--;
+            if (iterPoint <= 0)
+            {
+                startPoint = railPoints[iterPoint].position;
+                nextPoint = railPoints[iterPoint - 1].position;
+            }
+            else
+            {
+                playerIsOnRail = false;
+            }
+        }
+    }
+
+    public void startRailForward(Collider col)
+    {
+        if (!playerIsOnRail)
+        {
+            rideForwards = true;
+            iterPoint = 0;
+            player = col.gameObject;
+            initGrind();
+        }
+        else
+        {
+            player = null;
+            playerIsOnRail = false;
+        }
+    }
+
+    public void startRailBackward(Collider col)
+    {
+        if (!playerIsOnRail)
+        {
+            rideForwards = false;
+            iterPoint = railPoints.Length;
+            player = col.gameObject;
+            initGrind();
+        }
+        else
+        {
+            player = null;
             playerIsOnRail = false;
         }
     }

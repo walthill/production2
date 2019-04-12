@@ -20,8 +20,7 @@ public class EndRail : MonoBehaviour
     {
         if(col.name == "Player")
         {
-            GetComponentInParent<RaliScript>().setOnRail(false);
-            Debug.Log("Player Contact");
+            GetComponentInParent<RaliScript>().startRailBackward(col);
         }
     }
 }

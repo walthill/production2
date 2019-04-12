@@ -10,11 +10,20 @@ public class LoadingScreen : MonoBehaviour
 
     [SerializeField] RectTransform barFillRectTransform = null;
     [SerializeField] Text percentLoadedText = null;
+    [SerializeField] Text startButton = null;
+    [SerializeField] Vector3 textRGB = new Vector3(); //No alpha value as it fades in and out programatically
+    [SerializeField] GameObject loadingBar;
+    [SerializeField] GameObject pressAToContinue;
 
     Vector3 barFillLocalScale;
+    float alphaTime;
+    bool waitForButton;
 
     void Awake()
     {
+        alphaTime = 0;
+        waitForButton = true;
+        startButton.color = Vector4.zero;
         barFillLocalScale = barFillRectTransform.localScale;
         Hide();
     }
@@ -28,7 +37,16 @@ public class LoadingScreen : MonoBehaviour
             if(currentLoadingOperation.isDone)
             {
                 //Hide();
+                waitForButton = true;
             }
+        }
+
+        if (waitForButton)
+        {
+            //Flash Text
+            alphaTime += Time.deltaTime;
+            float textAlpha = Mathf.Abs(Mathf.Sin(alphaTime / 20.0f)) * 255.0f;
+            startButton.color = new Vector4(textRGB.x, textRGB.y, textRGB.z, textAlpha);
         }
     }
 
@@ -38,6 +56,12 @@ public class LoadingScreen : MonoBehaviour
         barFillRectTransform.localScale = barFillLocalScale;
 
         percentLoadedText.text = Mathf.CeilToInt(progress * 100).ToString() + "%";
+
+        if (Mathf.CeilToInt(progress * 100) >= 99)
+        {
+            loadingBar.SetActive(false);
+            pressAToContinue.SetActive(true);
+        }
     }
 
     public void Show(AsyncOperation op)
@@ -50,10 +74,9 @@ public class LoadingScreen : MonoBehaviour
     }
 
     public void Hide()
-    {
+    {   
         gameObject.SetActive(false);
-
-        currentLoadingOperation = null;
         isLoading = false;
+        currentLoadingOperation = null;
     }
 }

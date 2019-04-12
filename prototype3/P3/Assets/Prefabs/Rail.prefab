@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4261350319037301531}
+  - component: {fileID: 3321878657759320873}
+  - component: {fileID: 1816946415397633849}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -30,6 +32,31 @@ Transform:
   m_Father: {fileID: 6787519802048955375}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3321878657759320873
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3560583561602925907}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.374442, y: 0.10783734, z: 1.4147819}
+  m_Center: {x: -0.059039116, y: 0.028126303, z: -0.6668203}
+--- !u!114 &1816946415397633849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3560583561602925907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e99366261a1c3843a09ccd43a6a1f49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4401408500422339103
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +70,6 @@ GameObject:
   - component: {fileID: 5985832305361769202}
   - component: {fileID: 6269577575920619727}
   - component: {fileID: 3232330857003216482}
-  - component: {fileID: 4029698301444814299}
   m_Layer: 0
   m_Name: Rail
   m_TagString: Untagged
@@ -59,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4401408500422339103}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.9117, z: -0.000000032375}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 6.6941, z: 0.25}
   m_Children:
   - {fileID: 4261350319037301531}
@@ -138,24 +164,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a9bd828a3bd6e64c9127ca7fafac7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCurved: 0
   railPoints:
   - {fileID: 4261350319037301531}
   - {fileID: 3321258928387344932}
   timeOnRail: 3
   railCollider: {fileID: 6269577575920619727}
---- !u!65 &4029698301444814299
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4401408500422339103}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.9451361, y: 0.1016125, z: 1.9820364}
-  m_Center: {x: -0.075823545, y: 0.94919497, z: -0.49101818}
+  nextPointThreshold: 0.5
 --- !u!1 &7024856635680593413
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3321258928387344932}
   - component: {fileID: 4667144310864008200}
-  - component: {fileID: 2689037708131896964}
+  - component: {fileID: 6028003275887565844}
   m_Layer: 0
   m_Name: End
   m_TagString: Untagged
@@ -200,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e13cb0a7294194886a5c217c910d0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &2689037708131896964
+--- !u!65 &6028003275887565844
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,8 +223,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7024856635680593413}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.0927544, y: 0.11073794, z: 3.019255}
-  m_Center: {x: 0.011291504, y: 0.046972983, z: -1.0096278}
+  m_Size: {x: 2.374442, y: 0.10783734, z: 1.4147819}
+  m_Center: {x: -0.059039116, y: 0.028126303, z: -0.6668203}
