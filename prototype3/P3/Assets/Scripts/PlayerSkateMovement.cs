@@ -183,15 +183,15 @@ public class PlayerSkateMovement : MonoBehaviour
         endOfDrift = true;
         isDrifting = false;
         Time.timeScale = normalTimeScale;
-        if (isGrounded)
+        if (true) //(isGrounded)
         {
             //rb.velocity = transform.forward * rb.velocity.magnitude;
             setSpeed(driftVelocity.magnitude);
 
-            rb.velocity = transform.forward * driftVelocity.magnitude;
-            //TODO: clusterfuck
-            debugMoveSpeed = rb.velocity.magnitude;
-            arcadeData.targetVelocity = debugMoveSpeed;
+            //rb.velocity = transform.forward * driftVelocity.magnitude;
+            ////TODO: clusterfuck
+            //debugMoveSpeed = rb.velocity.magnitude;
+            //arcadeData.targetVelocity = debugMoveSpeed;
         }
     }
 
