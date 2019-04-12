@@ -1,15 +1,29 @@
 fileFormatVersion: 2
-guid: b7b3db3cfe302d84a9db77dd99c11a74
+guid: 163b09021d36b5e4db7ec46725991bbd
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: lambert1
-    2100002: lambert3
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: pPlane1
+    100000: BackSeat
+    100002: Crane
+    100004: //RootNode
+    100006: Wheels
+    400000: BackSeat
+    400002: Crane
+    400004: //RootNode
+    400006: Wheels
+    2100000: StingrayPBS1
+    2300000: BackSeat
+    2300002: Crane
+    2300004: //RootNode
+    2300006: Wheels
+    3300000: BackSeat
+    3300002: Crane
+    3300004: //RootNode
+    3300006: Wheels
+    4300000: Truck
+    4300002: BackSeat
+    4300004: Crane
+    4300006: Wheels
   externalObjects: {}
   materials:
     importMaterials: 1

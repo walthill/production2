@@ -1,15 +1,14 @@
 fileFormatVersion: 2
-guid: b7b3db3cfe302d84a9db77dd99c11a74
+guid: 9bd7817961f62584691dff141aa4a96e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2100000: lambert1
-    2100002: lambert3
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pPlane1
+    4300000: favelaBuilding_1
   externalObjects: {}
   materials:
     importMaterials: 1
