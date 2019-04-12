@@ -27,8 +27,6 @@ EditorBuildSettings:
     path: Assets/Scenes/WinScreen.unity
     guid: d57ce04e122a8a240a6e3d63953afbf9
   - enabled: 1
-    path: Assets/Scenes/PauseMenu.unity
-    guid: f99bd7d1437ee5c4f9e910d6d5c6cd59
     path: Assets/Scenes/Boi Scene.unity
     guid: 7962b6a6e4f7a2248bb6420d6fd9d3a3
   m_configObjects: {}
