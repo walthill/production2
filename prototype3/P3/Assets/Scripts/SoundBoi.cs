@@ -130,6 +130,18 @@ public class SoundBoi : MonoBehaviour
         Jumpsauce.clip = jump;
         lambSauce.clip = land;
 
+
+
+
+        // this sets all the EQs to 0
+        float MixerFloat = 0;
+        mixer.GetFloat("lowPassPart1", out MixerFloat);
+        mixer.GetFloat("lowPassPart2", out MixerFloat);
+        mixer.GetFloat("lowPassPart3", out MixerFloat);
+        mixer.GetFloat("lowPassPart4", out MixerFloat);
+        mixer.GetFloat("lowPassPart5", out MixerFloat);
+       
+
     }
 
 
@@ -287,8 +299,8 @@ public class SoundBoi : MonoBehaviour
         {
             //PlaywheelSound();
         }
-        WheelSource.volume = speed * .01f +.2f;
-        WheelSource.pitch = speed * .01f +.5f;
+        WheelSource.volume = (speed * .003f);
+        WheelSource.pitch = (speed * .01f) +.5f;
        // Debug.Log("link has been made speed is");
 
     }
@@ -296,7 +308,7 @@ public class SoundBoi : MonoBehaviour
     public void PlaywheelSound()
     {
 
-        WheelSource.volume = .1f;
+        //WheelSource.volume = .1f;
         WheelSource.Play();
       //  Debug.Log("playing wheels");
       //  Debug.Log("volume is" + WheelSource.volume);

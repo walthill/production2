@@ -70,7 +70,8 @@ public class PlayerSpeedSurface : MonoBehaviour
                 boostLength = Vector3.Distance(startPosit, endPosit);
                 speedBoost();
                 stopCharging();
-                SoundBoi.instance.ReleaseSound();
+				if(speedBoi.canUseSpeedSurface(surfaceChannel))
+					SoundBoi.instance.ReleaseSound();
             }
         }
 
@@ -78,7 +79,8 @@ public class PlayerSpeedSurface : MonoBehaviour
     private void startCharging()
     {
         isCharging = true;
-        SoundBoi.instance.makeChargeSound = true;
+		if(speedBoi.canUseSpeedSurface(surfaceChannel))
+			SoundBoi.instance.makeChargeSound = true;
     }
     private void stopCharging()
     {

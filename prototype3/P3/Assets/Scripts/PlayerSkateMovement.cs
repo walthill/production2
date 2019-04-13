@@ -31,6 +31,7 @@ public class PlayerSkateMovement : MonoBehaviour
                      boostValue;
 
         public float rotationSpeed;
+        public float driftRotationSpeed;
         public float jumpForce;
     }
     [SerializeField]
@@ -49,12 +50,15 @@ public class PlayerSkateMovement : MonoBehaviour
   
     //Input vars
     float xMove, accelerationButton;
-    bool accelButtonDown, jump, isGrounded, applyDownforce, isAirborne;
+    [SerializeField]
+    bool isGrounded;
+    bool accelButtonDown, jump, applyDownforce, isAirborne;
     Rigidbody rb;
     float oldVel;
     Transform objTransform;
 
     //Drifting stuff
+    [SerializeField]
     bool isDrifting = false;
     bool endOfDrift; //Flags smooth camera damping on drift release
     Vector3 driftStartForward;
@@ -113,7 +117,7 @@ public class PlayerSkateMovement : MonoBehaviour
         jump = Input.GetButtonDown("JoyJump");
 
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
-        if (Input.GetButtonUp("JoyDrift")) stopDrifting();
+        if (!Input.GetButton("JoyDrift") && Time.timeScale != 0f) stopDrifting();
     }
 
     private void FixedUpdate()
@@ -171,18 +175,23 @@ public class PlayerSkateMovement : MonoBehaviour
     }
     private void stopDrifting()
     {
+        if (!isDrifting)
+        {
+            return;
+            //TODO: clusterfuck
+        }
         endOfDrift = true;
         isDrifting = false;
         Time.timeScale = normalTimeScale;
-        if (isGrounded)
+        if (true) //(isGrounded)
         {
             //rb.velocity = transform.forward * rb.velocity.magnitude;
             setSpeed(driftVelocity.magnitude);
 
-            rb.velocity = transform.forward * driftVelocity.magnitude;
-            //TODO: clusterfuck
-            debugMoveSpeed = rb.velocity.magnitude;
-            arcadeData.targetVelocity = debugMoveSpeed;
+            //rb.velocity = transform.forward * driftVelocity.magnitude;
+            ////TODO: clusterfuck
+            //debugMoveSpeed = rb.velocity.magnitude;
+            //arcadeData.targetVelocity = debugMoveSpeed;
         }
     }
 
@@ -238,10 +247,12 @@ public class PlayerSkateMovement : MonoBehaviour
     private void TurnPhysics()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
-        float turnFactor = xMove * arcadeData.rotationSpeed;
+        float turnFactor;
+        if (isDrifting)
+            turnFactor = xMove * arcadeData.rotationSpeed * (arcadeData.driftRotationSpeed + debugMoveSpeed / speedThresholdBoi.getMaxSpeed());
+        else
+            turnFactor = xMove * arcadeData.rotationSpeed;
         transform.Rotate(new Vector3(0f, turnFactor, 0f));
-
     }
 
     private void calcTargetVelocity()
@@ -251,18 +262,17 @@ public class PlayerSkateMovement : MonoBehaviour
         { //decrease
             //arcadeData.localMaxVelocity-= .1f
             arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
-            arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
+            
         }
         else if (debugMoveSpeed > arcadeData.localMaxVelocity + diffToSpeedLoss)
         { //increase
             //arcadeData.localMaxVelocity += .1f
             arcadeData.localMaxVelocity = debugMoveSpeed;
         }
+        arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         if (accelButtonDown)
-            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime);
+            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); //
         arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
-        float accel = accelerationButton * arcadeData.accelMultiplier;
-
     }
 
     private void MovePhysics()
