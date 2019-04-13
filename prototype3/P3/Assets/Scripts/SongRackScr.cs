@@ -48,14 +48,14 @@ public class SongRackScr : MonoBehaviour
     {
         CurrentSong++;
         AssignClipsToTracks();
-        Debug.Log("trying to change music");
+        //Debug.Log("trying to change music");
     }
 
     public void PreviousSong()
     {
         CurrentSong--;
         AssignClipsToTracks();
-        Debug.Log("trying to change music");
+        //Debug.Log("trying to change music");
     }
 
     public void AssignClipsToTracks()

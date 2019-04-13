@@ -81,7 +81,7 @@ public class SceneLoadingBoi : MonoBehaviour
                 if (SceneManager.GetActiveScene().buildIndex != lightScene.buildIndex)
                    SceneManager.SetActiveScene(lightScene);
             } catch (System.Exception) {
-                Debug.Log("waiting for lighting scene to load");
+                //Debug.Log("waiting for lighting scene to load");
                 // throw; MWAHAHAHAHAH - this is bad and I feel bad
             }
 

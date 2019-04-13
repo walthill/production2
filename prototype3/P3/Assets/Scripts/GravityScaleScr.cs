@@ -36,7 +36,7 @@ public class GravityScaleScr : MonoBehaviour
         /*
         if (Input.GetButtonDown("JoyGrav"))
         {
-            Debug.Log("grav is calling");
+            //Debug.Log("grav is calling");
             rb.AddForce(0, -100, 0, ForceMode.Acceleration);
         }
         */
@@ -47,7 +47,7 @@ public class GravityScaleScr : MonoBehaviour
     {
         if (Input.GetButton("JoyGrav"))
         {
-            Debug.Log("grav is calling");
+            //Debug.Log("grav is calling");
             rb.AddForce(WIDTransform.transform.up * -100, ForceMode.Acceleration);
         }
         if (Input.GetButtonDown("JoyGrav"))

@@ -92,7 +92,7 @@ public class FollowCamera : MonoBehaviour
             {
                 if (hitInfo.transform != target.parent.transform) //make sure collision isn't the player
                 {
-                    Debug.Log("raycast hit" + hitInfo.collider.name);
+                    //Debug.Log("raycast hit" + hitInfo.collider.name);
 
                     wantedPosition = new Vector3(hitInfo.point.x,
                                                  Mathf.Lerp(hitInfo.point.y + collisionCameraHeight, wantedPosition.y, Time.deltaTime * damping),

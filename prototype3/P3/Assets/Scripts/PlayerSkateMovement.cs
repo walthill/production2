@@ -340,7 +340,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                //Debug.Log("JUMP RAY HIT");
+                ////Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
                 SoundBoi.instance.playLandSound();
@@ -360,7 +360,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
                 Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-                //Debug.Log(hit.normal);
+                ////Debug.Log(hit.normal);
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 12.0f);
             }
@@ -383,7 +383,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 //Capture a rotation that makes player move in parallel with ground surface, lerp to that rotation
                 Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
-                //Debug.Log(hit.normal);
+                ////Debug.Log(hit.normal);
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * PLAYER_ALIGN_SPEED);
 

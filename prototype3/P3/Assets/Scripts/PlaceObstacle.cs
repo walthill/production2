@@ -17,7 +17,7 @@ public class PlaceObstacle : MonoBehaviour
     {
         //Number of possible meshes should match number of obstacles
         if (modelList.Length != (int)ObstacleType.NUM_OBSTACLES)
-            Debug.LogWarning("The number of possible meshes do not equal the number of obstacle types");
+            //Debug.LogWarning("The number of possible meshes do not equal the number of obstacle types");
 
         if ((int)obstacleType < 0)
             gameObject.GetComponent<MeshFilter>().mesh = null;
