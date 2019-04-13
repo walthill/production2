@@ -115,9 +115,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966412553}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -62.42, y: 148.7, z: 511}
-  m_LocalScale: {x: 5, y: 3, z: 3}
+  m_LocalScale: {x: 9.835099, y: 3, z: 3}
   m_Children:
   - {fileID: 1885579634}
   - {fileID: 1060026253}
@@ -149,7 +149,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c346c5b7355e85845ab325f1a92748f2, type: 3}
+  - {fileID: 2100000, guid: ca3de373f51d43948a1a87388e65dba1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -178,7 +178,7 @@ BoxCollider:
   m_GameObject: {fileID: 1966412553}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.105379775, y: 0.3035531, z: 0.4269206}
   m_Center: {x: 0.3060112, y: 0.36157998, z: -0.1469218}
@@ -203,13 +203,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966412553}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a9bd828a3bd6e64c9127ca7fafac7a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCurved: 0
   railPoints:
   - {fileID: 1885579634}
   - {fileID: 1060026253}
   timeOnRail: 3
   railCollider: {fileID: 1966412555}
+  nextPointThreshold: 0.1
