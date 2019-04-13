@@ -203,7 +203,7 @@ public class SoundBoi : MonoBehaviour
             if (partIndex < musicPartsArray.Length && slotIndex < MusicSlotArray.Length)
             {
                 slot.clip = musicPartsArray[partIndex];
-                //Debug.Log(musicPartsArray[partIndex].name + " assigned");
+                ////Debug.Log(musicPartsArray[partIndex].name + " assigned");
                 partIndex++;
                 slotIndex++;
             }
@@ -219,7 +219,7 @@ public class SoundBoi : MonoBehaviour
         timer = timer + Time.deltaTime;
         if (timer >= timerMax)
         {
-            //Debug.Log("timer is done");
+            ////Debug.Log("timer is done");
             PlayMusic();
             timer = 0;
             isTimerGoing = false;
@@ -301,7 +301,7 @@ public class SoundBoi : MonoBehaviour
         }
         WheelSource.volume = (speed * .003f);
         WheelSource.pitch = (speed * .01f) +.5f;
-       // Debug.Log("link has been made speed is");
+       // //Debug.Log("link has been made speed is");
 
     }
 
@@ -310,8 +310,8 @@ public class SoundBoi : MonoBehaviour
 
         //WheelSource.volume = .1f;
         WheelSource.Play();
-      //  Debug.Log("playing wheels");
-      //  Debug.Log("volume is" + WheelSource.volume);
+      //  //Debug.Log("playing wheels");
+      //  //Debug.Log("volume is" + WheelSource.volume);
     }
 
     public void WheelPitchUp()
@@ -319,7 +319,7 @@ public class SoundBoi : MonoBehaviour
         WheelSource.volume = WheelSource.volume + .02f;
         WheelSource.pitch = pitchNumber;
         pitchNumber = pitchNumber + .02f;
-       // Debug.Log("pitch is: " + pitchNumber);
+       // //Debug.Log("pitch is: " + pitchNumber);
     }
 
     public void WheelPitchDown()
@@ -327,7 +327,7 @@ public class SoundBoi : MonoBehaviour
         WheelSource.volume = WheelSource.volume - .02f;
         WheelSource.pitch = pitchNumber;
         pitchNumber = pitchNumber - .02f;
-      //  Debug.Log("pitch is: " + pitchNumber);
+      //  //Debug.Log("pitch is: " + pitchNumber);
     }
 
 
@@ -438,7 +438,7 @@ public class SoundBoi : MonoBehaviour
             mixer.GetFloat("lowPassPart1", out MixerFloat);
             mixer.SetFloat("lowPassPart1", MixerFloat*1.1f);
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
-            //Debug.Log(MixerFloat);
+            ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
                 Part1LowPass = false;
@@ -454,7 +454,7 @@ public class SoundBoi : MonoBehaviour
             mixer.GetFloat("lowPassPart2", out MixerFloat);
             mixer.SetFloat("lowPassPart2", MixerFloat * 1.1f);
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
-            //Debug.Log(MixerFloat);
+            ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
                 Part2LowPass = false;
@@ -470,7 +470,7 @@ public class SoundBoi : MonoBehaviour
             mixer.GetFloat("lowPassPart3", out MixerFloat);
             mixer.SetFloat("lowPassPart3", MixerFloat * 1.1f);
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
-            //Debug.Log(MixerFloat);
+            ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
                 Part3LowPass = false;
@@ -486,7 +486,7 @@ public class SoundBoi : MonoBehaviour
             mixer.GetFloat("lowPassPart4", out MixerFloat);
             mixer.SetFloat("lowPassPart4", MixerFloat * 1.1f);
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
-            //Debug.Log(MixerFloat);
+            ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
                 Part4LowPass = false;
@@ -502,7 +502,7 @@ public class SoundBoi : MonoBehaviour
             mixer.GetFloat("lowPassPart5", out MixerFloat);
             mixer.SetFloat("lowPassPart5", MixerFloat * 1.1f);
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
-            //Debug.Log(MixerFloat);
+            ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
                 Part5LowPass = false;

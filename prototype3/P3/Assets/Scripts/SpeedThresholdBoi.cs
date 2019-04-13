@@ -65,8 +65,8 @@ public class SpeedThresholdBoi : MonoBehaviour
             channelMin = speeds[(int)currentSpeedChannel - 1];
         }
         //normalize speed within channel from 0-1
-        //Debug.Log(speed);
-        // Debug.Log(channelMax);
+        ////Debug.Log(speed);
+        // //Debug.Log(channelMax);
         speed -= channelMin;
         speed = speed < 0 ? 0 : speed;
         channelMax -= channelMin;

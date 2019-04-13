@@ -30,7 +30,7 @@ public class MenuBoi : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.JoystickButton7))
         {
-            Debug.Log("Button Pressed");
+            //Debug.Log("Button Pressed");
             doPause();
             StartCoroutine(startPause());
         }
@@ -38,7 +38,7 @@ public class MenuBoi : MonoBehaviour
 
     IEnumerator startPause()
     {
-        Debug.Log("Started Pause");
+        //Debug.Log("Started Pause");
         preTimeScale = Time.timeScale;
         Time.timeScale = 0.0f;
         yield return new WaitForEndOfFrame(); //So it does not immediately unpause
@@ -46,7 +46,7 @@ public class MenuBoi : MonoBehaviour
         {
             yield return waitForKeyPress();
         }
-        Debug.Log("Ended Pause");
+        //Debug.Log("Ended Pause");
         Time.timeScale = preTimeScale;
         unPause();
     }
@@ -75,7 +75,7 @@ public class MenuBoi : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Where the FUCK are you going up");
+                    //Debug.Log("Where the FUCK are you going up");
                 }
             }
             if (Input.GetAxis("JoyVertical") < -0.5f && !isHeld && !isInControlsMenu)
@@ -91,7 +91,7 @@ public class MenuBoi : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Where the FUCK are you going down");
+                    //Debug.Log("Where the FUCK are you going down");
                 }
             }
 
@@ -119,7 +119,7 @@ public class MenuBoi : MonoBehaviour
 
     public void GoToControls()
     {
-        Debug.Log("whhhh");
+        //Debug.Log("whhhh");
         gameObject.transform.Find("DefaultMenu").gameObject.SetActive(false);
         gameObject.transform.Find("ControlsMenu/Controls").gameObject.SetActive(true);
         gameObject.transform.Find("ControlsMenu/Controls/GoBack").GetComponent<UIControllerWrapper>().setSelected(true);

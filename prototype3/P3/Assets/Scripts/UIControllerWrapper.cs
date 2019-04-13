@@ -29,7 +29,7 @@ public class UIControllerWrapper : MonoBehaviour
         {
             if (Input.GetKeyDown(accessableButtons[i]))
             {
-                Debug.Log(accessableButtons[i].ToString());
+                //Debug.Log(accessableButtons[i].ToString());
                 return true;
             }
         }
@@ -51,7 +51,7 @@ public class UIControllerWrapper : MonoBehaviour
             gameObject.transform.Find("Text_Right").GetComponent<Text>().color = Color.white;
 
         }
-        Debug.Log(gameObject.name + " is " + selected.ToString());
+        //Debug.Log(gameObject.name + " is " + selected.ToString());
         isSelected = selected;
     }
 }

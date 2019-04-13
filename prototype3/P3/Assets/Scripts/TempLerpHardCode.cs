@@ -76,7 +76,7 @@ public class TempLerpHardCode : MonoBehaviour
     {
         if(collision.collider.tag== "boomBox")
         {
-            Debug.Log("you hit the boom box");
+            //Debug.Log("you hit the boom box");
             keepMoving = true;
         }
         if (collision.collider.tag == "end")

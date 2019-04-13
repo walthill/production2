@@ -40,7 +40,7 @@ public class MusicBoiScr : MonoBehaviour
 
 
 
-        //Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
+        ////Debug.Log("chord clip is loaded as: " + gameObject.GetComponent<MusicBoiScr>().ChordClip.name);
         SongPath = "audio/music/Song" + SongNum;
 
         // check out the following links in order to add sound files to a list
@@ -72,14 +72,14 @@ public class MusicBoiScr : MonoBehaviour
         /*
         foreach (AudioClip part in songParts)
         {
-            Debug.Log(part);
+            //Debug.Log(part);
         }
         updateSoundBoi();
         //ChordClip = (AudioClip)AssetDatabase.LoadAssetAtPath("" + SoundPath,typeof(AudioClip));
         /*
         foreach(object part in songParts)
         {
-            Debug.Log(part);
+            //Debug.Log(part);
         }
         */
         updateSoundBoi();
@@ -94,7 +94,7 @@ public class MusicBoiScr : MonoBehaviour
             //adjust the number of the song 
             SongNum++;
             //debug the number of the song so I can make sure it's working right
-            Debug.Log("You're listening to song number: " + SongNum);
+            //Debug.Log("You're listening to song number: " + SongNum);
             //adjust the string representing the path with the new song number
             SongPath = "audio/music/Song" + SongNum;
             //update the array
@@ -113,7 +113,7 @@ public class MusicBoiScr : MonoBehaviour
             //adjust the number of the song 
             SongNum--;
             //debug the number of the song so I can make sure it's working right
-            Debug.Log("You're listening to song number: " + SongNum);
+            //Debug.Log("You're listening to song number: " + SongNum);
             //adjust the string representing the path with the new song number
             SongPath = "audio/music/Song" + SongNum;
             //update the array

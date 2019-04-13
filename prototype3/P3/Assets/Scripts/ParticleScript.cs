@@ -139,7 +139,7 @@ public class ParticleScript : MonoBehaviour
     {
         //main.startColor = new Color(255, 120, 120);
         //ps.main.startColor=new Color(255, 120, 120);
-        Debug.Log("color should be changed");
+        //Debug.Log("color should be changed");
 
         //gameObject.GetComponent<Renderer>().material.color = Color.red;//new Color(255, 120, 120);
         
