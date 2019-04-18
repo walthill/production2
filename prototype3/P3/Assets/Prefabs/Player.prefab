@@ -508,9 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boostMultiplier: 0.5
-  isTouchingCharge: 0
-  isTouchingRelease: 0
-  isCharging: 0
+  passiveBoostMultiplier: 10
 --- !u!114 &9007623253124313016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,14 +835,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1406194919}
     m_Modifications:
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -888,6 +878,14 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_FieldOfView
