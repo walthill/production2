@@ -13,19 +13,19 @@ public class PlayerSpeedSurface : MonoBehaviour
     const string CHARGE_SURFACE = "ChargeSurface", RELEASE_SURFACE = "ReleaseSurface";
 
     [SerializeField]
-    [Tooltip("Multiplier applied to the boost effect")]
+    [Tooltip("Multiplier applied to the button boost")]
     float boostMultiplier = 2f;
-
+    [SerializeField]
+    [Tooltip("Multiplier applied to the passive boost")]
+    float passiveBoostMultiplier = 0.5f;
     PlayerSkateMovement playerMove;
     SpeedThresholdBoi speedBoi;
-    [SerializeField]
     bool isTouchingCharge = false;
-    [SerializeField]
     bool isTouchingRelease = false;
-    Vector3 startPosit, endPosit; //where the player presses and releases the button
-    
+    Vector3 buttonStartPosit, buttonEndPosit; //where the player presses and releases the button
+    Vector3 startPosit, endPosit;
+    bool boostCharge, releaseCharge; //player missed button, but hit both surfaces
     //[Header("Displays boost effects")]
-    [SerializeField]
     bool isCharging = false;
     float boostVelocityValue = 0;
     float boostLength; //distance the button was held down for.
@@ -42,6 +42,10 @@ public class PlayerSpeedSurface : MonoBehaviour
 
     void Update()
     {
+        if (isTouchingCharge)
+        {
+            minorSpeedBoost();
+        }
         if (isCharging)
         {
             //if not on speed surface
@@ -56,7 +60,7 @@ public class PlayerSpeedSurface : MonoBehaviour
             if (isTouchingCharge)
             {
                 ////Debug.Log("charging is registered");
-                startPosit = transform.position;
+                buttonStartPosit = transform.position;
                 startCharging();
             }
         }
@@ -66,8 +70,8 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             if (isTouchingRelease && isCharging)
             {
-                endPosit = transform.position;
-                boostLength = Vector3.Distance(startPosit, endPosit);
+                buttonEndPosit = transform.position;
+                boostLength = Vector3.Distance(buttonStartPosit, buttonEndPosit);
                 speedBoost();
                 stopCharging();
 				if(speedBoi.canUseSpeedSurface(surfaceChannel))
@@ -89,19 +93,28 @@ public class PlayerSpeedSurface : MonoBehaviour
     }
     private void speedBoost()
     {
+        boostCharge = releaseCharge = false; //disable passive boost
         //speed player up in proportion to how big the boost time is up to max boost
         boostVelocityValue = boostLength*boostMultiplier;
         speedBoi.speedBoost(boostVelocityValue, surfaceChannel);
+    }
+    private void minorSpeedBoost()
+    {
+        boostVelocityValue = passiveBoostMultiplier*Time.deltaTime;//Vector3.Distance(startPosit, endPosit)*passiveBoostMultiplier;
+        speedBoi.minorSpeedBoost(boostVelocityValue, surfaceChannel);
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == CHARGE_SURFACE)
         {
+            startPosit = transform.position;
+            boostCharge = true;
             isTouchingCharge = true;
             surfaceChannel = other.gameObject.GetComponent<SpeedGate>().speedRequired;
         }
         if(other.tag == RELEASE_SURFACE)
         {
+            releaseCharge = true;
             isTouchingRelease = true;
         }
     }
@@ -109,10 +122,19 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         if (other.tag == CHARGE_SURFACE)
         {
+            //if not touching release, cancel boost charge.
+            //if (releaseCharge) boostCharge = false;
             isTouchingCharge = false;
         }
         if (other.tag == RELEASE_SURFACE)
         {
+            endPosit = transform.position;
+
+           //if (releaseCharge && boostCharge)
+           //{
+           //    minorSpeedBoost();
+           //}
+            releaseCharge = boostCharge = false;
             isTouchingRelease = false;
         }
     }
