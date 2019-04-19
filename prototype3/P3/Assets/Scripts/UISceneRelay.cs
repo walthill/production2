@@ -41,4 +41,39 @@ public class UISceneRelay : MonoBehaviour
     {
         canvas.SetActive(true);
     }
+
+    public void setOnSpeedSurfaceNoX(bool xNotPressed)
+    {
+        //set when player is on speed surface
+    }
+
+    public void xHold(float distance, bool xHeld)
+    {
+        //set when player is holding X on a speed surface w/ the distance
+    }
+
+    public void onReleaseSurfaceX(bool xIsPressed)
+    {
+        //set when player is on the release surface and still holding X
+    }
+
+    public void correctRelease()
+    {
+        //called when the player correctly releases X
+        SpeedChannel currentChannel = PlayerSceneRelay.instance.getSpeedChannel();
+        Debug.Log("Correct Release");
+    }
+
+    public void earlyRelease()
+    {
+        Debug.Log("Early Release");
+        //called when the player releases X before the release surface
+    }
+
+    public void lateRelease()
+    {
+        Debug.Log("late release");
+        //called when the player releases X after the release surface
+    }
+
 }
