@@ -42,7 +42,6 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         if (isTouchingCharge)
         {
-            minorSpeedBoost();
             UISceneRelay.instance.setOnSpeedSurfaceNoX(!xIsDown);
         }
         if (isTouchingRelease)
@@ -51,6 +50,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         }
         if (isCharging)
         {
+            minorSpeedBoost();
             UISceneRelay.instance.xHold(Vector3.Distance(buttonStartPosit, buttonEndPosit), xIsDown);
             //if not on speed surface
             if (!isTouchingRelease && !isTouchingCharge)
