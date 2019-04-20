@@ -134,14 +134,14 @@ public class SoundBoi : MonoBehaviour
 
 
         // this sets all the EQs to 0
-        float MixerFloat = 0;
-        mixer.GetFloat("lowPassPart1", out MixerFloat);
-        mixer.GetFloat("lowPassPart2", out MixerFloat);
-        mixer.GetFloat("lowPassPart3", out MixerFloat);
-        mixer.GetFloat("lowPassPart4", out MixerFloat);
-        mixer.GetFloat("lowPassPart5", out MixerFloat);
+        float MixerFloat = 10;
+        mixer.SetFloat("lowPassPart1", MixerFloat);
+        mixer.SetFloat("lowPassPart2", MixerFloat);
+        mixer.SetFloat("lowPassPart3", MixerFloat);
+        mixer.SetFloat("lowPassPart4", MixerFloat);
+        mixer.SetFloat("lowPassPart5", MixerFloat);
        
-
+        
     }
 
 
