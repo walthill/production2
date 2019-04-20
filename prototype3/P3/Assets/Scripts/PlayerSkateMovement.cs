@@ -45,7 +45,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField] Transform respawn = null;
     [SerializeField] float liftCoeffiecient = 0;
 
-    const float SLOPE_RAY_DIST = 1f;
+    const float SLOPE_RAY_DIST = 2f;
     const float PLAYER_ALIGN_SPEED = 10f;
   
     //Input vars
@@ -340,7 +340,6 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                ////Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
                 SoundBoi.instance.playLandSound();
@@ -371,7 +370,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //help @ https://bit.ly/2RMVeox
 
-        Ray ray = new Ray(objTransform.position, -objTransform.up);
+        Ray ray = new Ray(objTransform.position - new Vector3(0.0f, -1.0f, 0.0f), -objTransform.up);
 
         if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
