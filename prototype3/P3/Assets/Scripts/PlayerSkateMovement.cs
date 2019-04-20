@@ -340,7 +340,6 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                ////Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
                 rb.velocity = rb.velocity.normalized * oldVel;
                 SoundBoi.instance.playLandSound();
@@ -373,7 +372,6 @@ public class PlayerSkateMovement : MonoBehaviour
 
         Ray ray = new Ray(objTransform.position - new Vector3(0.0f, -1.0f, 0.0f), -objTransform.up);
 
-        Debug.DrawRay(ray.origin, ray.direction, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
             if (!isAirborne)
