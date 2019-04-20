@@ -103,7 +103,7 @@ public class SoundBoi : MonoBehaviour
     bool Part3LowPass = false;
     bool Part4LowPass = false;
     bool Part5LowPass = false;
-
+    public bool IsDrifting = false;
 
 
     public bool makeChargeSound = false;
@@ -292,8 +292,8 @@ public class SoundBoi : MonoBehaviour
         ReleaseFeedBackSource.Play();
     }
 
-
-    public void linkWheelSoundToSpeed(float speed)
+    //hook this up to the player to look for the bool
+    public void linkWheelSoundToSpeed(float speed, bool drifting)
     {
         if (speed > 0)
         {
@@ -301,6 +301,7 @@ public class SoundBoi : MonoBehaviour
         }
         WheelSource.volume = (speed * .003f);
         WheelSource.pitch = (speed * .01f) +.5f;
+        //if(PlayerSceneRelay.)
        // //Debug.Log("link has been made speed is");
 
     }

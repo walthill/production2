@@ -183,7 +183,7 @@ MonoBehaviour:
   WheelSoundSlowSnd: {fileID: 8300000, guid: e6ebce094305c7a4abeb78273e671aab, type: 3}
   WheelSoundFastSnd: {fileID: 0}
   SparksSnd: {fileID: 0}
-  ChargingSnd: {fileID: 8300000, guid: 6c5a7646928c1d24c87c504dd747faae, type: 3}
+  ChargingSnd: {fileID: 8300000, guid: 119fffea28f255945b9631275b7540b1, type: 3}
   ReleaseSnd: {fileID: 8300000, guid: b91bc24af05bfea4bab15718489ae28c, type: 3}
   PerfectReleaseSnd: {fileID: 0}
   StaticChangeSongSnd: {fileID: 8300000, guid: d2678b85213e7d94ea4316befd6fa029, type: 3}
@@ -1613,8 +1613,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChordSource: {fileID: 2910597395598217843}
   SongPath: 
+  SongNum: 0
   songParts: []
   ChordClip: {fileID: 0}
+  changingSong: 0
 --- !u!82 &2910597395598217843
 AudioSource:
   m_ObjectHideFlags: 0
