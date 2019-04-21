@@ -434,5 +434,9 @@ public class PlayerSkateMovement : MonoBehaviour
         arcadeData.targetVelocity = debugMoveSpeed;
         arcadeData.localMaxVelocity = newSpeed;
     }
+    public bool getIsGrounded()
+    {
+        return isGrounded;
+    }
     #endregion
 }
