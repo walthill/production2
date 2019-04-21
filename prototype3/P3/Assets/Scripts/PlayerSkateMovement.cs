@@ -102,13 +102,15 @@ public class PlayerSkateMovement : MonoBehaviour
 
         DriftCamRelease();
 
+		//Works when building game with option development build checked
+		#if UNITY_EDITOR 
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
-
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer(respawn);
-    }
+		#endif
+	}
 
     void ProcessInput()
     {
@@ -425,7 +427,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public void ResetPlayer(Transform t) //TODO: reset speed threshold
     {
         objTransform.position = t.position;
-        objTransform.localRotation = Quaternion.identity;
+        objTransform.localRotation = t.rotation;
    
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
