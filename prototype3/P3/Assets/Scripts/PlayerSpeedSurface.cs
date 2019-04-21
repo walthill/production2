@@ -74,7 +74,6 @@ public class PlayerSpeedSurface : MonoBehaviour
 
                 uiChanged = false;
             }
-
         }
         if (!isCharging && !isTouchingCharge && !isTouchingRelease)
         {
@@ -93,6 +92,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         }
         if (isCharging)
         {
+            minorSpeedBoost();
             UISceneRelay.instance.xHold(Vector3.Distance(buttonStartPosit, buttonEndPosit), xIsDown);
 
             if (Vector3.Distance(buttonStartPosit, transform.position) >= 40/speedSurfaceBar.GetComponent<UISpeedSurfaceBar>().bars.Length * volumeBarTracker)
