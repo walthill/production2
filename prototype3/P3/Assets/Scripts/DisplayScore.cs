@@ -11,16 +11,27 @@ public class DisplayScore : MonoBehaviour
 
     Animator winScreenAnim;
     int totalScore;
-
+	bool skipCounter = false, canSkip = true;
+	
     void Awake()
     {
         winScreenAnim = gameObject.GetComponent<Animator>();
         SpeedChannel ch = ScoreBoi.instance.GetHighestSpeedChannel();
         scoreText.color = scoreColors[(int)ch - 1];
         timeText.text = ScoreBoi.instance.GetTime();
-        totalScore = ScoreBoi.instance.CalculateScore();
+        totalScore = ScoreBoi.instance.CalculateScore(); 
     }
 
+	void Update()
+	{
+		if(canSkip && Input.GetButtonDown("JoyJump"))
+		{
+			canSkip = false;
+			//Debug.Log("skip score counter");
+			skipCounter = true;
+		}
+	}
+	
     //Called from animation trigger
     public void PlayerWin()
     {
@@ -33,20 +44,36 @@ public class DisplayScore : MonoBehaviour
         int counter = 0;
         for (int i = 0; i < totalScore; i++)
         {
-            if (counter < totalScore)
-            {
-                counter += 21;
-                scoreText.text = counter.ToString();
-                yield return new WaitForSeconds(timeBetweenText);
-            }
-            else
-            {
-                counter = totalScore;
-                scoreText.text = counter.ToString();
-                break;
-            }
-        }
-
-        yield return new WaitForSeconds(1.5f);
+			if(!skipCounter)
+			{
+				if (counter < totalScore)
+				{
+					counter += 76;
+					scoreText.text = counter.ToString();
+					yield return new WaitForSeconds(timeBetweenText);
+				}
+				else
+				{
+					counter = totalScore;
+					scoreText.text = counter.ToString();
+					break;
+				}
+			}
+			else
+			{
+				//Debug.Log("SKIP");
+				scoreText.text = totalScore.ToString();
+				
+				skipCounter = false;
+				break;
+			}
+		}
     }
+	
+
+	public void ReturnToMain()
+	{
+		if(!skipCounter && !canSkip)
+			SceneManager.LoadScene("Title");
+	}
 }
