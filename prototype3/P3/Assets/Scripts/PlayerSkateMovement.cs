@@ -79,6 +79,9 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     [Tooltip("should time slow less at lower speeds?")]
     bool changeTimeBySpeed;
+	[Range(0,1)]
+	[SerializeField] float airTurnFactor = 0.25f;
+	
     float normalTimeScale;
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
@@ -253,7 +256,7 @@ public class PlayerSkateMovement : MonoBehaviour
 
         if (isAirborne)
         {
-            transform.Rotate(new Vector3(0f, turnFactor / 4, 0f));
+            transform.Rotate(new Vector3(0f, turnFactor * airTurnFactor, 0f));
         }
         else
         {
@@ -318,7 +321,7 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         else if (!jump && accelButtonDown && isAirborne)
         {
-            if(rb.velocity.z != 0)
+            if(rb.velocity.z != 0) //don't allow air turning if the player has no forward motion
             { 
                 float applyGravity = rb.velocity.y;
 
@@ -328,7 +331,8 @@ public class PlayerSkateMovement : MonoBehaviour
                     rb.velocity = vel.normalized * arcadeData.maxVelocity;
                 else
                     rb.velocity = vel;
-
+				
+				//apply force of gravity
                 rb.velocity = new Vector3(rb.velocity.x, applyGravity, rb.velocity.z);
 
             }
