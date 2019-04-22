@@ -49,6 +49,7 @@ public class SceneLoadingBoi : MonoBehaviour
     //load all scenes in given level index
     void loadLevel(int index)
     {
+		loadingScreen.SetNumScenesToLoad(mLevelScenes[index].sceneList.Count);
         foreach (int sceneNum in mLevelScenes[index].sceneList)
         {
             loadingScreen.Show(SceneManager.LoadSceneAsync(sceneNum, LoadSceneMode.Additive));
@@ -85,7 +86,7 @@ public class SceneLoadingBoi : MonoBehaviour
                 // throw; MWAHAHAHAHAH - this is bad and I feel bad
             }
 
-            if (Input.GetKeyDown(key))
+            if (Input.GetKeyDown(key) && loadingScreen.ReadyToPlay())
             {
                 done = true; // breaks the loop
                 ScoreBoi.instance.RunGameClock(); //start clock - used to calculate score
