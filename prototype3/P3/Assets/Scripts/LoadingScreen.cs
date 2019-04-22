@@ -19,7 +19,7 @@ public class LoadingScreen : MonoBehaviour
 
     Vector3 barFillLocalScale;
     float alphaTime;
-    bool waitForButton, readyToPlay = false, shouldHideLoadingBar = true;
+    bool waitForButton, canPauseGame = false, readyToPlay = false, shouldHideLoadingBar = true;
 	int numScenesToLoad, scenesLoaded = 0;
 
     void Awake()
@@ -28,7 +28,7 @@ public class LoadingScreen : MonoBehaviour
         waitForButton = true;
         startButton.color = Vector4.zero;
         barFillLocalScale = barFillRectTransform.localScale;
-        Hide();
+        //Hide(); not sure why this is here, but don't uncomment it. When this runs, the player can pause the game in the loading screen
     }
 
     void Update()
@@ -101,6 +101,7 @@ public class LoadingScreen : MonoBehaviour
         gameObject.SetActive(false);
         isLoading = false;
         currentLoadingOperation = null;
+		canPauseGame = true;
     }
 	
 	public void SetNumScenesToLoad(int amount)
@@ -111,5 +112,10 @@ public class LoadingScreen : MonoBehaviour
 	public bool ReadyToPlay()
 	{
 		return readyToPlay;
+	}
+	
+	public bool AbleToPause()
+	{
+		return canPauseGame;
 	}
 }
