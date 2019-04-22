@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class DisplayScore : MonoBehaviour
 {
-    [SerializeField] Text scoreText,timeText;
-    [SerializeField] Color[] scoreColors;
+    [SerializeField] Text scoreText,timeText, channelText;
+    [SerializeField] Image channelImg;
+	[SerializeField] Color[] scoreColors;
+	
 
     Animator winScreenAnim;
     int totalScore;
@@ -15,10 +17,37 @@ public class DisplayScore : MonoBehaviour
 	
     void Awake()
     {
+
         winScreenAnim = gameObject.GetComponent<Animator>();
         SpeedChannel ch = ScoreBoi.instance.GetHighestSpeedChannel();
         scoreText.color = scoreColors[(int)ch - 1];
-        timeText.text = ScoreBoi.instance.GetTime();
+
+		string channelStr = "CH 2";
+        if (ch == SpeedChannel.FAST)
+        {
+			channelStr = "CH 3";
+        }
+        else if (ch == SpeedChannel.BLUR)
+        {
+            channelStr = "CH 4";
+        }
+        else if (ch == SpeedChannel.LIGHTNING)
+        {
+            channelStr = "CH 5";
+        }
+        else if (ch == SpeedChannel.WOW_SO_FAST)
+        {
+            channelStr = "CH 6";
+        }
+        else if (ch == SpeedChannel.LIVE_IN_DARKNESS)
+        {
+            channelStr = "CH 7";
+        }
+		
+		channelText.text = channelStr;
+		channelImg.color = scoreText.color;
+		
+		timeText.text = ScoreBoi.instance.GetTime();
         totalScore = ScoreBoi.instance.CalculateScore(); 
     }
 
