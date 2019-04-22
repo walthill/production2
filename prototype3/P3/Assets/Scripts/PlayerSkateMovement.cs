@@ -166,6 +166,10 @@ public class PlayerSkateMovement : MonoBehaviour
         driftStartForward = objTransform.forward;
         
         isDrifting = true;
+
+        //this "plays" the drifting sound effect
+        SoundBoi.instance.playDriftingSound();
+
         driftVelocity = rb.velocity.normalized * debugMoveSpeed;
         driftSlowTimer = Time.time + driftTime;
         float modDriftScale = changeTimeBySpeed? 
@@ -187,7 +191,7 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             //rb.velocity = transform.forward * rb.velocity.magnitude;
             setSpeed(driftVelocity.magnitude);
-
+            SoundBoi.instance.StopDriftingSound();
             //rb.velocity = transform.forward * driftVelocity.magnitude;
             ////TODO: clusterfuck
             //debugMoveSpeed = rb.velocity.magnitude;

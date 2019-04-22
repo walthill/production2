@@ -13,6 +13,14 @@ public class SoundBoi : MonoBehaviour
     public AudioSource Jumpsauce;
     public AudioSource lambSauce;
 
+    [Header("drifting and drift release")]
+    public AudioClip driftSnd;
+    public AudioClip driftReleaseSnd;
+    public AudioSource driftSource;
+    public AudioSource driftReleaseSource;
+
+
+
     [Header("General Feedback Sounds")]
     public AudioClip WheelSoundSlowSnd;
     public AudioClip WheelSoundFastSnd;
@@ -131,7 +139,18 @@ public class SoundBoi : MonoBehaviour
         lambSauce.clip = land;
 
 
+        // add components for drift sound and drift release sound
+        driftSource = gameObject.AddComponent<AudioSource>();
+        driftReleaseSource = gameObject.AddComponent<AudioSource>();
+        driftSource.clip = driftSnd;
+        driftReleaseSource.clip = driftReleaseSnd;
+        
+        driftSource.Play();
+        driftSource.loop = true;
+        driftSource.volume = 0;
 
+        driftReleaseSource.loop = false;
+        driftReleaseSource.volume = 1;
 
         // this sets all the EQs to 0
         float MixerFloat = 10;
@@ -143,7 +162,16 @@ public class SoundBoi : MonoBehaviour
        
         
     }
-
+    //called from PlayerSkateMovement
+    public void playDriftingSound()
+    {
+        driftSource.volume = .1f;
+    }
+    public void StopDriftingSound()
+    {
+        driftSource.volume = 0;
+        driftReleaseSource.Play();
+    }
 
     public void playJumpSound()
     {
@@ -293,7 +321,7 @@ public class SoundBoi : MonoBehaviour
     }
 
     //hook this up to the player to look for the bool
-    public void linkWheelSoundToSpeed(float speed, bool drifting)
+    public void linkWheelSoundToSpeed(float speed)
     {
         if (speed > 0)
         {
@@ -401,12 +429,12 @@ public class SoundBoi : MonoBehaviour
             ReleaseSound();
 
         }
-
+        /*
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             PlaywheelSound();
         }
-
+        */
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
