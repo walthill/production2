@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
@@ -17,7 +19,8 @@ public class LoadingScreen : MonoBehaviour
 
     Vector3 barFillLocalScale;
     float alphaTime;
-    bool waitForButton;
+    bool waitForButton, readyToPlay = false, shouldHideLoadingBar = true;
+	int numScenesToLoad, scenesLoaded = 0;
 
     void Awake()
     {
@@ -52,20 +55,40 @@ public class LoadingScreen : MonoBehaviour
 
     void SetProgress(float progress)
     {
-        barFillLocalScale.x = progress;
+		if(barFillLocalScale.x < 1)
+		{
+			float randomFillScale = Random.Range(15, 127);
+			barFillLocalScale.x += progress/randomFillScale;
+		}
+		else
+			barFillLocalScale.x = 1;
+		
         barFillRectTransform.localScale = barFillLocalScale;
 
         percentLoadedText.text = Mathf.CeilToInt(progress * 100).ToString() + "%";
-
-        if (Mathf.CeilToInt(progress * 100) >= 99)
+		
+        if (Mathf.CeilToInt(progress * 100) >= 99 && barFillLocalScale.x == 1)
         {
-            loadingBar.SetActive(false);
-            pressAToContinue.SetActive(true);
-        }
+			
+			if(scenesLoaded == numScenesToLoad && shouldHideLoadingBar)
+			{
+				shouldHideLoadingBar = false;
+				StartCoroutine(WaitAndHideLoadBar(Random.Range(0.5f, 1f)));
+			}
+		}
     }
+	
+	IEnumerator WaitAndHideLoadBar(float waitTime)
+	{
+			yield return new WaitForSecondsRealtime(waitTime);
+			loadingBar.SetActive(false);
+			pressAToContinue.SetActive(true);
+			readyToPlay = true;
+	}
 
     public void Show(AsyncOperation op)
     {
+		scenesLoaded++;
         gameObject.SetActive(true);
         currentLoadingOperation = op;
 
@@ -79,4 +102,14 @@ public class LoadingScreen : MonoBehaviour
         isLoading = false;
         currentLoadingOperation = null;
     }
+	
+	public void SetNumScenesToLoad(int amount)
+	{
+		numScenesToLoad = amount;
+	}
+	
+	public bool ReadyToPlay()
+	{
+		return readyToPlay;
+	}
 }
