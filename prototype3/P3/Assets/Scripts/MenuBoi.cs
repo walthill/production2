@@ -57,11 +57,11 @@ public class MenuBoi : MonoBehaviour
         while (!done) // essentially a "while true", but with a bool to break out naturally
         {
             //UnPause
-            if (Input.GetKeyDown(KeyCode.JoystickButton7) && !isInControlsMenu)
+            /*if (Input.GetKeyDown(KeyCode.JoystickButton7) && !isInControlsMenu)
             {
                 done = true; // breaks the loop
                 isPaused = false;
-            }
+            }*/
             if (Input.GetAxis("JoyVertical") > 0.5f && !isHeld && !isInControlsMenu)
             {
                 if (buttonInt > 0)
