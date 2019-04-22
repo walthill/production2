@@ -144,9 +144,9 @@ MonoBehaviour:
   isGameRunning: 0
   timerText: {fileID: 977530216}
   itemsCollected: 0
-  bestTimesPerSpeed: 1e0000005a000000f00000002c010000a4010000e0010000
+  bestTimesPerSpeed: 1b0000002d0000004b00000078000000a5000000d2000000
   baseScore: 5000
-  timePenalty: 144
+  timePenalty: 189
   scoreBonus: 1.25
 --- !u!4 &741592338
 Transform:
