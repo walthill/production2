@@ -61,18 +61,18 @@ public class UISceneRelay : MonoBehaviour
     {
         //called when the player correctly releases X
         SpeedChannel currentChannel = PlayerSceneRelay.instance.getSpeedChannel();
-        Debug.Log("Correct Release");
+       //Debug.Log("Correct Release");
     }
 
     public void earlyRelease()
     {
-        Debug.Log("Early Release");
+       //Debug.Log("Early Release");
         //called when the player releases X before the release surface
     }
 
     public void lateRelease()
     {
-        Debug.Log("late release");
+       //Debug.Log("late release");
         //called when the player releases X after the release surface
     }
 
