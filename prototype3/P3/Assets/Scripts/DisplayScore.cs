@@ -56,6 +56,7 @@ public class DisplayScore : MonoBehaviour
 				{
 					counter = totalScore;
 					scoreText.text = counter.ToString();
+					canSkip = false;
 					break;
 				}
 			}
