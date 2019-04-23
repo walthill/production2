@@ -13,6 +13,14 @@ public class SoundBoi : MonoBehaviour
     public AudioSource Jumpsauce;
     public AudioSource lambSauce;
 
+    [Header("drifting and drift release")]
+    public AudioClip driftSnd;
+    public AudioClip driftReleaseSnd;
+    public AudioSource driftSource;
+    public AudioSource driftReleaseSource;
+
+
+
     [Header("General Feedback Sounds")]
     public AudioClip WheelSoundSlowSnd;
     public AudioClip WheelSoundFastSnd;
@@ -103,7 +111,7 @@ public class SoundBoi : MonoBehaviour
     bool Part3LowPass = false;
     bool Part4LowPass = false;
     bool Part5LowPass = false;
-
+    public bool IsDrifting = false;
 
 
     public bool makeChargeSound = false;
@@ -131,19 +139,39 @@ public class SoundBoi : MonoBehaviour
         lambSauce.clip = land;
 
 
+        // add components for drift sound and drift release sound
+        driftSource = gameObject.AddComponent<AudioSource>();
+        driftReleaseSource = gameObject.AddComponent<AudioSource>();
+        driftSource.clip = driftSnd;
+        driftReleaseSource.clip = driftReleaseSnd;
+        
+        driftSource.Play();
+        driftSource.loop = true;
+        driftSource.volume = 0;
 
+        driftReleaseSource.loop = false;
+        driftReleaseSource.volume = 1;
 
         // this sets all the EQs to 0
-        float MixerFloat = 0;
-        mixer.GetFloat("lowPassPart1", out MixerFloat);
-        mixer.GetFloat("lowPassPart2", out MixerFloat);
-        mixer.GetFloat("lowPassPart3", out MixerFloat);
-        mixer.GetFloat("lowPassPart4", out MixerFloat);
-        mixer.GetFloat("lowPassPart5", out MixerFloat);
+        float MixerFloat = 10;
+        mixer.SetFloat("lowPassPart1", MixerFloat);
+        mixer.SetFloat("lowPassPart2", MixerFloat);
+        mixer.SetFloat("lowPassPart3", MixerFloat);
+        mixer.SetFloat("lowPassPart4", MixerFloat);
+        mixer.SetFloat("lowPassPart5", MixerFloat);
        
-
+        
     }
-
+    //called from PlayerSkateMovement
+    public void playDriftingSound()
+    {
+        driftSource.volume = .1f;
+    }
+    public void StopDriftingSound()
+    {
+        driftSource.volume = 0;
+        driftReleaseSource.Play();
+    }
 
     public void playJumpSound()
     {
@@ -292,7 +320,7 @@ public class SoundBoi : MonoBehaviour
         ReleaseFeedBackSource.Play();
     }
 
-
+    //hook this up to the player to look for the bool
     public void linkWheelSoundToSpeed(float speed)
     {
         if (speed > 0)
@@ -301,6 +329,7 @@ public class SoundBoi : MonoBehaviour
         }
         WheelSource.volume = (speed * .003f);
         WheelSource.pitch = (speed * .01f) +.5f;
+        //if(PlayerSceneRelay.)
        // //Debug.Log("link has been made speed is");
 
     }
@@ -400,12 +429,12 @@ public class SoundBoi : MonoBehaviour
             ReleaseSound();
 
         }
-
+        /*
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
             PlaywheelSound();
         }
-
+        */
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
