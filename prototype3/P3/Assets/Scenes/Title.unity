@@ -280,12 +280,12 @@ GameObject:
   - component: {fileID: 142978696}
   - component: {fileID: 142978695}
   m_Layer: 5
-  m_Name: ControlsButton
+  m_Name: HowToPlayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &142978694
 RectTransform:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 82.99999, y: 129}
+  m_AnchoredPosition: {x: 82.99999, y: 136.7}
   m_SizeDelta: {x: 303.2, y: 107.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &142978695
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20dd9474dc18f1d42b2a169337911ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: LoadingScene
+  sceneName: HowToPlay
   willQuitTheGame: 0
   tvDude: {fileID: 828552205}
   lines: {fileID: 1033029633}
@@ -1223,7 +1223,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 82.99999, y: 101.99999}
+  m_AnchoredPosition: {x: 82.99999, y: 80.69998}
   m_SizeDelta: {x: 303.2, y: 107.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &822984649
@@ -1571,7 +1571,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: controls
+  m_Text: how to play
 --- !u!222 &1051903072
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2933,7 +2933,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 82.99999, y: 173}
+  m_AnchoredPosition: {x: 82.99999, y: 192.69998}
   m_SizeDelta: {x: 303.2, y: 107.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1882167946
@@ -3372,7 +3372,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONTROLS
+  m_Text: HOW TO PLAY
 --- !u!222 &2117376642
 CanvasRenderer:
   m_ObjectHideFlags: 0
