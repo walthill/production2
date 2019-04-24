@@ -6,6 +6,8 @@ public class UISceneRelay : MonoBehaviour
 {
     public static UISceneRelay instance;
     UISpeedCellsManager speedCells;
+    UIMusicManager musicStuff;
+    public bool allowMusicUIToWork;
 
     [SerializeField] GameObject canvas;
 
@@ -17,6 +19,12 @@ public class UISceneRelay : MonoBehaviour
     private void Start()
     {
         speedCells = GameObject.Find("SpeedChannels").GetComponent<UISpeedCellsManager>();
+        musicStuff = GameObject.Find("Music").GetComponent<UIMusicManager>();
+        
+        if (!allowMusicUIToWork)
+        {
+            musicStuff.gameObject.SetActive(false);
+        }
     }
 
     public void setCurrentChannel(SpeedChannel currentChannel)
@@ -40,6 +48,30 @@ public class UISceneRelay : MonoBehaviour
     public void ShowUI()
     {
         canvas.SetActive(true);
+    }
+
+    public void MusicGoBack()
+    {
+        if (musicStuff.enabled)
+        {
+            musicStuff.Rewind();
+        }
+    }
+
+    public void MusicGoForward()
+    {
+        if (musicStuff.enabled)
+        {
+            musicStuff.FastFoward();
+        }
+    }
+
+    public void MusicPlay()
+    {
+        if (musicStuff.enabled)
+        {
+            musicStuff.PlayMusic();
+        }
     }
 
     public void setOnSpeedSurfaceNoX(bool xNotPressed)
