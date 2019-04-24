@@ -51,7 +51,8 @@ public class SpeedThresholdBoi : MonoBehaviour
     }
     private void Update()
     {
-        sendCurrentSpeedChannel();
+        if(playerMovement.getIsGrounded())
+            sendCurrentSpeedChannel();
     }
     void sendCurrentSpeedChannel()
     {

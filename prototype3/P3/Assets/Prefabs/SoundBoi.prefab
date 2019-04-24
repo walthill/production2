@@ -180,10 +180,14 @@ MonoBehaviour:
   land: {fileID: 8300000, guid: ad2af45ebc0ef4446a3ef4948c217511, type: 3}
   Jumpsauce: {fileID: 0}
   lambSauce: {fileID: 0}
+  driftSnd: {fileID: 8300000, guid: 3391dbe1220f8f94db3d6ce4aa9344fc, type: 3}
+  driftReleaseSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  driftSource: {fileID: 0}
+  driftReleaseSource: {fileID: 0}
   WheelSoundSlowSnd: {fileID: 8300000, guid: e6ebce094305c7a4abeb78273e671aab, type: 3}
   WheelSoundFastSnd: {fileID: 0}
   SparksSnd: {fileID: 0}
-  ChargingSnd: {fileID: 8300000, guid: 6c5a7646928c1d24c87c504dd747faae, type: 3}
+  ChargingSnd: {fileID: 8300000, guid: 119fffea28f255945b9631275b7540b1, type: 3}
   ReleaseSnd: {fileID: 8300000, guid: b91bc24af05bfea4bab15718489ae28c, type: 3}
   PerfectReleaseSnd: {fileID: 0}
   StaticChangeSongSnd: {fileID: 8300000, guid: d2678b85213e7d94ea4316befd6fa029, type: 3}
@@ -216,6 +220,7 @@ MonoBehaviour:
   lowPassArray:
   - {fileID: 0}
   mixer: {fileID: 24100000, guid: 07c859b5785b8634287c4dcf590223bd, type: 2}
+  IsDrifting: 0
   makeChargeSound: 0
 --- !u!82 &4905406056331549035
 AudioSource:
@@ -1613,8 +1618,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChordSource: {fileID: 2910597395598217843}
   SongPath: 
+  SongNum: 0
   songParts: []
   ChordClip: {fileID: 0}
+  changingSong: 0
 --- !u!82 &2910597395598217843
 AudioSource:
   m_ObjectHideFlags: 0

@@ -21,16 +21,19 @@ public class MenuBoi : MonoBehaviour
 
     float preTimeScale = 1.0f;
 
+	LoadingSceneRelay relayHandle;
+	
     void Start()
     {
+		relayHandle = LoadingSceneRelay.instance;
         unPause();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.JoystickButton7))
+        if (relayHandle.AbleToPause() && Input.GetKeyDown(KeyCode.JoystickButton7))
         {
-            //Debug.Log("Button Pressed");
+//            Debug.Log("Button Pressed");
             doPause();
             StartCoroutine(startPause());
         }
@@ -183,5 +186,4 @@ public class MenuBoi : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Title");
     }
-
 }

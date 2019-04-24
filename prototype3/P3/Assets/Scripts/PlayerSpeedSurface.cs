@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSpeedSurface : MonoBehaviour
 {
@@ -30,20 +31,61 @@ public class PlayerSpeedSurface : MonoBehaviour
     float boostVelocityValue = 0;
     float boostLength; //distance the button was held down for.
     SpeedChannel surfaceChannel;
+
+    //Leo's Fun UI Corner
+    GameObject pressX;
+    GameObject pressXParentheses;
+    GameObject speedSurfaceBar;
+    GameObject releaseIndicator;
+    GameObject successIndicator;
+    int volumeBarTracker = 0;
+    bool uiChanged = false; //need this to only call certain things once in the update function
+
     private void Start()
     {
         playerMove = gameObject.GetComponent<PlayerSkateMovement>();
         speedBoi = gameObject.GetComponent<SpeedThresholdBoi>();
 
         ParticleScript.instance.SpeedColor1();
+
+        pressX = gameObject.transform.Find("Canvas/X").gameObject;
+        pressXParentheses = gameObject.transform.Find("Canvas/Parentheses").gameObject;
+        speedSurfaceBar = gameObject.transform.Find("Canvas/VolumeBar").gameObject;
+        releaseIndicator = gameObject.transform.Find("Canvas/NOW").gameObject;
+        successIndicator = gameObject.transform.Find("Canvas/Indicator").gameObject;
     }
 
     void Update()
     {
         if (isTouchingCharge)
         {
-            UISceneRelay.instance.setOnSpeedSurfaceNoX(!xIsDown);
+            minorSpeedBoost();
+
+            if (uiChanged)
+            {
+                UISceneRelay.instance.setOnSpeedSurfaceNoX(!xIsDown);
+
+                pressX.SetActive(true);
+                pressXParentheses.SetActive(true);
+                successIndicator.SetActive(false);
+                //pressX.GetComponent<Text>().fontSize = 136;
+                //pressXParentheses.GetComponent<Text>().text = "(   )";
+                //pressXParentheses.GetComponent<Text>().fontSize = 100;
+
+                uiChanged = false;
+            }
         }
+        if (!isCharging && !isTouchingCharge && !isTouchingRelease)
+        {
+            pressX.SetActive(false);
+            pressXParentheses.SetActive(false);
+            speedSurfaceBar.SetActive(false);
+            speedSurfaceBar.GetComponent<UISpeedSurfaceBar>().ResetBars();
+            volumeBarTracker = 0;
+            releaseIndicator.SetActive(false);
+
+        }
+
         if (isTouchingRelease)
         {
             UISceneRelay.instance.onReleaseSurfaceX(xIsDown);
@@ -52,13 +94,33 @@ public class PlayerSpeedSurface : MonoBehaviour
         {
             minorSpeedBoost();
             UISceneRelay.instance.xHold(Vector3.Distance(buttonStartPosit, buttonEndPosit), xIsDown);
+
+            if (Vector3.Distance(buttonStartPosit, transform.position) >= 40/speedSurfaceBar.GetComponent<UISpeedSurfaceBar>().bars.Length * volumeBarTracker)
+            {
+                speedSurfaceBar.GetComponent<UISpeedSurfaceBar>().SetCurrentBar(volumeBarTracker);
+                volumeBarTracker++;
+            }
+
+            if (isTouchingRelease)
+            {
+                releaseIndicator.SetActive(true);
+            }
+
             //if not on speed surface
             if (!isTouchingRelease && !isTouchingCharge)
             {
                 stopCharging();
                 //TODO: this will probably flag when the player goes off in any direction
                 if(didTouchRelease)
+                {
+                    speedSurfaceBar.SetActive(false);
+                    releaseIndicator.SetActive(false);
+                    successIndicator.GetComponent<Text>().text = "TOO LATE";
+                    successIndicator.SetActive(true);
+
+
                     UISceneRelay.instance.lateRelease();
+                }
             }
         }
         if (Input.GetButtonDown("JoyCharge"))
@@ -70,6 +132,11 @@ public class PlayerSpeedSurface : MonoBehaviour
                 ////Debug.Log("charging is registered");
                 buttonStartPosit = transform.position;
                 startCharging();
+
+                speedSurfaceBar.SetActive(true);
+                pressX.SetActive(false);
+                pressXParentheses.SetActive(false);
+
             }
         }
 
@@ -88,6 +155,10 @@ public class PlayerSpeedSurface : MonoBehaviour
             }
             else if (isTouchingCharge)
             {
+                speedSurfaceBar.SetActive(false);
+                successIndicator.GetComponent<Text>().text = "TOO EARLY";
+                successIndicator.SetActive(true);
+
                 UISceneRelay.instance.earlyRelease();
             }
             isCharging = false;
@@ -108,7 +179,13 @@ public class PlayerSpeedSurface : MonoBehaviour
     }
     private void speedBoost()
     {
+        speedSurfaceBar.SetActive(false);
+        releaseIndicator.SetActive(false);
+        successIndicator.GetComponent<Text>().text = "NICE!";
+        successIndicator.SetActive(true);
+
         UISceneRelay.instance.correctRelease();
+
         boostCharge = releaseCharge = false; //disable passive boost
         //speed player up in proportion to how big the boost time is up to max boost
         boostVelocityValue = boostLength*boostMultiplier;
@@ -129,6 +206,7 @@ public class PlayerSpeedSurface : MonoBehaviour
                 startPosit = transform.position;
                 boostCharge = true;
                 isTouchingCharge = true;
+                uiChanged = true;
             }
             didTouchRelease = false;
         }
