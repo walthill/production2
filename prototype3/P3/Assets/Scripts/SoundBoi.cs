@@ -249,6 +249,7 @@ public class SoundBoi : MonoBehaviour
         {
             ////Debug.Log("timer is done");
             PlayMusic();
+            UISceneRelay.instance.MusicPlay();
             timer = 0;
             isTimerGoing = false;
         }
