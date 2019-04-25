@@ -7,7 +7,7 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
-
+    public Animator trickanim;
     public float debugMoveSpeed;
 
     [System.Serializable]
@@ -105,11 +105,19 @@ public class PlayerSkateMovement : MonoBehaviour
 
         DriftCamRelease();
 
-		//Works when building game with option development build checked
-		#if UNITY_EDITOR 
+        if (Input.GetButtonDown("Ytrick") && isAirborne)
+        {
+            trickanim.SetBool("isTricking", true);
+
+        }
+        else
+            trickanim.SetBool("isTricking", false);
+
+        //Works when building game with option development build checked
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-
+      
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer(respawn);
 		#endif
@@ -120,6 +128,7 @@ public class PlayerSkateMovement : MonoBehaviour
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
         jump = Input.GetButtonDown("JoyJump");
+        
 
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (!Input.GetButton("JoyDrift") && Time.timeScale != 0f) stopDrifting();
