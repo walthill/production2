@@ -86,6 +86,8 @@ public class PlayerSkateMovement : MonoBehaviour
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
 
+    GameObject driftCanvas;
+
     void Awake()
     {
         objTransform = gameObject.GetComponent<Transform>();
@@ -96,6 +98,8 @@ public class PlayerSkateMovement : MonoBehaviour
         respawn.position = objTransform.position;
         arcadeData.localMaxVelocity = 25f;
         normalTimeScale = 1f;
+
+        driftCanvas = gameObject.transform.Find("DriftCanvas").gameObject;
     }
 
     void Update()
@@ -307,6 +311,8 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (isDrifting)
             {
+                driftCanvas.SetActive(true);
+
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
@@ -320,6 +326,8 @@ public class PlayerSkateMovement : MonoBehaviour
             }
             else
             {
+                driftCanvas.SetActive(false);
+
                 //Save player forward unless drift button released
                 if (!endOfDrift)
                     driftStartForward = objTransform.forward;
