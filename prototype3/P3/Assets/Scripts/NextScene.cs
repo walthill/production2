@@ -15,6 +15,11 @@ public class NextScene : MonoBehaviour
     public GameObject lines;
     public GameObject title;
 
+	public void Awake()
+	{
+		Cursor.visible = false;
+	}
+	
     public void GoToNextScene()
     {
         if (willQuitTheGame)

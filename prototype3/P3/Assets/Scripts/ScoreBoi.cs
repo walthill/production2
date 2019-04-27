@@ -79,7 +79,7 @@ public class ScoreBoi : MonoBehaviour
             timeElapsed += Time.deltaTime;
 
             seconds = Mathf.FloorToInt(timeElapsed);
-            totalSeconds = seconds;
+            totalSeconds += seconds;
 
             if (seconds == 60)
             {
