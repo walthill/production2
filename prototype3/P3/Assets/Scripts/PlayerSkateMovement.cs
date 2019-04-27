@@ -82,7 +82,8 @@ public class PlayerSkateMovement : MonoBehaviour
     bool changeTimeBySpeed;
 	[Range(0,1)]
 	[SerializeField] float airTurnFactor = 0.25f;
-	
+	[SerializeField] LayerMask wallCollisionLM;
+    
     float normalTimeScale;
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
@@ -159,10 +160,11 @@ public class PlayerSkateMovement : MonoBehaviour
         debugMoveSpeed = rb.velocity.magnitude;
         calcTargetVelocity(); //after debug movespeed to use most current move speed.
         sendSpeedToSoundBoi();
+
+        UnicornCollider();
     }
     // this sends movespeed data to the sound boi optimize this if you want
     //called from update sorry :(
-
 
     void sendSpeedToSoundBoi()
     {
@@ -301,7 +303,7 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         if (accelButtonDown)
-            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); //
+            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); 
         arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
     }
 
@@ -448,6 +450,20 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             isGrounded = false;
             isAirborne = true;
+        }
+    }
+
+    void UnicornCollider()
+    {
+        Ray ray = new Ray(objTransform.position + new Vector3(0, 1, 0), objTransform.up + objTransform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1, wallCollisionLM))
+        {
+            if (!hit.collider.isTrigger)
+            {
+               // Debug.Log("WALL RAY: " + hit.transform.name);
+                setSpeed(0);
+            }
         }
     }
 #endregion
