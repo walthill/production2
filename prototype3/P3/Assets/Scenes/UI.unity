@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.097921796, g: 0.092178576, b: 0.030787872, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1405,10 +1405,10 @@ MonoBehaviour:
   songAction: {fileID: 663502202}
   songTitle: {fileID: 668542417}
   songNames:
-  - WHIP AND DIE
-  - 1WEEK2
-  - PLUCK HARMONY
-  - MEL SYNTH
+  - WHIP_AND_DIE
+  - G_SCOUT_COOKS
+  - GLITCH_GARDEN
+  - M.ON_THE_GR3N
   - STICKERZ
 --- !u!1 &1213320797
 GameObject:
