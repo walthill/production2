@@ -61,6 +61,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     bool isDrifting = false;
     bool endOfDrift; //Flags smooth camera damping on drift release
+    float modDriftSpeed = 1f; //0-1 how much the player is slowed down while drifting.
     Vector3 driftStartForward;
     const float DRIFT_CAM_RESET_WAIT = 0.35f;
     const float FACING_STRAIGHT_DIST = 0.1f;
@@ -74,8 +75,8 @@ public class PlayerSkateMovement : MonoBehaviour
     [Tooltip("How long it takes to stop after slowing down while drifting.")]
     float driftStopTime = 4f;
     [SerializeField]
-    [Tooltip("How time is slowed down by during drifting at max speed")]
-    float maxDriftTimeScale = 0.5f;
+    [Tooltip("What % speed is slowed down by during drifting at max speed")]
+    float maxDriftSpeedScale = 0.5f;
     [SerializeField]
     [Tooltip("should time slow less at lower speeds?")]
     bool changeTimeBySpeed;
@@ -191,9 +192,11 @@ public class PlayerSkateMovement : MonoBehaviour
         driftVelocity = rb.velocity.normalized * debugMoveSpeed;
         driftSlowTimer = Time.time + driftTime;
         float modDriftScale = changeTimeBySpeed ?
-            1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f)
-            : maxDriftTimeScale;
-        Time.timeScale = Time.timeScale * modDriftScale;
+            1.0f - maxDriftSpeedScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f)
+            : maxDriftSpeedScale;
+
+        //Time.timeScale = Time.timeScale * modDriftScale;
+        modDriftSpeed = modDriftScale;
     }
     private void stopDrifting()
     {
@@ -316,7 +319,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
-                vel = driftVelocity;
+                vel = driftVelocity * modDriftSpeed;
                 float time = Time.time - driftSlowTimer;
 
                 if (time > 0)
@@ -459,6 +462,10 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public bool getIsDrifting()
+    { 
+        return isDrifting;
+    }
     public ArcadeMoveData GetArcadeMoveData()
     {
         return arcadeData;
