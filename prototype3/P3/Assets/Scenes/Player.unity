@@ -235,6 +235,30 @@ PrefabInstance:
       propertyPath: respawn
       value: 
       objectReference: {fileID: 653620678}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: arcadeData.jumpForce
+      value: 12.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: airTurnFactor
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: trickanim
+      value: 
+      objectReference: {fileID: 1315432699}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: rayOffsetZ
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: lm.m_Bits
+      value: 823
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: wallCollisionLM.m_Bits
+      value: 823
+      objectReference: {fileID: 0}
     - target: {fileID: 1842638562, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: WIDTransform
       value: 
