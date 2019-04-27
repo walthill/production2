@@ -7,7 +7,7 @@ public class PlayerSkateMovement : MonoBehaviour
     //some help w/ slopes https://www.reddit.com/r/Unity3D/comments/2b696a/rotate_player_to_angle_of_slope/
 
     public enum MoveType { SIM, ARCADE };
-
+    public Animator trickanim;
     public float debugMoveSpeed;
 
     [System.Serializable]
@@ -26,8 +26,8 @@ public class PlayerSkateMovement : MonoBehaviour
     public struct ArcadeMoveData
     {
         //clamp value - increase this for speed channels?
-        public float maxVelocity, accelCap, localMaxVelocity, targetVelocity; 
-        public float accelMultiplier, boostAcceleration, 
+        public float maxVelocity, accelCap, localMaxVelocity, targetVelocity;
+        public float accelMultiplier, boostAcceleration,
                      boostValue;
 
         public float rotationSpeed;
@@ -38,21 +38,21 @@ public class PlayerSkateMovement : MonoBehaviour
     float diffToSpeedLoss = 20f;
 
     [SerializeField] float leftStickXAxisDeadzone = 0.25f;
-    
-	public MoveType moveType;
+
+    public MoveType moveType;
 
     [SerializeField] ArcadeMoveData arcadeData = new ArcadeMoveData();
     [SerializeField] Transform respawn = null;
     [SerializeField] float liftCoeffiecient = 0;
 
-    const float SLOPE_RAY_DIST = 1f;
+    const float SLOPE_RAY_DIST = 2f;
     const float PLAYER_ALIGN_SPEED = 10f;
-  
+
     //Input vars
     float xMove, accelerationButton;
     [SerializeField]
     bool isGrounded;
-    bool accelButtonDown, jump, applyDownforce, isAirborne;
+    bool accelButtonDown, jump, isJumping = false, applyDownforce, isAirborne;
     Rigidbody rb;
     float oldVel;
     Transform objTransform;
@@ -79,9 +79,14 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     [Tooltip("should time slow less at lower speeds?")]
     bool changeTimeBySpeed;
+	[Range(0,1)]
+	[SerializeField] float airTurnFactor = 0.25f;
+	
     float normalTimeScale;
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
+
+    GameObject driftCanvas;
 
     void Awake()
     {
@@ -93,6 +98,8 @@ public class PlayerSkateMovement : MonoBehaviour
         respawn.position = objTransform.position;
         arcadeData.localMaxVelocity = 25f;
         normalTimeScale = 1f;
+
+        driftCanvas = gameObject.transform.Find("DriftCanvas").gameObject;
     }
 
     void Update()
@@ -102,29 +109,40 @@ public class PlayerSkateMovement : MonoBehaviour
 
         DriftCamRelease();
 
+        if (Input.GetButtonDown("Ytrick") && isAirborne)
+        {
+            trickanim.SetBool("isTricking", true);
+
+        }
+        else
+            trickanim.SetBool("isTricking", false);
+
+        //Works when building game with option development build checked
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-
-
+      
         if (Input.GetKeyDown(KeyCode.R))
             ResetPlayer(respawn);
-    }
+		#endif
+	}
 
     void ProcessInput()
     {
         xMove = Input.GetAxis("JoyHorizontal");
         accelerationButton = Input.GetAxis("JoyTurnRight"); //rt
         jump = Input.GetButtonDown("JoyJump");
+        
 
         if (Input.GetButtonDown("JoyDrift")) startDrifting();
         if (!Input.GetButton("JoyDrift") && Time.timeScale != 0f) stopDrifting();
     }
 
     private void FixedUpdate()
-    {   
+    {
         if (moveType == MoveType.ARCADE)
             rb.constraints = RigidbodyConstraints.FreezeRotation;
-        
+
         AlignPlayerWithGround();
         RollerSkateMovement();
         JumpAlignRaycast();
@@ -151,20 +169,20 @@ public class PlayerSkateMovement : MonoBehaviour
         {
             SoundBoi.instance.linkWheelSoundToSpeed(debugMoveSpeed);
         }
-        
+
         if (!isGrounded)
         {
             SoundBoi.instance.linkWheelSoundToSpeed(0);
         }
-        
-        
+
+
     }
 
     #region Drifting
     private void startDrifting()
     {
         driftStartForward = objTransform.forward;
-        
+
         isDrifting = true;
 
         //this "plays" the drifting sound effect
@@ -172,8 +190,8 @@ public class PlayerSkateMovement : MonoBehaviour
 
         driftVelocity = rb.velocity.normalized * debugMoveSpeed;
         driftSlowTimer = Time.time + driftTime;
-        float modDriftScale = changeTimeBySpeed? 
-            1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f) 
+        float modDriftScale = changeTimeBySpeed ?
+            1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f)
             : maxDriftTimeScale;
         Time.timeScale = Time.timeScale * modDriftScale;
     }
@@ -182,20 +200,14 @@ public class PlayerSkateMovement : MonoBehaviour
         if (!isDrifting)
         {
             return;
-            //TODO: clusterfuck
         }
         endOfDrift = true;
         isDrifting = false;
         Time.timeScale = normalTimeScale;
-        if (true) //(isGrounded)
+        if (isGrounded)
         {
-            //rb.velocity = transform.forward * rb.velocity.magnitude;
             setSpeed(driftVelocity.magnitude);
             SoundBoi.instance.StopDriftingSound();
-            //rb.velocity = transform.forward * driftVelocity.magnitude;
-            ////TODO: clusterfuck
-            //debugMoveSpeed = rb.velocity.magnitude;
-            //arcadeData.targetVelocity = debugMoveSpeed;
         }
     }
 
@@ -229,6 +241,7 @@ public class PlayerSkateMovement : MonoBehaviour
             Vector3 jumpVec = arcadeData.jumpForce * objTransform.up;
             rb.AddForceAtPosition(jumpVec, objTransform.position, ForceMode.Impulse);
 
+            isJumping = true;
             isGrounded = false;
             isAirborne = true;
             SoundBoi.instance.playJumpSound();
@@ -237,12 +250,12 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void RollerSkateMovement()
     {
-        if(moveType == MoveType.ARCADE)
-        {        
+        if (moveType == MoveType.ARCADE)
+        {
             if (xMove < -leftStickXAxisDeadzone || xMove > leftStickXAxisDeadzone)
             {
                 TurnPhysics();
-            }              
+            }
 
             MovePhysics();
         }
@@ -251,12 +264,22 @@ public class PlayerSkateMovement : MonoBehaviour
     private void TurnPhysics()
     {
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        float turnFactor;
+
+        float turnFactor = 0;
+
         if (isDrifting)
             turnFactor = xMove * arcadeData.rotationSpeed * (arcadeData.driftRotationSpeed + debugMoveSpeed / speedThresholdBoi.getMaxSpeed());
         else
             turnFactor = xMove * arcadeData.rotationSpeed;
-        transform.Rotate(new Vector3(0f, turnFactor, 0f));
+
+        if (isAirborne)
+        {
+            transform.Rotate(new Vector3(0f, turnFactor * airTurnFactor, 0f));
+        }
+        else
+        {
+            transform.Rotate(new Vector3(0f, turnFactor, 0f));
+        }
     }
 
     private void calcTargetVelocity()
@@ -266,7 +289,7 @@ public class PlayerSkateMovement : MonoBehaviour
         { //decrease
             //arcadeData.localMaxVelocity-= .1f
             arcadeData.localMaxVelocity = Mathf.Lerp(arcadeData.localMaxVelocity, debugMoveSpeed, 0.1f);
-            
+
         }
         else if (debugMoveSpeed > arcadeData.localMaxVelocity + diffToSpeedLoss)
         { //increase
@@ -281,37 +304,60 @@ public class PlayerSkateMovement : MonoBehaviour
 
     private void MovePhysics()
     {
+        Vector3 vel = new Vector3();
         //Forward movement
         if (accelButtonDown && isGrounded)
         {
-            Vector3 vel;
+
             if (isDrifting)
             {
+                driftCanvas.SetActive(true);
+
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
                 vel = driftVelocity;
                 float time = Time.time - driftSlowTimer;
-                
-                if(time > 0 )
+
+                if (time > 0)
                 {
                     driftVelocity -= driftVelocity * (time / driftStopTime);
                 }
             }
             else
             {
+                driftCanvas.SetActive(false);
+
                 //Save player forward unless drift button released
-                if(!endOfDrift)
+                if (!endOfDrift)
                     driftStartForward = objTransform.forward;
 
                 //vel = rb.velocity.normalized * arcadeData.targetVelocity;
                 vel = transform.forward.normalized * arcadeData.targetVelocity;
             }
-          
+
             if (vel.sqrMagnitude > arcadeData.maxVelocity * arcadeData.maxVelocity)
                 rb.velocity = vel.normalized * arcadeData.maxVelocity;
             else
                 rb.velocity = vel;
+        }
+        else if (!jump && accelButtonDown && isAirborne)
+        {
+            if(rb.velocity.z != 0) //don't allow air turning if the player has no forward motion
+            { 
+                float applyGravity = rb.velocity.y;
+
+                vel = new Vector3(transform.forward.normalized.x * arcadeData.targetVelocity, rb.velocity.y, transform.forward.normalized.z * arcadeData.targetVelocity);
+
+                if (vel.sqrMagnitude > (arcadeData.maxVelocity * arcadeData.maxVelocity))
+                    rb.velocity = vel.normalized * arcadeData.maxVelocity;
+                else
+                    rb.velocity = vel;
+				
+				//apply force of gravity
+                rb.velocity = new Vector3(rb.velocity.x, applyGravity, rb.velocity.z);
+
+            }
         }
     }
 
@@ -344,8 +390,9 @@ public class PlayerSkateMovement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 0.05f, layerToAlignWith))
             {
-                ////Debug.Log("JUMP RAY HIT");
                 isAirborne = false;
+                isJumping = false;
+
                 rb.velocity = rb.velocity.normalized * oldVel;
                 SoundBoi.instance.playLandSound();
             }
@@ -375,7 +422,7 @@ public class PlayerSkateMovement : MonoBehaviour
     {
         //help @ https://bit.ly/2RMVeox
 
-        Ray ray = new Ray(objTransform.position, -objTransform.up);
+        Ray ray = new Ray(objTransform.position - new Vector3(0.0f, -1.0f, 0.0f), -objTransform.up);
 
         if (Physics.Raycast(ray, out RaycastHit hit, SLOPE_RAY_DIST, layerToAlignWith))
         {
@@ -406,7 +453,7 @@ public class PlayerSkateMovement : MonoBehaviour
     public void ResetPlayer(Transform t) //TODO: reset speed threshold
     {
         objTransform.position = t.position;
-        objTransform.localRotation = Quaternion.identity;
+        objTransform.localRotation = t.rotation;
    
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -445,6 +492,10 @@ public class PlayerSkateMovement : MonoBehaviour
         debugMoveSpeed = rb.velocity.magnitude;
         arcadeData.targetVelocity = debugMoveSpeed;
         arcadeData.localMaxVelocity = newSpeed;
+    }
+    public bool getIsGrounded()
+    {
+        return isGrounded;
     }
     #endregion
 }

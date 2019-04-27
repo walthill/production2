@@ -90,6 +90,8 @@ public class MusicBoiScr : MonoBehaviour
 
         if (SongNum < 4)
         {
+            UISceneRelay.instance.MusicGoForward();
+
             changingSong = true;
             //adjust the number of the song 
             SongNum++;
@@ -109,6 +111,8 @@ public class MusicBoiScr : MonoBehaviour
     {
         if (SongNum > 0)
         {
+            UISceneRelay.instance.MusicGoBack();
+
             changingSong = true;
             //adjust the number of the song 
             SongNum--;
