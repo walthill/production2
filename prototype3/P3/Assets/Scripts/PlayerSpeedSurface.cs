@@ -161,7 +161,7 @@ public class PlayerSpeedSurface : MonoBehaviour
 
                 UISceneRelay.instance.earlyRelease();
             }
-            isCharging = false;
+            stopCharging();
 
         }
 
