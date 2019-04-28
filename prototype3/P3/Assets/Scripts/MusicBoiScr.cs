@@ -52,6 +52,7 @@ public class MusicBoiScr : MonoBehaviour
         EmptySource.clip = EmptySound;
         EmptySource.playOnAwake = true;
         EmptySource.Play();
+        EmptySource.volume = .2f;
         EmptySource.mute = true;
         EmptySource.loop = true;
         //EmptySource.volume = (EmptySource.volume) / 2;
@@ -140,6 +141,7 @@ public class MusicBoiScr : MonoBehaviour
                 mixer.SetFloat("MasterVol", mute);
                 Debug.Log("songsToUnlock is false");
 
+                EmptySource.Play();
                 EmptySource.mute = false;
             }
             if (songsToUnlock[SongNum])
@@ -148,6 +150,7 @@ public class MusicBoiScr : MonoBehaviour
                 Debug.Log("songsToUnlock is false");
                 
                 EmptySource.mute = true;
+                EmptySource.Stop();
             }
 
 
@@ -183,13 +186,14 @@ public class MusicBoiScr : MonoBehaviour
                 float mute = -80;
                 mixer.SetFloat("MasterVol", mute);
                 Debug.Log("songsToUnlock is false");
-                
+                EmptySource.Play();
                 EmptySource.mute = false;
             }
             if (songsToUnlock[SongNum])
             {
                 UpdateSongVol();
                 EmptySource.mute = true;
+                EmptySource.Stop();
             }
         }
         

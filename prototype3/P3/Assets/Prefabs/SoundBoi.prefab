@@ -1626,7 +1626,7 @@ MonoBehaviour:
   SongNum: 0
   songParts: []
   ChordClip: {fileID: 0}
-  EmptySound: {fileID: 8300000, guid: d046d73c69096724fa93f70c808efc14, type: 3}
+  EmptySound: {fileID: 8300000, guid: a83a2b2041c9e8f438b562175ae39eb8, type: 3}
   EmptySource: {fileID: 0}
   trackVol:
   - -10
