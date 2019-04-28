@@ -427,6 +427,7 @@ GameObject:
   - component: {fileID: 207392742}
   - component: {fileID: 207392741}
   - component: {fileID: 207392745}
+  - component: {fileID: 207392746}
   m_Layer: 5
   m_Name: InvertCameraButton
   m_TagString: Untagged
@@ -579,6 +580,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accessableButtons: 4a010000
   isSelected: 0
+--- !u!114 &207392746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207392739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &330125530
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,6 +883,7 @@ GameObject:
   - component: {fileID: 579479955}
   - component: {fileID: 579479958}
   - component: {fileID: 579479959}
+  - component: {fileID: 579479960}
   m_Layer: 5
   m_Name: ResumeButton
   m_TagString: Untagged
@@ -1018,6 +1036,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accessableButtons: 4a010000
   isSelected: 1
+--- !u!114 &579479960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579479953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &826262212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1759,7 @@ GameObject:
   - component: {fileID: 1471462967}
   - component: {fileID: 1471462966}
   - component: {fileID: 1471462970}
+  - component: {fileID: 1471462971}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -1877,6 +1912,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accessableButtons: 4a010000
   isSelected: 0
+--- !u!114 &1471462971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471462964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &1539760944
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,6 +2455,7 @@ GameObject:
   - component: {fileID: 1993146308}
   - component: {fileID: 1993146307}
   - component: {fileID: 1993146311}
+  - component: {fileID: 1993146312}
   m_Layer: 5
   m_Name: ControlsButton
   m_TagString: Untagged
@@ -2556,6 +2608,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accessableButtons: 4a010000
   isSelected: 0
+--- !u!114 &1993146312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993146305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!114 &5239055293248239472
 MonoBehaviour:
   m_ObjectHideFlags: 0

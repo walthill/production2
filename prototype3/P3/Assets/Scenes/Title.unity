@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 142978697}
   - component: {fileID: 142978696}
   - component: {fileID: 142978695}
+  - component: {fileID: 142978700}
   m_Layer: 5
   m_Name: HowToPlayButton
   m_TagString: Untagged
@@ -423,6 +424,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142978693}
   m_CullTransparentMesh: 0
+--- !u!114 &142978700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142978693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 675c2d8876a524d4d96491581892727b, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &165843833
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,6 +539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 173879873}
   - component: {fileID: 173879872}
+  - component: {fileID: 173879874}
   m_Layer: 0
   m_Name: titleMusic
   m_TagString: Untagged
@@ -539,9 +557,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 95c9d03526cff5c4c965af299dc3bb84, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 36738dd99da41e04e961cf6e0c879b73, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.51
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -639,6 +657,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &173879874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173879871}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 0}
+  SelectSnd: {fileID: 0}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &255119868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,6 +1358,7 @@ GameObject:
   - component: {fileID: 822984651}
   - component: {fileID: 822984650}
   - component: {fileID: 822984649}
+  - component: {fileID: 822984654}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -1468,6 +1503,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 822984647}
   m_CullTransparentMesh: 0
+--- !u!114 &822984654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822984647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 675c2d8876a524d4d96491581892727b, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &828552205
 GameObject:
   m_ObjectHideFlags: 0
@@ -3048,6 +3099,7 @@ GameObject:
   - component: {fileID: 1882167947}
   - component: {fileID: 1882167946}
   - component: {fileID: 1882167950}
+  - component: {fileID: 1882167951}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -3203,6 +3255,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1882167951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882167944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 675c2d8876a524d4d96491581892727b, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &1973743482
 GameObject:
   m_ObjectHideFlags: 0
