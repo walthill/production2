@@ -29,7 +29,7 @@ public class Collectable : MonoBehaviour
 
     void Rotate()
     {
-        transform.Rotate(Time.deltaTime * rotationSpeed, 0, 0, Space.World);
+        transform.Rotate( 0,  Time.deltaTime * rotationSpeed, 0, Space.World);
 
     }
 
