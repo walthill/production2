@@ -181,7 +181,7 @@ Transform:
   m_GameObject: {fileID: 6542401402299743031}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children:
   - {fileID: 9031138210331527945}
   - {fileID: 9205793091347252945}
@@ -204,6 +204,8 @@ MonoBehaviour:
   bounceSpeed: 1.31
   rotationSpeed: 15
   collectableType: 0
+  collectedSound: {fileID: 8300000, guid: 77f13c4797d465e45bc761432b692221, type: 3}
+  CollectSource: {fileID: 0}
 --- !u!135 &606553083596291653
 SphereCollider:
   m_ObjectHideFlags: 0

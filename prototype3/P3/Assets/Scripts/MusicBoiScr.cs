@@ -15,8 +15,10 @@ public class MusicBoiScr : MonoBehaviour
     public bool[] songsToUnlock;
     public AudioMixer mixer;
     public float UnmutedMaster;
-    
-    
+
+    public AudioClip collectedSound;
+    public AudioSource CollectSource;
+
 
 
     //temp have audio sources on this object attatched to this script.
@@ -84,7 +86,12 @@ public class MusicBoiScr : MonoBehaviour
         addThingsToList();
 
         mixer.GetFloat("MasterVol", out UnmutedMaster);
-        
+        UpdateSongVol();
+
+        CollectSource = gameObject.AddComponent<AudioSource>();
+        CollectSource.playOnAwake = false;
+        CollectSource.clip = collectedSound;
+
     }
 
 
@@ -252,11 +259,12 @@ public class MusicBoiScr : MonoBehaviour
     public void UnlockTracks(int unlockNum)
     {
         songsToUnlock[unlockNum] = true;
+        CollectSource.Play();
         if (unlockNum == SongNum)
         {
             mixer.SetFloat("MasterVol", UnmutedMaster);
-            
 
+            UpdateSongVol();
             EmptySource.mute = true;
         }
     }

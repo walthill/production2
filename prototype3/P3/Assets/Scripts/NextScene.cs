@@ -20,6 +20,12 @@ public class NextScene : MonoBehaviour
         GameObject.Find("EventSystem").SetActive(false);
     }
 
+    public void playTransitionSound()
+    {
+        //TODO MAKE THIS PLAY A SOUND
+    }
+
+
 	public void Awake()
 	{
 		Cursor.visible = false;
