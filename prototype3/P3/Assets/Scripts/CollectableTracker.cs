@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollectableTracker : MonoBehaviour
 {
-    public enum collectableType { UNASSIGNED, SONG_1, SONG_2, SONG_3, SONG_4, NUM_TYPES}
+    public enum collectableType { UNASSIGNED, SONG_1, SONG_2, SONG_3, SONG_4, SONG_DUCK, NUM_TYPES}
     Dictionary<collectableType, int> collectIndex;
 
     void Start()
@@ -21,11 +21,13 @@ public class CollectableTracker : MonoBehaviour
         collectIndex.Add(collectableType.SONG_2, 0);
         collectIndex.Add(collectableType.SONG_3, 0);
         collectIndex.Add(collectableType.SONG_4, 0);
+        collectIndex.Add(collectableType.SONG_DUCK, 0);
     }
 
     public void addCollectable(collectableType itemType)
     {
         collectIndex[itemType] += 1;
+        UISceneRelay.instance.UnlockSong((int)itemType);
     }
 
     public int getNumCollectable(collectableType itemType)

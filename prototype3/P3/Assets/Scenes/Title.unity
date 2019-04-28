@@ -1901,6 +1901,7 @@ GameObject:
   - component: {fileID: 1358839403}
   - component: {fileID: 1358839402}
   - component: {fileID: 1358839401}
+  - component: {fileID: 1358839404}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1956,6 +1957,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1358839404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358839400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496a1b8f07eb30e4a98cf8037cdf821d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastselect: {fileID: 1882167944}
 --- !u!1 &1370101489
 GameObject:
   m_ObjectHideFlags: 0

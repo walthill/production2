@@ -29,6 +29,7 @@ public class SoundBoi : MonoBehaviour
     public AudioClip ReleaseSnd;
     public AudioClip PerfectReleaseSnd;
     public AudioClip StaticChangeSongSnd;
+    public bool PlayChangeSongSndOnStart = false;
 
     [Header("Music Sounds")]
     public AudioClip musicSnd0;
@@ -152,7 +153,7 @@ public class SoundBoi : MonoBehaviour
         driftReleaseSource.loop = false;
         driftReleaseSource.volume = 1;
 
-        // this sets all the EQs to 0
+        // this sets all the EQs to 10
         float MixerFloat = 10;
         mixer.SetFloat("lowPassPart1", MixerFloat);
         mixer.SetFloat("lowPassPart2", MixerFloat);
@@ -221,11 +222,19 @@ public class SoundBoi : MonoBehaviour
     public void AssignTracks()
     {
         SetMusic();
-        ChangeSongStaticSource.Play();
+        
         isTimerGoing = true;
         ClearMusic();
         int partIndex = 0;
         int slotIndex = 0;
+        if (PlayChangeSongSndOnStart)
+        {
+            ChangeSongStaticSource.Play();
+        }
+        if (!PlayChangeSongSndOnStart)
+        {
+            PlayChangeSongSndOnStart = true;
+        }
         foreach (AudioSource slot in MusicSlotArray)
         {
             if (partIndex < musicPartsArray.Length && slotIndex < MusicSlotArray.Length)

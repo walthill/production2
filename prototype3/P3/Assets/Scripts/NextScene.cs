@@ -15,6 +15,16 @@ public class NextScene : MonoBehaviour
     public GameObject lines;
     public GameObject title;
 
+    public void DisableEventSystem()
+    {
+        GameObject.Find("EventSystem").SetActive(false);
+    }
+
+	public void Awake()
+	{
+		Cursor.visible = false;
+	}
+	
     public void GoToNextScene()
     {
         if (willQuitTheGame)

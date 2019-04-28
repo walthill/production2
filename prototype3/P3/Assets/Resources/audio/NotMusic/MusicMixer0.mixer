@@ -17,6 +17,8 @@ AudioMixerController:
   m_EnableSuspend: 1
   m_UpdateMode: 0
   m_ExposedParameters:
+  - guid: 7f8d9f401d7daf640ba062adf6bc9032
+    name: MasterVol
   - guid: 7cf2081089ec96842a45ae57b046f214
     name: lowPassPart1
   - guid: 75d0ae3a537a73744af57de2f68e2e76
@@ -59,7 +61,7 @@ AudioMixerGroupController:
   m_Pitch: 4b577aafa8576924699ddb142d5c2822
   m_Effects:
   - {fileID: 24400004}
-  m_UserColorIndex: 0
+  m_UserColorIndex: 3
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0

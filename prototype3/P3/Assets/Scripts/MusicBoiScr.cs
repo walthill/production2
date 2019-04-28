@@ -1,12 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 //using UnityEditor;
 //using UnityEngine.Networking;
 
 
 public class MusicBoiScr : MonoBehaviour
 {
+    public static MusicBoiScr instance;
+    [Header("what songs are unlocked?")]
+    
+    public bool DuckMaster;
+    public bool[] songsToUnlock;
+    public AudioMixer mixer;
+    public float UnmutedMaster;
+
+
+
     //temp have audio sources on this object attatched to this script.
     //clips are pulled from folders then loaded into sources then played
     //Start TEMP ####################################
@@ -24,6 +35,8 @@ public class MusicBoiScr : MonoBehaviour
     //public AudioClip[] songParts;
     public AudioClip[] songParts;
     public AudioClip ChordClip;
+    public AudioClip EmptySound;
+    public AudioSource EmptySource;
 
     public bool changingSong = false;
 
@@ -32,6 +45,14 @@ public class MusicBoiScr : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+        EmptySource = gameObject.AddComponent<AudioSource>();
+        EmptySource.clip = EmptySound;
+        EmptySource.playOnAwake = true;
+        EmptySource.Play();
+        EmptySource.mute = true;
+        EmptySource.loop = true;
+        //EmptySource.volume = (EmptySource.volume) / 2;
         //SoundPath = "file://" + Application.Resources + "/audio/music/Song0/";
         
         
@@ -59,9 +80,12 @@ public class MusicBoiScr : MonoBehaviour
         //https://www.youtube.com/watch?v=mTDy-A7gfSc
         addThingsToList();
 
-
+        mixer.GetFloat("MasterVol", out UnmutedMaster);
         
     }
+
+
+
 
 
     void addThingsToList()
@@ -90,6 +114,9 @@ public class MusicBoiScr : MonoBehaviour
 
         if (SongNum < 4)
         {
+
+
+            
             UISceneRelay.instance.MusicGoForward();
 
             changingSong = true;
@@ -102,6 +129,26 @@ public class MusicBoiScr : MonoBehaviour
             //update the array
             songParts = Resources.LoadAll<AudioClip>(SongPath);
             updateSoundBoi();
+
+            if (!songsToUnlock[SongNum])
+            {
+
+                float mute = -80;
+
+                mixer.SetFloat("MasterVol", mute);
+                //Debug.Log("songsToUnlock is false");
+
+                EmptySource.mute = false;
+            }
+            if (songsToUnlock[SongNum])
+            {
+                mixer.SetFloat("MasterVol", UnmutedMaster);
+                //Debug.Log("songsToUnlock is false");
+                
+                EmptySource.mute = true;
+            }
+
+
         }
         
         
@@ -111,6 +158,7 @@ public class MusicBoiScr : MonoBehaviour
     {
         if (SongNum > 0)
         {
+            
             UISceneRelay.instance.MusicGoBack();
 
             changingSong = true;
@@ -123,6 +171,20 @@ public class MusicBoiScr : MonoBehaviour
             //update the array
             songParts = Resources.LoadAll<AudioClip>(SongPath);
             updateSoundBoi();
+            if (!songsToUnlock[SongNum])
+            {
+                float mute = -80;
+                mixer.SetFloat("MasterVol", mute);
+                Debug.Log("songsToUnlock is false");
+                
+                EmptySource.mute = false;
+            }
+            if (songsToUnlock[SongNum])
+            {
+                mixer.SetFloat("MasterVol", UnmutedMaster);
+                Debug.Log("songsToUnlock is false");
+                EmptySource.mute = true;
+            }
         }
         
     }
@@ -175,6 +237,21 @@ public class MusicBoiScr : MonoBehaviour
         }
         
     }
+
+
+
+    public void UnlockTracks(int unlockNum)
+    {
+        songsToUnlock[unlockNum] = true;
+        if (unlockNum == SongNum)
+        {
+            mixer.SetFloat("MasterVol", UnmutedMaster);
+            
+
+            EmptySource.mute = true;
+        }
+    }
+
 
 
 
