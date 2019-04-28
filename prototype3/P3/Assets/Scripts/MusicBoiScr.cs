@@ -139,7 +139,7 @@ public class MusicBoiScr : MonoBehaviour
                 float mute = -80;
 
                 mixer.SetFloat("MasterVol", mute);
-                Debug.Log("songsToUnlock is false");
+                //Debug.Log("songsToUnlock is false");
 
                 EmptySource.Play();
                 EmptySource.mute = false;
@@ -147,7 +147,6 @@ public class MusicBoiScr : MonoBehaviour
             if (songsToUnlock[SongNum])
             {
                 UpdateSongVol();
-                Debug.Log("songsToUnlock is false");
                 
                 EmptySource.mute = true;
                 EmptySource.Stop();
@@ -253,9 +252,13 @@ public class MusicBoiScr : MonoBehaviour
     public void UnlockTracks(int unlockNum)
     {
         songsToUnlock[unlockNum] = true;
+        if (unlockNum == SongNum)
+        {
+            mixer.SetFloat("MasterVol", UnmutedMaster);
+            
 
-
-        
+            EmptySource.mute = true;
+        }
     }
 
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIMusicManager : MonoBehaviour
@@ -9,10 +7,18 @@ public class UIMusicManager : MonoBehaviour
     public Text songTitle;
     public string[] songNames;
 
+    public GameObject unlockNotification;
+    Text unlockText;
+
     string randomLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     int currentSong = 0;
     bool isChanging = false;
+
+    private void Start()
+    {
+        unlockText = unlockNotification.transform.Find("UnlockText").gameObject.GetComponent<Text>();
+    }
 
     private void Update()
     {
@@ -35,6 +41,20 @@ public class UIMusicManager : MonoBehaviour
         }
     }
 
+    public void ManagerUnlockSong(int song)
+    {
+        unlockNotification.SetActive(false);
+        unlockText.text = "'" + songNames[song].ToString() + "' TRACK UNLOCKED!";
+        unlockNotification.SetActive(true);
+
+        MusicBoiScr.instance.UnlockTracks(song);
+
+        if (currentSong == song)
+        {
+            PlayMusic();
+        }
+    }
+
     public void Rewind()
     {
         songAction.text = "<<RW";
@@ -54,7 +74,15 @@ public class UIMusicManager : MonoBehaviour
     public void PlayMusic()
     {
         songAction.text = "PLAY";
-        songTitle.text = songNames[currentSong];
+        // if song isnt unlocked
+        if (!MusicBoiScr.instance.songsToUnlock[currentSong])
+        {
+            songTitle.text = "-------------";
+        }
+        else
+        {
+            songTitle.text = songNames[currentSong];
+        }
         isChanging = false;
     }
 }
