@@ -38,6 +38,8 @@ public class PlayerSpeedSurface : MonoBehaviour
     GameObject speedSurfaceBar;
     GameObject releaseIndicator;
     GameObject successIndicator;
+    GameObject bonusFace;
+    public string[] successWords;
     int volumeBarTracker = 0;
     bool uiChanged = false; //need this to only call certain things once in the update function
 
@@ -53,6 +55,7 @@ public class PlayerSpeedSurface : MonoBehaviour
         speedSurfaceBar = gameObject.transform.Find("Canvas/VolumeBar").gameObject;
         releaseIndicator = gameObject.transform.Find("Canvas/NOW").gameObject;
         successIndicator = gameObject.transform.Find("Canvas/Indicator").gameObject;
+        bonusFace = gameObject.transform.Find("Canvas/Indicator/Face").gameObject;
     }
 
     void Update()
@@ -83,7 +86,6 @@ public class PlayerSpeedSurface : MonoBehaviour
             speedSurfaceBar.GetComponent<UISpeedSurfaceBar>().ResetBars();
             volumeBarTracker = 0;
             releaseIndicator.SetActive(false);
-
         }
 
         if (isTouchingRelease)
@@ -115,9 +117,12 @@ public class PlayerSpeedSurface : MonoBehaviour
                 {
                     speedSurfaceBar.SetActive(false);
                     releaseIndicator.SetActive(false);
+
+                    successIndicator.GetComponent<Text>().fontSize = 100;
                     successIndicator.GetComponent<Text>().text = "TOO LATE";
                     successIndicator.SetActive(true);
-
+                    bonusFace.GetComponent<Text>().text = ":(";
+                    bonusFace.SetActive(true);
 
                     UISceneRelay.instance.lateRelease();
                 }
@@ -156,8 +161,12 @@ public class PlayerSpeedSurface : MonoBehaviour
             else if (isTouchingCharge)
             {
                 speedSurfaceBar.SetActive(false);
+
+                successIndicator.GetComponent<Text>().fontSize = 100;
                 successIndicator.GetComponent<Text>().text = "TOO EARLY";
                 successIndicator.SetActive(true);
+                bonusFace.GetComponent<Text>().text = ":(";
+                bonusFace.SetActive(true);
 
                 UISceneRelay.instance.earlyRelease();
             }
@@ -181,8 +190,13 @@ public class PlayerSpeedSurface : MonoBehaviour
     {
         speedSurfaceBar.SetActive(false);
         releaseIndicator.SetActive(false);
-        successIndicator.GetComponent<Text>().text = "NICE!";
+
+        successIndicator.GetComponent<Text>().fontSize = 120;
+        int i = Random.Range(0, successWords.Length);
+        successIndicator.GetComponent<Text>().text = successWords[i].ToString();
         successIndicator.SetActive(true);
+        bonusFace.GetComponent<Text>().text = ":D";
+        bonusFace.SetActive(true);
 
         UISceneRelay.instance.correctRelease();
 
