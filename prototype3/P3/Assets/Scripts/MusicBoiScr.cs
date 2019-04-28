@@ -10,11 +10,7 @@ public class MusicBoiScr : MonoBehaviour
 {
     public static MusicBoiScr instance;
     [Header("what songs are unlocked?")]
-    public bool song0IsUnlocked;
-    public bool song1IsUnlocked;
-    public bool song2IsUnlocked;
-    public bool song3IsUnlocked;
-    public bool song4IsUnlocked;
+    
     public bool DuckMaster;
     public bool[] songsToUnlock;
     public AudioMixer mixer;
@@ -140,14 +136,14 @@ public class MusicBoiScr : MonoBehaviour
                 float mute = -80;
 
                 mixer.SetFloat("MasterVol", mute);
-                Debug.Log("songsToUnlock is false");
+                //Debug.Log("songsToUnlock is false");
 
                 EmptySource.mute = false;
             }
             if (songsToUnlock[SongNum])
             {
                 mixer.SetFloat("MasterVol", UnmutedMaster);
-                Debug.Log("songsToUnlock is false");
+                //Debug.Log("songsToUnlock is false");
                 
                 EmptySource.mute = true;
             }
@@ -247,9 +243,13 @@ public class MusicBoiScr : MonoBehaviour
     public void UnlockTracks(int unlockNum)
     {
         songsToUnlock[unlockNum] = true;
+        if (unlockNum == SongNum)
+        {
+            mixer.SetFloat("MasterVol", UnmutedMaster);
+            
 
-
-        
+            EmptySource.mute = true;
+        }
     }
 
 

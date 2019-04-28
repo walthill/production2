@@ -46,6 +46,13 @@ public class UIMusicManager : MonoBehaviour
         unlockNotification.SetActive(false);
         unlockText.text = "'" + songNames[song].ToString() + "' TRACK UNLOCKED!";
         unlockNotification.SetActive(true);
+
+        MusicBoiScr.instance.UnlockTracks(song);
+
+        if (currentSong == song)
+        {
+            PlayMusic();
+        }
     }
 
     public void Rewind()
@@ -68,10 +75,11 @@ public class UIMusicManager : MonoBehaviour
     {
         songAction.text = "PLAY";
         // if song isnt unlocked
+        if (!MusicBoiScr.instance.songsToUnlock[currentSong])
         {
-
+            songTitle.text = "-------------";
         }
-        // else if it is
+        else
         {
             songTitle.text = songNames[currentSong];
         }
