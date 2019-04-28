@@ -10,16 +10,13 @@ public class MusicBoiScr : MonoBehaviour
 {
     public static MusicBoiScr instance;
     [Header("what songs are unlocked?")]
-    public bool song0IsUnlocked;
-    public bool song1IsUnlocked;
-    public bool song2IsUnlocked;
-    public bool song3IsUnlocked;
-    public bool song4IsUnlocked;
+
     public bool DuckMaster;
     public bool[] songsToUnlock;
     public AudioMixer mixer;
     public float UnmutedMaster;
-
+    
+    
 
 
     //temp have audio sources on this object attatched to this script.
@@ -41,6 +38,7 @@ public class MusicBoiScr : MonoBehaviour
     public AudioClip ChordClip;
     public AudioClip EmptySound;
     public AudioSource EmptySource;
+    public float[] trackVol;
 
     public bool changingSong = false;
 
@@ -146,7 +144,7 @@ public class MusicBoiScr : MonoBehaviour
             }
             if (songsToUnlock[SongNum])
             {
-                mixer.SetFloat("MasterVol", UnmutedMaster);
+                UpdateSongVol();
                 Debug.Log("songsToUnlock is false");
                 
                 EmptySource.mute = true;
@@ -156,6 +154,11 @@ public class MusicBoiScr : MonoBehaviour
         }
         
         
+    }
+
+    public void UpdateSongVol()
+    {
+        mixer.SetFloat("MasterVol", trackVol[SongNum]);
     }
 
     public void prevSong()
@@ -185,8 +188,7 @@ public class MusicBoiScr : MonoBehaviour
             }
             if (songsToUnlock[SongNum])
             {
-                mixer.SetFloat("MasterVol", UnmutedMaster);
-                Debug.Log("songsToUnlock is false");
+                UpdateSongVol();
                 EmptySource.mute = true;
             }
         }
@@ -226,7 +228,7 @@ public class MusicBoiScr : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            nextSong();
+            UpdateSongVol();
         }
         if (Input.GetKeyDown(KeyCode.Z)&&SongNum>=0)
         {
