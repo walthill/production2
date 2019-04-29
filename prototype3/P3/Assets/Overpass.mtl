@@ -1,0 +1,9 @@
+newmtl New_Material
+Kd 0.3192073 0.02122641 0.5
+d 1
+
+newmtl 3
+map_Kd 3.png
+Kd 1 1 1
+d 1
+

@@ -29,7 +29,8 @@ public class Collectable : MonoBehaviour
 
     void Rotate()
     {
-        transform.Rotate(0, 0, Time.deltaTime * rotationSpeed);
+        transform.Rotate( 0,  Time.deltaTime * rotationSpeed, 0, Space.World);
+
     }
 
     void Bounce()
