@@ -1617,22 +1617,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22db3d1ba6679874b948be5450b8483f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  song0IsUnlocked: 0
-  song1IsUnlocked: 0
-  song2IsUnlocked: 0
-  song3IsUnlocked: 0
-  song4IsUnlocked: 0
   DuckMaster: 0
   songsToUnlock: 0100000000
   mixer: {fileID: 24100000, guid: 07c859b5785b8634287c4dcf590223bd, type: 2}
   UnmutedMaster: 0
+  collectedSound: {fileID: 8300000, guid: 1684ea3075e7c0641a3806a29772a30c, type: 3}
+  CollectSource: {fileID: 0}
   ChordSource: {fileID: 2910597395598217843}
   SongPath: 
   SongNum: 0
   songParts: []
   ChordClip: {fileID: 0}
-  EmptySound: {fileID: 8300000, guid: d046d73c69096724fa93f70c808efc14, type: 3}
+  EmptySound: {fileID: 8300000, guid: a83a2b2041c9e8f438b562175ae39eb8, type: 3}
   EmptySource: {fileID: 0}
+  trackVol:
+  - -10
+  - -7
+  - 0
+  - -2.5
+  - -2
   changingSong: 0
 --- !u!82 &2910597395598217843
 AudioSource:

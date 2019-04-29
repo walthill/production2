@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 11574096}
   - component: {fileID: 11574097}
   - component: {fileID: 11574098}
+  - component: {fileID: 11574099}
   m_Layer: 5
   m_Name: 4. UNLOCK CHANNELS
   m_TagString: Untagged
@@ -228,6 +229,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 658776558}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &11574099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 11574094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &15712077
 GameObject:
   m_ObjectHideFlags: 0
@@ -3654,6 +3671,7 @@ GameObject:
   - component: {fileID: 406363838}
   - component: {fileID: 406363839}
   - component: {fileID: 406363840}
+  - component: {fileID: 406363841}
   m_Layer: 5
   m_Name: 5. LEAVING THE BOWL
   m_TagString: Untagged
@@ -3758,6 +3776,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1424398420}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &406363841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406363836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &409109675
 GameObject:
   m_ObjectHideFlags: 0
@@ -4721,6 +4755,7 @@ GameObject:
   - component: {fileID: 501852414}
   - component: {fileID: 501852415}
   - component: {fileID: 501852416}
+  - component: {fileID: 501852417}
   m_Layer: 5
   m_Name: 1. BASIC MOVEMENT
   m_TagString: Untagged
@@ -4825,6 +4860,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1530855932}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &501852417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 501852412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &525916647
 GameObject:
   m_ObjectHideFlags: 0
@@ -4837,6 +4888,7 @@ GameObject:
   - component: {fileID: 525916649}
   - component: {fileID: 525916650}
   - component: {fileID: 525916651}
+  - component: {fileID: 525916652}
   m_Layer: 5
   m_Name: 6. DRIFTING
   m_TagString: Untagged
@@ -4941,6 +4993,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1129711477}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &525916652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525916647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &640993319
 GameObject:
   m_ObjectHideFlags: 0
@@ -5750,6 +5818,7 @@ GameObject:
   - component: {fileID: 748963242}
   - component: {fileID: 748963243}
   - component: {fileID: 748963244}
+  - component: {fileID: 748963245}
   m_Layer: 5
   m_Name: 2. BOOSTING
   m_TagString: Untagged
@@ -5854,6 +5923,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1695795157}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &748963245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748963240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &751422600
 GameObject:
   m_ObjectHideFlags: 0
@@ -6567,6 +6652,7 @@ GameObject:
   - component: {fileID: 824365870}
   - component: {fileID: 824365871}
   - component: {fileID: 824365872}
+  - component: {fileID: 824365873}
   m_Layer: 5
   m_Name: 0. BACK TO MENU
   m_TagString: Untagged
@@ -6699,6 +6785,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1944472614}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &824365873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824365867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: e6aabc9b4252cd54bb4047a0925001d2, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &829192617
 GameObject:
   m_ObjectHideFlags: 0
@@ -8749,6 +8851,7 @@ GameObject:
   - component: {fileID: 1087452967}
   - component: {fileID: 1087452968}
   - component: {fileID: 1087452969}
+  - component: {fileID: 1087452970}
   m_Layer: 5
   m_Name: 3. SPEED CHANNELS
   m_TagString: Untagged
@@ -8853,6 +8956,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1936299433}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &1087452970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087452965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &1091462750
 GameObject:
   m_ObjectHideFlags: 0
@@ -14285,6 +14404,7 @@ GameObject:
   - component: {fileID: 1910135027}
   - component: {fileID: 1910135028}
   - component: {fileID: 1910135029}
+  - component: {fileID: 1910135030}
   m_Layer: 5
   m_Name: 8. CROUCHING
   m_TagString: Untagged
@@ -14389,6 +14509,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1837740916}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &1910135030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910135025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &1935219578
 GameObject:
   m_ObjectHideFlags: 0
@@ -15490,6 +15626,7 @@ GameObject:
   - component: {fileID: 2090295805}
   - component: {fileID: 2090295806}
   - component: {fileID: 2090295807}
+  - component: {fileID: 2090295808}
   m_Layer: 5
   m_Name: 7. JUMPING
   m_TagString: Untagged
@@ -15594,6 +15731,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relatedInfo: {fileID: 1223305307}
   whiteNoise: {fileID: 872778413}
+--- !u!114 &2090295808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090295803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dc8767cd66cd04fac21aa9a20e2004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  SelectSnd: {fileID: 8300000, guid: 9d096dd60c3edf04da1bbbaad4247ab5, type: 3}
+  HiSrc: {fileID: 0}
+  SeSrc: {fileID: 0}
 --- !u!1 &2099223411
 GameObject:
   m_ObjectHideFlags: 0

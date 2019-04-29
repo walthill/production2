@@ -50,6 +50,8 @@ MonoBehaviour:
   bounceSpeed: 1.31
   rotationSpeed: 15
   collectableType: 0
+  collectedSound: {fileID: 8300000, guid: 77f13c4797d465e45bc761432b692221, type: 3}
+  CollectSource: {fileID: 0}
 --- !u!135 &606553083596291653
 SphereCollider:
   m_ObjectHideFlags: 0

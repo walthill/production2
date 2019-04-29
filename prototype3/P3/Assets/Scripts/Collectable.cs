@@ -13,10 +13,16 @@ public class Collectable : MonoBehaviour
 
     public CollectableTracker.collectableType collectableType;
 
+    //public AudioClip collectedSound;
+    //public AudioSource CollectSource;
+
     float startY;
 
-    void Start()
+    void Awake()
     {
+        //CollectSource = gameObject.AddComponent<AudioSource>();
+        //CollectSource.playOnAwake = false;
+        //CollectSource.clip = collectedSound;
         startY = transform.position.y;
     }
 
@@ -49,7 +55,9 @@ public class Collectable : MonoBehaviour
         //MAKE LINK TO SOUND AND/OR PLAYER HERE
         if(col.name == "Player")
         {
+            //CollectSource.Play();
             col.GetComponent<CollectableTracker>().addCollectable(collectableType);
+            
             Destroy(gameObject);
         }
     }

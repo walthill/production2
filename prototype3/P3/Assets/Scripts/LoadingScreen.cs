@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class LoadingScreen : MonoBehaviour
 {
     //Tut @ https://www.windykeep.com/2018/02/15/make-loading-screen-unity/#siesta
-
     bool isLoading;
     AsyncOperation currentLoadingOperation;
 
@@ -50,6 +49,7 @@ public class LoadingScreen : MonoBehaviour
             alphaTime += Time.deltaTime;
             float textAlpha = Mathf.Abs(Mathf.Sin(alphaTime / 20.0f)) * 255.0f;
             startButton.color = new Vector4(textRGB.x, textRGB.y, textRGB.z, textAlpha);
+            
         }
     }
 
@@ -97,7 +97,8 @@ public class LoadingScreen : MonoBehaviour
     }
 
     public void Hide()
-    {   
+    {
+        SoundBoi.instance.driftReleaseSource.Play();
         gameObject.SetActive(false);
         isLoading = false;
         currentLoadingOperation = null;
