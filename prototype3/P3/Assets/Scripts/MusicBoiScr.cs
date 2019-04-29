@@ -191,7 +191,7 @@ public class MusicBoiScr : MonoBehaviour
             {
                 float mute = -80;
                 mixer.SetFloat("MasterVol", mute);
-                Debug.Log("songsToUnlock is false");
+                //Debug.Log("songsToUnlock is false");
                 EmptySource.Play();
                 EmptySource.mute = false;
             }
