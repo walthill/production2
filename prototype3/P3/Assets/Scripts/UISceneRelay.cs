@@ -27,6 +27,11 @@ public class UISceneRelay : MonoBehaviour
         }
     }
 
+    public void UnlockSong(int song)
+    {
+        musicStuff.ManagerUnlockSong(song);
+    }
+
     public void setCurrentChannel(SpeedChannel currentChannel)
     {
         speedCells.SetCurrentChannel(currentChannel);

@@ -49,6 +49,7 @@ public class Collectable : MonoBehaviour
         if(col.name == "Player")
         {
             col.GetComponent<CollectableTracker>().addCollectable(collectableType);
+            Destroy(gameObject);
         }
     }
 }

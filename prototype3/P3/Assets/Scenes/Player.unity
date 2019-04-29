@@ -263,6 +263,96 @@ PrefabInstance:
       propertyPath: WIDTransform
       value: 
       objectReference: {fileID: 1985177580}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: passiveBoostMultiplier
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[0]
+      value: NICE!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[1]
+      value: RADICAL!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[2]
+      value: AWESOME!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[3]
+      value: DOPE!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[4]
+      value: SICK!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[5]
+      value: PSYCHOTRONIC!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[6]
+      value: TUBULAR!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[7]
+      value: COSMORIFIC!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[8]
+      value: EPIC!
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[6]
+      value: 135
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[0]
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[5]
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[4]
+      value: 105
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[3]
+      value: 95
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[2]
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: speeds.Array.data[1]
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 778373043, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
@@ -333,6 +423,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 778373015, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5574757069030399082, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
