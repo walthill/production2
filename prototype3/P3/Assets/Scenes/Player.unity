@@ -247,6 +247,18 @@ PrefabInstance:
       propertyPath: trickanim
       value: 
       objectReference: {fileID: 1315432699}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: rayOffsetZ
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: lm.m_Bits
+      value: 823
+      objectReference: {fileID: 0}
+    - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+      propertyPath: wallCollisionLM.m_Bits
+      value: 823
+      objectReference: {fileID: 0}
     - target: {fileID: 1842638562, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: WIDTransform
       value: 
@@ -456,12 +468,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!95 &1315432699 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 787736675, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 368511532}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1364800569
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,21 +785,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2069421964 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1032722376, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
-    type: 3}
-  m_PrefabInstance: {fileID: 368511532}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2069421965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069421964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27dba089219782e4ebb035d94689bd0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -61,6 +61,7 @@ public class PlayerSkateMovement : MonoBehaviour
     [SerializeField]
     bool isDrifting = false;
     bool endOfDrift; //Flags smooth camera damping on drift release
+    float modDriftSpeed = 1f; //0-1 how much the player is slowed down while drifting.
     Vector3 driftStartForward;
     const float DRIFT_CAM_RESET_WAIT = 0.35f;
     const float FACING_STRAIGHT_DIST = 0.1f;
@@ -74,14 +75,15 @@ public class PlayerSkateMovement : MonoBehaviour
     [Tooltip("How long it takes to stop after slowing down while drifting.")]
     float driftStopTime = 4f;
     [SerializeField]
-    [Tooltip("How time is slowed down by during drifting at max speed")]
-    float maxDriftTimeScale = 0.5f;
+    [Tooltip("What % speed is slowed down by during drifting at max speed")]
+    float maxDriftSpeedScale = 0.5f;
     [SerializeField]
     [Tooltip("should time slow less at lower speeds?")]
     bool changeTimeBySpeed;
 	[Range(0,1)]
 	[SerializeField] float airTurnFactor = 0.25f;
-	
+	[SerializeField] LayerMask wallCollisionLM;
+    
     float normalTimeScale;
     FollowCamera playerCam;
     LayerMask layerToAlignWith;    //only align to gameobjects marked as ground layers
@@ -158,10 +160,11 @@ public class PlayerSkateMovement : MonoBehaviour
         debugMoveSpeed = rb.velocity.magnitude;
         calcTargetVelocity(); //after debug movespeed to use most current move speed.
         sendSpeedToSoundBoi();
+
+        UnicornCollider();
     }
     // this sends movespeed data to the sound boi optimize this if you want
     //called from update sorry :(
-
 
     void sendSpeedToSoundBoi()
     {
@@ -191,9 +194,11 @@ public class PlayerSkateMovement : MonoBehaviour
         driftVelocity = rb.velocity.normalized * debugMoveSpeed;
         driftSlowTimer = Time.time + driftTime;
         float modDriftScale = changeTimeBySpeed ?
-            1.0f - maxDriftTimeScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f)
-            : maxDriftTimeScale;
-        Time.timeScale = Time.timeScale * modDriftScale;
+            1.0f - maxDriftSpeedScale * (float)speedThresholdBoi.getCurrentSpeedChannel() / ((float)SpeedChannel.NUM_SPEEDS - 1.0f)
+            : maxDriftSpeedScale;
+
+        //Time.timeScale = Time.timeScale * modDriftScale;
+        modDriftSpeed = modDriftScale;
     }
     private void stopDrifting()
     {
@@ -298,7 +303,7 @@ public class PlayerSkateMovement : MonoBehaviour
         }
         arcadeData.localMaxVelocity = Mathf.Max(arcadeData.localMaxVelocity, 25f);
         if (accelButtonDown)
-            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); //
+            arcadeData.targetVelocity = Mathf.Lerp(debugMoveSpeed, arcadeData.localMaxVelocity, Time.deltaTime); 
         arcadeData.targetVelocity = Mathf.Min(arcadeData.targetVelocity, arcadeData.localMaxVelocity);
     }
 
@@ -316,7 +321,7 @@ public class PlayerSkateMovement : MonoBehaviour
                 // if hitting a wall then stop.
                 if (rb.velocity.magnitude < 0.1)
                     driftVelocity = Vector3.zero;
-                vel = driftVelocity;
+                vel = driftVelocity * modDriftSpeed;
                 float time = Time.time - driftSlowTimer;
 
                 if (time > 0)
@@ -447,6 +452,20 @@ public class PlayerSkateMovement : MonoBehaviour
             isAirborne = true;
         }
     }
+
+    void UnicornCollider()
+    {
+        Ray ray = new Ray(objTransform.position + new Vector3(0, 1, 0), objTransform.up + objTransform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1, wallCollisionLM))
+        {
+            if (!hit.collider.isTrigger)
+            {
+               // Debug.Log("WALL RAY: " + hit.transform.name);
+                setSpeed(0);
+            }
+        }
+    }
 #endregion
 
     #region Getters and Setters
@@ -459,6 +478,10 @@ public class PlayerSkateMovement : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public bool getIsDrifting()
+    { 
+        return isDrifting;
+    }
     public ArcadeMoveData GetArcadeMoveData()
     {
         return arcadeData;

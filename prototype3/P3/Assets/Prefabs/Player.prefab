@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 1842638562}
   - component: {fileID: 860847346}
   - component: {fileID: 1769932875969997399}
+  - component: {fileID: 8442316961311665558}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -295,7 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddf882ab31e271429ae6295fe9f2a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trickanim: {fileID: 0}
+  trickanim: {fileID: 787736675}
   debugMoveSpeed: 0
   diffToSpeedLoss: 20
   leftStickXAxisDeadzone: 0.125
@@ -310,16 +311,16 @@ MonoBehaviour:
     boostValue: 1
     rotationSpeed: 2.5
     driftRotationSpeed: 1.1
-    jumpForce: 6.5
+    jumpForce: 12.17
   respawn: {fileID: 0}
   liftCoeffiecient: 0.2
   isGrounded: 0
   isDrifting: 0
   driftTime: 5
   driftStopTime: 2
-  maxDriftTimeScale: 0.7
-  changeTimeBySpeed: 1
-  airTurnFactor: 0.25
+  maxDriftSpeedScale: 0.6
+  changeTimeBySpeed: 0
+  airTurnFactor: 0.65
 --- !u!114 &1881121411489919166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,8 +334,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boostMultiplier: 0.5
-  passiveBoostMultiplier: 10
   successWords: []
+  passiveBoostMultiplier: 5
 --- !u!114 &9007623253124313016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ee8e171540d72418109acf59181d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speeds: 19000000280000003c00000050000000640000007d00000096000000
+  speeds: 2d00000041000000550000005f000000690000007800000087000000
   currentSpeedChannel: 0
   maxSpeedChannel: 0
   speedIndicator: {fileID: 0}
@@ -394,6 +395,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shuntForce: 5
+--- !u!114 &8442316961311665558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032722376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27dba089219782e4ebb035d94689bd0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &76976118292001139
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,15 +2236,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17dd237d082d62a44acc972db4df2a4a, type: 3}
---- !u!4 &778373043 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400048, guid: 17dd237d082d62a44acc972db4df2a4a,
-    type: 3}
-  m_PrefabInstance: {fileID: 778247427}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &787736675 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9500000, guid: 17dd237d082d62a44acc972db4df2a4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 778247427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &778373043 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400048, guid: 17dd237d082d62a44acc972db4df2a4a,
     type: 3}
   m_PrefabInstance: {fileID: 778247427}
   m_PrefabAsset: {fileID: 0}
@@ -2242,14 +2255,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1406194919}
     m_Modifications:
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2293,6 +2298,14 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_FieldOfView
