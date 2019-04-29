@@ -523,8 +523,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 57.6, y: 27.2}
-  m_SizeDelta: {x: -130.2, y: -114.72}
+  m_AnchoredPosition: {x: 42.51, y: 52.45}
+  m_SizeDelta: {x: -100.02, y: -113.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &74883617
 MonoBehaviour:
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8588236, g: 0.098039225, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.96862745, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1301,7 +1301,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\n           ACCELERATE.\n"
+  m_Text: '        CASSETTE TAPES'
 --- !u!222 &154594773
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9379,8 +9379,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12.33, y: -51.2}
-  m_SizeDelta: {x: -33.67, y: -114.72}
+  m_AnchoredPosition: {x: -14.52, y: -53.5}
+  m_SizeDelta: {x: -38.04, y: -114.72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1134333241
 MonoBehaviour:
@@ -9395,7 +9395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.454902, b: 0.78823537, a: 1}
+  m_Color: {r: 1, g: 0.96862745, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -10105,7 +10105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1228187717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11213,10 +11213,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Hold down the Right Trigger to
-
-
-    Move the Left Stick to '
+  m_Text: "Pick up \nin order to unlock new songs to listen to. Switch songs with
+    the"
 --- !u!222 &1377722199
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12084,14 +12082,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.96862745, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 84d38e2ca8b7d9e4f8478f6edb361cb9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a4a39172a171940428241ee5cbd47815, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12967,7 +12965,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689138044}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 6bc109313f080dc44abcc8d4f093758d, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: d8493059e4fe35341b2761332c21a4c5, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
@@ -12980,14 +12978,12 @@ VideoPlayer:
   m_DataSource: 0
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
   m_Looping: 0
@@ -13763,7 +13759,7 @@ MonoBehaviour:
 
 
 
-    TURN LEFT AND RIGHT.'
+    LEFT AND RIGHT DPAD.'
 --- !u!222 &1843060687
 CanvasRenderer:
   m_ObjectHideFlags: 0

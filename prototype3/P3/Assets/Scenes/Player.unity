@@ -254,7 +254,7 @@ PrefabInstance:
     - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
         type: 3}
       propertyPath: successWords.Array.size
-      value: 6
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
         type: 3}
@@ -290,6 +290,21 @@ PrefabInstance:
         type: 3}
       propertyPath: successWords.Array.data[5]
       value: PSYCHOTRONIC!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[6]
+      value: TUBULAR!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[7]
+      value: COSMORIFIC!
+      objectReference: {fileID: 0}
+    - target: {fileID: 1881121411489919166, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+        type: 3}
+      propertyPath: successWords.Array.data[8]
+      value: EPIC!
       objectReference: {fileID: 0}
     - target: {fileID: 9007623253124313016, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
         type: 3}
@@ -550,14 +565,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Name
-      value: BlobShadowProjector
-      objectReference: {fileID: 0}
-    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -601,6 +608,14 @@ PrefabInstance:
     - target: {fileID: 400002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Name
+      value: BlobShadowProjector
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11900000, guid: 28a5e79925e3ce04a82856c16a572cbe, type: 3}
       propertyPath: m_FieldOfView
