@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: ec2b45289cfebd8478f3ca42ab8f1d30
+guid: 932237de19b0177489d6100160b0e428
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
     2100000: lambert1
-    2100002: StingrayPBS1
     2300000: //RootNode
     3300000: //RootNode
-    4300000: favelaBuilding_1
+    4300000: overPass
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
