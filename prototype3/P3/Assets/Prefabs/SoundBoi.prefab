@@ -1618,7 +1618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DuckMaster: 0
-  songsToUnlock: 0100000000
+  songsToUnlock: 010000000000
   mixer: {fileID: 24100000, guid: 07c859b5785b8634287c4dcf590223bd, type: 2}
   UnmutedMaster: 0
   collectedSound: {fileID: 8300000, guid: 1684ea3075e7c0641a3806a29772a30c, type: 3}
@@ -1635,6 +1635,7 @@ MonoBehaviour:
   - -7
   - 0
   - -2.5
+  - -2
   - -2
   changingSong: 0
 --- !u!82 &2910597395598217843

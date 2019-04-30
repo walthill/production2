@@ -122,7 +122,7 @@ public class MusicBoiScr : MonoBehaviour
     public void nextSong()
     {
 
-        if (SongNum < 4)
+        if (SongNum < 5)
         {
 
 
