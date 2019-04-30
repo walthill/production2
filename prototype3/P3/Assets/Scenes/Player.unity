@@ -245,7 +245,7 @@ PrefabInstance:
     - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: trickanim
       value: 
-      objectReference: {fileID: 1315432699}
+      objectReference: {fileID: 368511533}
     - target: {fileID: 1032722378, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
       propertyPath: rayOffsetZ
       value: -0.75
@@ -431,6 +431,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c279ffdc474ebf4395f4cff40ecef1b, type: 3}
+--- !u!95 &368511533 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 787736675, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 368511532}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &382545324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 382545324, guid: 8c279ffdc474ebf4395f4cff40ecef1b,
