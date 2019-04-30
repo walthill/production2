@@ -236,6 +236,8 @@ public class MusicBoiScr : MonoBehaviour
         {
             prevSong();
         }
+		
+		#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.X))
         {
             UpdateSongVol();
@@ -251,7 +253,7 @@ public class MusicBoiScr : MonoBehaviour
 
             SoundBoi.instance.PlayMusic();
         }
-        
+        #endif
     }
 
 
