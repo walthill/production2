@@ -1,15 +1,37 @@
 fileFormatVersion: 2
-guid: ec2b45289cfebd8478f3ca42ab8f1d30
+guid: ad288d262d3636c45ab183dc80106193
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: main_Build1
+    100004: s_1
+    100006: s_2
+    100008: s_3
+    100010: s_4
     400000: //RootNode
-    2100000: lambert1
-    2100002: StingrayPBS1
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: favelaBuilding_1
+    400002: main_Build1
+    400004: s_1
+    400006: s_2
+    400008: s_3
+    400010: s_4
+    2100000: StingrayPBS1
+    2100002: lambert3
+    2300000: main_Build1
+    2300002: s_1
+    2300004: s_2
+    2300006: s_3
+    2300008: s_4
+    3300000: main_Build1
+    3300002: s_1
+    3300004: s_2
+    3300006: s_3
+    3300008: s_4
+    4300000: s_4
+    4300002: s_3
+    4300004: s_2
+    4300006: s_1
+    4300008: main_Build1
   externalObjects: {}
   materials:
     importMaterials: 1

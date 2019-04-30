@@ -49,17 +49,20 @@ public class GravityScaleScr : MonoBehaviour
         {
             //Debug.Log("grav is calling");
             rb.AddForce(WIDTransform.transform.up * -100, ForceMode.Acceleration);
-            crouchanim.SetBool ("isCrouching",true);
-        }
-       /* if (Input.GetButtonDown("JoyGrav"))
-        {
             
-            crouchanim.SetTrigger("isCrouching");
-        }*/
-        if (Input.GetButtonUp("JoyGrav"))
+        }
+        if (Input.GetButton("JoyGrav"))
+        {
+
+            //crouchanim.SetTrigger("isCrouching");
+            crouchanim.SetBool("isCrouching", true);
+            Debug.Log("Crouch");
+        }
+        if (!Input.GetButton("JoyGrav"))
         {
             
             crouchanim.SetBool("isCrouching",false);
+            Debug.Log("notCrouch");
         }
 
     }
