@@ -56,13 +56,13 @@ public class GravityScaleScr : MonoBehaviour
 
             //crouchanim.SetTrigger("isCrouching");
             crouchanim.SetBool("isCrouching", true);
-            Debug.Log("Crouch");
+            //Debug.Log("Crouch");
         }
         if (!Input.GetButton("JoyGrav"))
         {
             
             crouchanim.SetBool("isCrouching",false);
-            Debug.Log("notCrouch");
+            //Debug.Log("notCrouch");
         }
 
     }

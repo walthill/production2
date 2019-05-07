@@ -153,6 +153,7 @@ public class UISpeedCellsManager : MonoBehaviour
             // The one cell that is the current speed channel becomes active //
             else
             {
+                //Debug.Log("speed channel change I think");
                 uiCells[i].GetComponent<UISpeedCellInfo>().SetAsActiveCell(activeCellSprite);
 
                 // Moves the active cell border //
@@ -171,6 +172,7 @@ public class UISpeedCellsManager : MonoBehaviour
     void ChangeChannelText()
     {
         channelText.text = "0" + (int)(currentSpeedChannel + 1);
+        SoundBoi.instance.channelChecker((int)(currentSpeedChannel));
     }
 
     // Moves the cell lock divider to differentiate between what cells are unlocked or not //
@@ -180,6 +182,7 @@ public class UISpeedCellsManager : MonoBehaviour
         {
             cellLockDivider.GetComponent<RectTransform>().anchoredPosition = new Vector2(cellLockDivider.GetComponent<RectTransform>().anchoredPosition.x + 50, cellLockDivider.GetComponent<RectTransform>().anchoredPosition.y);
             highestSpeedChannel++;
+            
         }
     }
 }

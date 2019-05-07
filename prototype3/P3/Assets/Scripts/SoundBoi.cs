@@ -117,9 +117,22 @@ public class SoundBoi : MonoBehaviour
 
     public bool makeChargeSound = false;
 
+
+    // this is a modifacation made after the due date by Jo Forchheimer:
+    [Header("that new shit")]
+    
+    
+    public bool[] partsLoPass;
+    public int highestTrackNum;
+
+    [SerializeField]
+    private int channelNo = 0;
+    private int partsEQedIn = 0;
+
     // Start is called before the first frame update
     void Awake()
     {
+        highestTrackNum = 0;
         //WheelSource.Play();
         instance = this;
 
@@ -468,83 +481,138 @@ public class SoundBoi : MonoBehaviour
         //                                                      //
         //////////////////////////////////////////////////////////
 
-        if (Part1LowPass)
+        if (partsLoPass[1])
         {
+            
             //mixer.GetFloat("lowPassPart1",MixerFloat);
             
             //float MixerFloat = 0;
-            float MixerFloat = 0;
+            float MixerFloat;
             mixer.GetFloat("lowPassPart1", out MixerFloat);
-            mixer.SetFloat("lowPassPart1", MixerFloat*1.1f);
+            if (MixerFloat < 22000)
+            {
+                mixer.SetFloat("lowPassPart1", MixerFloat * 1.1f);
+            }
+            
+            
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
             ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
-                Part1LowPass = false;
+                partsLoPass[1] = false;
+                //Debug.Log("called");
+                partsEQedIn=1;
+                partsLoPass[partsEQedIn - 1] = true;
+                if (highestTrackNum < partsEQedIn)
+                {
+                    highestTrackNum = partsEQedIn;
+                }
             }
         }
 
-        if (Part2LowPass)
+        if (partsLoPass[2])
         {
             //mixer.GetFloat("lowPassPart1",MixerFloat);
 
             //float MixerFloat = 0;
-            float MixerFloat = 0;
+            float MixerFloat;
             mixer.GetFloat("lowPassPart2", out MixerFloat);
-            mixer.SetFloat("lowPassPart2", MixerFloat * 1.1f);
+            if (MixerFloat < 22000)
+            {
+                mixer.SetFloat("lowPassPart2", MixerFloat * 1.1f);
+            }
+                
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
             ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
-                Part2LowPass = false;
+                partsLoPass[2] = false;
+                partsEQedIn = 2;
+                partsLoPass[partsEQedIn - 1] = true;
+                if (highestTrackNum < partsEQedIn)
+                {
+                    highestTrackNum = partsEQedIn;
+                }
             }
         }
 
-        if (Part3LowPass)
+        if (partsLoPass[3])
         {
             //mixer.GetFloat("lowPassPart1",MixerFloat);
 
             //float MixerFloat = 0;
-            float MixerFloat = 0;
+            float MixerFloat;
             mixer.GetFloat("lowPassPart3", out MixerFloat);
-            mixer.SetFloat("lowPassPart3", MixerFloat * 1.1f);
+
+            if (MixerFloat < 22000)
+            {
+                mixer.SetFloat("lowPassPart3", MixerFloat * 1.1f);
+            }
+                
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
             ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
-                Part3LowPass = false;
+                partsLoPass[3] = false;
+                partsEQedIn = 3;
+                partsLoPass[partsEQedIn - 1] = true;
+                if (highestTrackNum < partsEQedIn)
+                {
+                    highestTrackNum = partsEQedIn;
+                }
             }
         }
 
-        if (Part4LowPass)
+        if (partsLoPass[4])
         {
             //mixer.GetFloat("lowPassPart1",MixerFloat);
 
             //float MixerFloat = 0;
-            float MixerFloat = 0;
+            float MixerFloat;
             mixer.GetFloat("lowPassPart4", out MixerFloat);
-            mixer.SetFloat("lowPassPart4", MixerFloat * 1.1f);
+            if (MixerFloat < 22000)
+            {
+                mixer.SetFloat("lowPassPart4", MixerFloat * 1.1f);
+            }
+                
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
             ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
-                Part4LowPass = false;
+                partsLoPass[4] = false;
+                partsEQedIn = 4;
+                partsLoPass[partsEQedIn - 1] = true;
+                if (highestTrackNum < partsEQedIn)
+                {
+                    highestTrackNum = partsEQedIn;
+                }
             }
         }
 
-        if (Part5LowPass)
+        if (partsLoPass[5])
         {
             //mixer.GetFloat("lowPassPart1",MixerFloat);
 
             //float MixerFloat = 0;
-            float MixerFloat = 0;
+            float MixerFloat;
             mixer.GetFloat("lowPassPart5", out MixerFloat);
-            mixer.SetFloat("lowPassPart5", MixerFloat * 1.1f);
+            if (MixerFloat < 22000)
+            {
+                mixer.SetFloat("lowPassPart5", MixerFloat * 1.1f);
+            }
+                
             //float MixerFloat = mixer.GetFloat("lowPassPart1", MixerFloat);
             ////Debug.Log(MixerFloat);
             if (MixerFloat >= 22000)
             {
-                Part5LowPass = false;
+
+                partsLoPass[5]=false;
+                partsEQedIn = 5;
+                partsLoPass[partsEQedIn - 1] = true;
+                if (highestTrackNum < partsEQedIn)
+                {
+                    highestTrackNum = partsEQedIn;
+                }
             }
         }
 
@@ -554,6 +622,11 @@ public class SoundBoi : MonoBehaviour
     //they will be called from a different script in the final version
     //20:00 2/7/19
     //right now they are triggered from update
+
+
+
+    //when their respective bool is true, the track's eq is sweapt in 
+
     public void VolumeMusic1()
     {
         //musicSlot1.volume = heldVolume1;
@@ -568,32 +641,81 @@ public class SoundBoi : MonoBehaviour
         //MusicSlotArray[1].GetComponent<AudioLowPassFilter>().cutoffFrequency =+ 11000;
         //AudioLowPassFilter audioLow = MusicSlotArray[1].GetComponent<AudioLowPassFilter>();
         //audioLow.cutoffFrequency = 11000;
-        Part1LowPass = true;
+        //Part1LowPass = true;
         
     }
     public void VolumeMusic2()
     {
         //musicSlot2.volume = heldVolume2;
         //MusicSlotArray[2].volume = .6f;
-        Part2LowPass = true;
+        //Part2LowPass = true;
     }
     public void VolumeMusic3()
     {
         //musicSlot3.volume = heldVolume3;\
         //MusicSlotArray[3].volume = .6f;
-        Part3LowPass = true;
+        //Part3LowPass = true;
     }
     public void VolumeMusic4()
     {
         //musicSlot4.volume = heldVolume4;
         //MusicSlotArray[4].volume = .6f;
-        Part4LowPass = true;
+       // Part4LowPass = true;
     }
     public void VolumeMusic5()
     {
         //musicSlot5.volume = heldVolume5;
         //MusicSlotArray[5].volume = .6f;
-        Part5LowPass = true;
+       // Part5LowPass = true;
+    }
+
+
+
+    public void channelChecker(int CurrentChannel)
+    {
+        //do something with this
+        partsLoPass[CurrentChannel] = true;
+        Debug.Log(partsEQedIn);
+
+        //eq out
+        if (highestTrackNum > CurrentChannel)
+        {
+            Debug.Log("eqing " + highestTrackNum + " out");
+            float MixerFloat;
+            mixer.GetFloat("lowPassPart" + highestTrackNum, out MixerFloat);
+            mixer.SetFloat("lowPassPart" + highestTrackNum, MixerFloat / 1.1f);
+
+            if (MixerFloat <= 10)
+            {
+
+                //partsLoPass[5] = false;
+                highestTrackNum--;
+                Debug.Log("eq part is " + highestTrackNum);
+            }
+        }
+
+
+        //this is meant to make sure if a track is playing, all of its lower tracks are playing
+        //this is cancer rewrite this
+        /*
+        if (partsLoPass[CurrentChannel] && CurrentChannel >= 1)
+        {
+            partsLoPass[CurrentChannel - 1] = true;
+            if(partsLoPass[CurrentChannel] && CurrentChannel >= 2)
+            {
+                partsLoPass[CurrentChannel - 2] = true;
+                if (partsLoPass[CurrentChannel] && CurrentChannel >= 3)
+                {
+                    partsLoPass[CurrentChannel - 3] = true;
+                    if (partsLoPass[CurrentChannel] && CurrentChannel >= 4)
+                    {
+                        partsLoPass[CurrentChannel - 4] = true;
+                    }
+                }
+            }
+        }
+        */
+        
     }
 
 }

@@ -14,6 +14,7 @@ public class UISceneRelay : MonoBehaviour
     void Awake()
     {
         instance = this;
+        
     }
 
     private void Start()
@@ -35,6 +36,8 @@ public class UISceneRelay : MonoBehaviour
     public void setCurrentChannel(SpeedChannel currentChannel)
     {
         speedCells.SetCurrentChannel(currentChannel);
+        // also adjust what tracks are playing her probably
+        Debug.Log("speed channel change");
     }
     public void setCurrentSpeed(float speedValueNormalized)
     {
@@ -44,6 +47,8 @@ public class UISceneRelay : MonoBehaviour
     public void setCurrentSpeedAndChannel(SpeedChannel currentChannel, float speedValueNormalized)
     {
         speedCells.SetCurrentChannelAndSpeed(currentChannel, speedValueNormalized);
+        //or here
+        
     }
 
     public void HideUI()
